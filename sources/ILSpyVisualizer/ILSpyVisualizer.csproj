@@ -34,15 +34,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=4.1.0.7275, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.AvalonEdit, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.Decompiler, Version=1.0.0.737, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.Decompiler, Version=1.0.0.821, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\ICSharpCode.Decompiler.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.NRefactory, Version=1.0.4120.35599, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.NRefactory, Version=1.0.4141.25229, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
@@ -50,7 +50,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\ICSharpCode.TreeView.dll</HintPath>
     </Reference>
-    <Reference Include="ILSpy, Version=1.0.0.737, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ILSpy, Version=1.0.0.821, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <ExecutableExtension>.exe</ExecutableExtension>
       <HintPath>..\..\build\ILSpy.exe</HintPath>
@@ -76,10 +76,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analyzer\AnalyzeInWindowContextMenuEntry.cs" />
+    <Compile Include="AssemblyBrowser\AssemblyBrowserWindow.xaml.cs">
+      <DependentUpon>AssemblyBrowserWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AssemblyBrowser\AssemblyBrowserWindowViewModel.cs" />
+    <Compile Include="AssemblyBrowser\BrowseAssemblyContextMenuEntry.cs" />
+    <Compile Include="AssemblyBrowser\EventViewModel.cs" />
+    <Compile Include="AssemblyBrowser\MemberViewModel.cs" />
+    <Compile Include="AssemblyBrowser\MethodViewModel.cs" />
+    <Compile Include="AssemblyBrowser\PropertyViewModel.cs" />
+    <Compile Include="AssemblyBrowser\TypeViewModel.cs" />
+    <Compile Include="Infrastructure\DelegateCommand.cs" />
+    <Compile Include="Infrastructure\ViewModelBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="AssemblyBrowser\AssemblyBrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

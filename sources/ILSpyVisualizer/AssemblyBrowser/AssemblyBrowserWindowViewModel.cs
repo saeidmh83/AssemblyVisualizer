@@ -15,7 +15,28 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		{
 			_assemblyDefinition = assemblyDefinition;
 
-			Types = _assemblyDefinition.MainModule.Types.Select(t => new TypeViewModel(t));
+			var typeViewModelsDictionary = new Dictionary<TypeDefinition, TypeViewModel>();
+			
+			var types = _assemblyDefinition.MainModule.Types
+				.Select(t =>
+				        	{
+				        		var viewModel = new TypeViewModel(t);
+								typeViewModelsDictionary.Add(t, viewModel);
+				        		return viewModel;
+				        	}).ToList();
+
+			foreach (var typeDefinition in _assemblyDefinition.MainModule.Types
+				.Where(t => t.BaseType != null))
+			{
+				var baseType = typeDefinition.BaseType.Resolve();
+				if (typeViewModelsDictionary.ContainsKey(baseType))
+				{
+					typeViewModelsDictionary[baseType].AddDerivedType(
+						typeViewModelsDictionary[typeDefinition]);
+				}
+			}
+
+			RootTypes = types.Where(t => t.BaseType == null);
 		}
 
 		public string Title
@@ -23,6 +44,6 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			get { return _assemblyDefinition.Name.Name; }
 		}
 
-		public IEnumerable<TypeViewModel> Types { get; private set; }
+		public IEnumerable<TypeViewModel> RootTypes { get; private set; }
 	}
 }

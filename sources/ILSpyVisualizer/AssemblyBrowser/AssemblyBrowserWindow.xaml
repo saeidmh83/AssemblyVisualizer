@@ -17,62 +17,80 @@
                        Margin="0, 0, 6, 0"                    
                        Stretch="Uniform"
                        Width="16"
-                       Height="16"
+                       Height="16"                       
                        />
                 <TextBlock Text="{Binding Text}"
                            Grid.Column="1"
                            TextOptions.TextFormattingMode="Display"/>
             </Grid>
         </DataTemplate>
-        
+
         <DataTemplate DataType="{x:Type AssemblyBrowser:TypeViewModel}">
             <Grid>
-                <Border CornerRadius="10"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <Grid HorizontalAlignment="Center">
+                    <Border CornerRadius="10"
                         BorderThickness="1"
                         BorderBrush="Black"                    
                         Margin="8"
                         SnapsToDevicePixels="True">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Border BorderThickness="0, 0, 0, 1"
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Border BorderThickness="0, 0, 0, 1"
                                 SnapsToDevicePixels="True"
                                 BorderBrush="Black">
-                            <TextBlock Text="{Binding Name}"
+                                <TextBlock Text="{Binding Name}"
                                        ToolTip="{Binding FullName}"
                                        HorizontalAlignment="Center"
                                        Margin="8, 5, 8, 3"
                                        TextOptions.TextFormattingMode="Display"
                                        FontWeight="Bold"/>
-                        </Border> 
-                        <ItemsControl ItemsSource="{Binding Members}"
+                            </Border>
+                            <ItemsControl ItemsSource="{Binding Members}"
                                       Grid.Row="1"
                                       Margin="5" />
-                    </Grid>
-                </Border>
-                <Border CornerRadius="10"
+                        </Grid>
+                    </Border>
+                    <Border CornerRadius="10"
                         BorderThickness="1"
                         BorderBrush="Black"                    
                         Margin="8"
                         SnapsToDevicePixels="True">
-                    <Border.Effect>
-                        <DropShadowEffect/>
-                    </Border.Effect>
-                </Border>
-            </Grid>            
+                        <Border.Effect>
+                            <DropShadowEffect/>
+                        </Border.Effect>
+                    </Border>
+                </Grid>
+                
+                <ItemsControl ItemsSource="{Binding DerivedTypes}"
+                              Grid.Row="1">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                
+            </Grid>
         </DataTemplate>
     </Window.Resources>
-    <Grid>
-        <ScrollViewer>
-            <ItemsControl ItemsSource="{Binding Types}">
+    <Grid UseLayoutRounding="True">
+        <ScrollViewer HorizontalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding RootTypes}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"/>
+                        <StackPanel Orientation="Horizontal"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
+                          
         </ScrollViewer>
     </Grid>
 </Window>

@@ -10,13 +10,15 @@ namespace ILSpyVisualizer.AssemblyBrowser
 	class TypeViewModel : ViewModelBase
 	{
 		private readonly TypeDefinition _typeDefinition;
-		
+		private readonly IList<TypeViewModel> _derivedTypes = new List<TypeViewModel>();
+
 		public TypeViewModel(TypeDefinition typeDefinition)
 		{
 			_typeDefinition = typeDefinition;
 
 			var properties = typeDefinition.Properties
-				.Where(p => p.GetMethod.IsPublic)
+				.Where(p => p.GetMethod != null && p.GetMethod.IsPublic
+							|| p.SetMethod != null && p.SetMethod.IsPublic)
 				.Select(p => new PropertyViewModel(p))
 				.OfType<MemberViewModel>();
 
@@ -44,5 +46,18 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		}
 
 		public IEnumerable<MemberViewModel> Members { get; set; }
+
+		public IEnumerable<TypeViewModel> DerivedTypes
+		{
+			get { return _derivedTypes; }
+		}
+
+		public TypeViewModel BaseType { get; private set; }
+		
+		public void AddDerivedType(TypeViewModel typeViewModel)
+		{
+			_derivedTypes.Add(typeViewModel);
+			typeViewModel.BaseType = this;
+		}
 	}
 }

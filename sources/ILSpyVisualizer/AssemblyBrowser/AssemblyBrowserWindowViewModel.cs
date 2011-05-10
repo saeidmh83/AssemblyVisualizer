@@ -36,7 +36,12 @@ namespace ILSpyVisualizer.AssemblyBrowser
 				}
 			}
 
-			RootTypes = types.Where(t => t.BaseType == null);
+			var baseTypes = types.Where(t => t.BaseType == null);
+
+			HierarchyRootTypes = baseTypes.Where(t => t.DerivedTypes.Count() > 0)
+				.OrderBy(t => t.Name);
+			SingleTypes = baseTypes.Where(t => t.DerivedTypes.Count() == 0)
+				.OrderBy(t => t.Name);
 		}
 
 		public string Title
@@ -44,6 +49,8 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			get { return _assemblyDefinition.Name.Name; }
 		}
 
-		public IEnumerable<TypeViewModel> RootTypes { get; private set; }
+		public IEnumerable<TypeViewModel> HierarchyRootTypes { get; private set; }
+
+		public IEnumerable<TypeViewModel> SingleTypes { get; private set; }
 	}
 }

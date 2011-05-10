@@ -26,49 +26,53 @@
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type AssemblyBrowser:TypeViewModel}">
-            <Grid>
+            <DataTemplate.Resources>
+                <Style x:Key="TypeNameTextBlockStyle" TargetType="{x:Type TextBlock}">
+                    <Setter Property="Text" Value="{Binding Name}"/>
+                    <Setter Property="ToolTip" Value="{Binding FullName}"/>
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="Margin" Value="8, 5, 8, 3"/>
+                    <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                </Style>
+                <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="10"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="Margin" Value="8"/>
+                    <Setter Property="SnapsToDevicePixels" Value="True"/>
+                </Style>
+            </DataTemplate.Resources>
+
+            <Grid HorizontalAlignment="Left">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition />
                 </Grid.RowDefinitions>
-
                 <Grid HorizontalAlignment="Center">
-                    <Border CornerRadius="10"
-                        BorderThickness="1"
-                        BorderBrush="Black"                    
-                        Margin="8"
-                        SnapsToDevicePixels="True">
+                    <Border Style="{StaticResource BorderStyle}">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <Border BorderThickness="0, 0, 0, 1"
+                            <Border x:Name="brdDivider" BorderThickness="0, 0, 0, 1"
                                 SnapsToDevicePixels="True"
                                 BorderBrush="Black">
-                                <TextBlock Text="{Binding Name}"
-                                       ToolTip="{Binding FullName}"
-                                       HorizontalAlignment="Center"
-                                       Margin="8, 5, 8, 3"
-                                       TextOptions.TextFormattingMode="Display"
-                                       FontWeight="Bold"/>
+                                <TextBlock Style="{StaticResource TypeNameTextBlockStyle}"/>
                             </Border>
-                            <ItemsControl ItemsSource="{Binding Members}"
+                            <ItemsControl x:Name="icMembers"
+                                    ItemsSource="{Binding Members}"
                                       Grid.Row="1"
                                       Margin="5" />
                         </Grid>
                     </Border>
-                    <Border CornerRadius="10"
-                        BorderThickness="1"
-                        BorderBrush="Black"                    
-                        Margin="8"
-                        SnapsToDevicePixels="True">
+                    <Border Style="{StaticResource BorderStyle}">
                         <Border.Effect>
                             <DropShadowEffect/>
                         </Border.Effect>
                     </Border>
                 </Grid>
-                
                 <ItemsControl ItemsSource="{Binding DerivedTypes}"
                               Grid.Row="1">
                     <ItemsControl.ItemsPanel>
@@ -77,20 +81,59 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
-                
             </Grid>
+
+            <DataTemplate.Triggers>
+                <DataTrigger Binding="{Binding ShowMembers}" Value="False">
+                    <Setter TargetName="icMembers" Property="Visibility" Value="Collapsed"/>
+                    <Setter TargetName="brdDivider" Property="BorderThickness" Value="0"/>
+                </DataTrigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
     </Window.Resources>
     <Grid UseLayoutRounding="True">
-        <ScrollViewer HorizontalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding RootTypes}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-                          
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ItemsControl ItemsSource="{Binding HierarchyRootTypes}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                                          HorizontalScrollBarVisibility="Auto">
+                                <Grid>
+                                    <Border BorderThickness="0, 0, 0, 1"
+                                        BorderBrush="Black">
+                                        <ContentControl Content="{Binding}"/>
+                                    </Border>
+                                    <Border BorderThickness="0, 0, 0, 1"
+                                        BorderBrush="Black">
+                                        <Border.Effect>
+                                            <DropShadowEffect/>
+                                        </Border.Effect>
+                                    </Border>
+                                </Grid>
+                            </ScrollViewer>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                <ItemsControl ItemsSource="{Binding SingleTypes}"
+                              Grid.Row="1">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </Grid>
         </ScrollViewer>
     </Grid>
 </Window>

@@ -11,6 +11,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 	{
 		private readonly TypeDefinition _typeDefinition;
 		private readonly IList<TypeViewModel> _derivedTypes = new List<TypeViewModel>();
+		private bool _showMembers = false;
 
 		public TypeViewModel(TypeDefinition typeDefinition)
 		{
@@ -53,7 +54,17 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		}
 
 		public TypeViewModel BaseType { get; private set; }
-		
+
+		public bool ShowMembers
+		{
+			get { return _showMembers; }
+			set 
+			{ 
+				_showMembers = value;
+				OnPropertyChanged("ShowMembers");
+			}
+		} 
+
 		public void AddDerivedType(TypeViewModel typeViewModel)
 		{
 			_derivedTypes.Add(typeViewModel);

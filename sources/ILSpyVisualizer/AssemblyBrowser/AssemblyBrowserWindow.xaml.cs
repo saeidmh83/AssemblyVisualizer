@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Mono.Cecil;
+using ICSharpCode.ILSpy;
 
 
 namespace ILSpyVisualizer.AssemblyBrowser
@@ -24,13 +25,21 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		{
 			InitializeComponent();
 
-			ViewModel = new AssemblyBrowserWindowViewModel(assemblyDefinition);
+			ViewModel = new AssemblyBrowserWindowViewModel(assemblyDefinition, Dispatcher);
 		}
 
 		internal AssemblyBrowserWindowViewModel ViewModel
 		{
 			get { return DataContext as AssemblyBrowserWindowViewModel; }
 			set { DataContext = value; }
+		}
+
+		private void TypeMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			var frameworkElement = sender as FrameworkElement;
+			var typeViewModel = frameworkElement.DataContext as TypeViewModel;
+			MainWindow.Instance.JumpToReference(typeViewModel.TypeDefinition);
+			e.Handled = true;
 		}
 	}
 }

@@ -51,7 +51,10 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid HorizontalAlignment="Center">
-                    <Border Style="{StaticResource BorderStyle}">
+                    <Border Style="{StaticResource BorderStyle}"
+                            MouseLeftButtonDown="TypeMouseLeftButtonDown"
+                            Background="Transparent"
+                            Cursor="Hand">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
@@ -109,6 +112,25 @@
                              IsChecked="{Binding ShowSingleTypes}"
                              Margin="4"/>
             </StackPanel>
+            
+            <TextBox Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                     HorizontalAlignment="Right"
+                     VerticalAlignment="Top"
+                     Width="200"
+                     Margin="10">
+                <TextBox.Style>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSearchPerformed}" Value="False">
+                                <Setter Property="BorderBrush" Value="#4db74a"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+                    
+               
+            
         </Grid>
 
         <Grid Grid.Row="1">            

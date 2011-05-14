@@ -36,6 +36,11 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			Members = properties.Concat(events).Concat(methods);
 		}
 
+		public TypeDefinition TypeDefinition
+		{
+			get { return _typeDefinition; }
+		}
+
 		public string Name
 		{
 			get { return _typeDefinition.Name; }

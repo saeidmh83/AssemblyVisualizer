@@ -4,17 +4,34 @@ using System.Linq;
 using System.Text;
 using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
+using System.Windows.Threading;
+using ICSharpCode.ILSpy;
 
 namespace ILSpyVisualizer.AssemblyBrowser
 {
 	class AssemblyBrowserWindowViewModel : ViewModelBase
 	{
-		private readonly AssemblyDefinition _assemblyDefinition;
-		private bool _showTypeHierarchies = true;
+		#region // Private fields
 
-		public AssemblyBrowserWindowViewModel(AssemblyDefinition assemblyDefinition)
+		private readonly AssemblyDefinition _assemblyDefinition;
+		private readonly IEnumerable<TypeViewModel> _hierarchyRootTypes;
+		private readonly IEnumerable<TypeViewModel> _singleTypes;
+
+		private bool _showTypeHierarchies = true;
+		private string _searchTerm = string.Empty;
+		private bool _isSearchPerformed = true;
+
+		private readonly Dispatcher _dispatcher;
+		private DispatcherTimer _searchTimer;
+
+		#endregion
+
+		#region // .ctor
+
+		public AssemblyBrowserWindowViewModel(AssemblyDefinition assemblyDefinition, Dispatcher dispatcher)
 		{
 			_assemblyDefinition = assemblyDefinition;
+			_dispatcher = dispatcher;
 
 			var typeViewModelsDictionary = new Dictionary<TypeDefinition, TypeViewModel>();
 			
@@ -39,27 +56,83 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 			var specialTypes = new[]
 			                   	{
-									"System.Object", "System.ValueType", "System.Enum", "System.Attribute"
+									"System.Object", 
+									"System.ValueType", 
+									"System.Enum", 
+									"System.Attribute"
 			                   	};
 
 			var baseTypes = types.Where(t => (t.BaseType == null 
 										|| specialTypes.Contains(t.BaseType.FullName))
 										&& !specialTypes.Contains(t.FullName));
 
-			HierarchyRootTypes = baseTypes.Where(t => t.DerivedTypes.Count() > 0)
+			_hierarchyRootTypes = baseTypes.Where(t => t.DerivedTypes.Count() > 0)
 				.OrderBy(t => t.Name);
-			SingleTypes = baseTypes.Where(t => t.DerivedTypes.Count() == 0)
+			_singleTypes = baseTypes.Where(t => t.DerivedTypes.Count() == 0)
 				.OrderBy(t => t.Name);
+
+			RefreshTypeCollections();
+
+			InitializeSearchTimer();
 		}
+
+		#endregion
+
+		#region // Public properties
 
 		public string Title
 		{
 			get { return _assemblyDefinition.Name.Name; }
 		}
 
-		public IEnumerable<TypeViewModel> HierarchyRootTypes { get; private set; }
+		public bool IsSearchPerformed
+		{
+			get { return _isSearchPerformed; }
+			set
+			{
+				_isSearchPerformed = value;
+				OnPropertyChanged("IsSearchPerformed");
+			}
+		}
 
-		public IEnumerable<TypeViewModel> SingleTypes { get; private set; }
+		public string SearchTerm
+		{
+			get { return _searchTerm; }
+			set
+			{
+				_searchTerm = value;
+				if (_searchTimer.IsEnabled)
+				{
+					_searchTimer.Stop();
+				}
+				_searchTimer.Start();
+				IsSearchPerformed = false;
+			}
+		}
+
+		public IEnumerable<TypeViewModel> HierarchyRootTypes
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(SearchTerm))
+				{
+					return _hierarchyRootTypes;
+				}
+				return _hierarchyRootTypes.Where(SatisfiesSearchTerm);
+			}
+		}
+
+		public IEnumerable<TypeViewModel> SingleTypes
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(SearchTerm))
+				{
+					return _singleTypes;
+				}
+				return _singleTypes.Where(SatisfiesSearchTerm);
+			}
+		}
 
 		public bool ShowTypeHierarchies
 		{
@@ -82,5 +155,42 @@ namespace ILSpyVisualizer.AssemblyBrowser
 				OnPropertyChanged("ShowSingleTypes");
 			}
 		}
+
+		#endregion
+
+		#region // Private methods
+
+		private void RefreshTypeCollections()
+		{
+			OnPropertyChanged("HierarchyRootTypes");
+			OnPropertyChanged("SingleTypes");
+			IsSearchPerformed = true;
+		}
+
+		#endregion
+
+		#region // Private methods related to search
+
+		private bool SatisfiesSearchTerm(TypeViewModel typeViewModel)
+		{
+			return typeViewModel.Name.IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase) >= 0
+				   || typeViewModel.DerivedTypes.Any(SatisfiesSearchTerm);
+		}
+
+		private void InitializeSearchTimer()
+		{
+			_searchTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(1000), 
+											   DispatcherPriority.Normal,
+											   SearchTimerTick,
+											   _dispatcher);
+		}
+
+		private void SearchTimerTick(object sender, EventArgs e)
+		{
+			_searchTimer.Stop();
+			RefreshTypeCollections();
+		}
+
+		#endregion
 	}
 }

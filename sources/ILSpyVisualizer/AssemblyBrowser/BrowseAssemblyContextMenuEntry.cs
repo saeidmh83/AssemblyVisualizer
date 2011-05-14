@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.TreeView;
@@ -29,7 +30,8 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			
 			var window = new AssemblyBrowserWindow(assemblyDefinition)
 			             	{
-			             		Owner = MainWindow.Instance
+			             		Owner = MainWindow.Instance,
+			             		WindowState = WindowState.Maximized
 			             	};
 			window.Show();
 		}

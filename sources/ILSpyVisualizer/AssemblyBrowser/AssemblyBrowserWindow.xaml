@@ -7,6 +7,8 @@
         Height="300" 
         Width="300">
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
         <DataTemplate DataType="{x:Type AssemblyBrowser:MemberViewModel}">
             <Grid Margin="0, 2">
                 <Grid.ColumnDefinitions>
@@ -20,8 +22,7 @@
                        Height="16"                       
                        />
                 <TextBlock Text="{Binding Text}"
-                           Grid.Column="1"
-                           TextOptions.TextFormattingMode="Display"/>
+                           Grid.Column="1" />
             </Grid>
         </DataTemplate>
 
@@ -31,8 +32,7 @@
                     <Setter Property="Text" Value="{Binding Name}"/>
                     <Setter Property="ToolTip" Value="{Binding FullName}"/>
                     <Setter Property="HorizontalAlignment" Value="Center"/>
-                    <Setter Property="Margin" Value="8, 5, 8, 3"/>
-                    <Setter Property="TextOptions.TextFormattingMode" Value="Display"/>
+                    <Setter Property="Margin" Value="8, 5, 8, 3"/>                    
                     <Setter Property="FontWeight" Value="Bold"/>
                 </Style>
                 <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
@@ -44,7 +44,8 @@
                 </Style>
             </DataTemplate.Resources>
 
-            <Grid HorizontalAlignment="Left">
+            <Grid HorizontalAlignment="Left"
+                  Margin="5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition />
@@ -91,32 +92,45 @@
             </DataTemplate.Triggers>
         </DataTemplate>
     </Window.Resources>
-    <Grid UseLayoutRounding="True">
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                      VerticalScrollBarVisibility="Auto">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+    <Grid UseLayoutRounding="True"
+          TextOptions.TextFormattingMode="Display">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <StackPanel>
+                <RadioButton GroupName="ViewMode" 
+                             Content="Type Hierarchies" 
+                             IsChecked="{Binding ShowTypeHierarchies}"
+                             Margin="4"/>
+                <RadioButton GroupName="ViewMode" 
+                             Content="Single Types" 
+                             IsChecked="{Binding ShowSingleTypes}"
+                             Margin="4"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">            
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
+                          Visibility="{Binding ShowTypeHierarchies, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ItemsControl ItemsSource="{Binding HierarchyRootTypes}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <ScrollViewer VerticalScrollBarVisibility="Disabled"
-                                          HorizontalScrollBarVisibility="Auto">
-                                <Grid>
-                                    <Border BorderThickness="0, 0, 0, 1"
+                            <Grid>
+                                <Border BorderThickness="0, 0, 0, 1"
                                         BorderBrush="Black">
-                                        <ContentControl Content="{Binding}"/>
-                                    </Border>
-                                    <Border BorderThickness="0, 0, 0, 1"
+                                    <ContentControl Content="{Binding}"
+                                                    Margin="10, 15"/>
+                                </Border>
+                                <Border BorderThickness="0, 0, 0, 1"
                                         BorderBrush="Black">
-                                        <Border.Effect>
-                                            <DropShadowEffect/>
-                                        </Border.Effect>
-                                    </Border>
-                                </Grid>
-                            </ScrollViewer>
+                                    <Border.Effect>
+                                        <DropShadowEffect/>
+                                    </Border.Effect>
+                                </Border>
+                            </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
@@ -125,15 +139,19 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
+            </ScrollViewer>
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          Visibility="{Binding ShowSingleTypes, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <ItemsControl ItemsSource="{Binding SingleTypes}"
                               Grid.Row="1">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"/>
+                            <WrapPanel Orientation="Horizontal" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
-            </Grid>
-        </ScrollViewer>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </Window>

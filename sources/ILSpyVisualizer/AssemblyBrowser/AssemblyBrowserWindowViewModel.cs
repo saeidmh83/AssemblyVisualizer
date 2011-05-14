@@ -10,6 +10,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 	class AssemblyBrowserWindowViewModel : ViewModelBase
 	{
 		private readonly AssemblyDefinition _assemblyDefinition;
+		private bool _showTypeHierarchies = true;
 
 		public AssemblyBrowserWindowViewModel(AssemblyDefinition assemblyDefinition)
 		{
@@ -36,7 +37,14 @@ namespace ILSpyVisualizer.AssemblyBrowser
 				}
 			}
 
-			var baseTypes = types.Where(t => t.BaseType == null);
+			var specialTypes = new[]
+			                   	{
+									"System.Object", "System.ValueType", "System.Enum", "System.Attribute"
+			                   	};
+
+			var baseTypes = types.Where(t => (t.BaseType == null 
+										|| specialTypes.Contains(t.BaseType.FullName))
+										&& !specialTypes.Contains(t.FullName));
 
 			HierarchyRootTypes = baseTypes.Where(t => t.DerivedTypes.Count() > 0)
 				.OrderBy(t => t.Name);
@@ -52,5 +60,27 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		public IEnumerable<TypeViewModel> HierarchyRootTypes { get; private set; }
 
 		public IEnumerable<TypeViewModel> SingleTypes { get; private set; }
+
+		public bool ShowTypeHierarchies
+		{
+			get { return _showTypeHierarchies; }
+			set
+			{
+				_showTypeHierarchies = value;
+				OnPropertyChanged("ShowTypeHierarchies");
+				OnPropertyChanged("ShowSingleTypes");
+			}
+		}
+
+		public bool ShowSingleTypes
+		{
+			get { return !_showTypeHierarchies; }
+			set
+			{
+				_showTypeHierarchies = !value;
+				OnPropertyChanged("ShowTypeHierarchies");
+				OnPropertyChanged("ShowSingleTypes");
+			}
+		}
 	}
 }

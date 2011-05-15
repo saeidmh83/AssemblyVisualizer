@@ -14,8 +14,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 	{
 		public bool IsVisible(SharpTreeNode[] selectedNodes)
 		{
-			return (selectedNodes.Count() == 1)
-					&& (selectedNodes.Single() is AssemblyTreeNode);
+			return selectedNodes.All(n => n is AssemblyTreeNode);
 		}
 
 		public bool IsEnabled(SharpTreeNode[] selectedNodes)
@@ -25,10 +24,12 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		public void Execute(SharpTreeNode[] selectedNodes)
 		{
-			var assemblyTreeNode = selectedNodes.Single() as AssemblyTreeNode;
-			var assemblyDefinition = assemblyTreeNode.LoadedAssembly.AssemblyDefinition;
+			var assemblyDefinitions = selectedNodes
+				.OfType<AssemblyTreeNode>()
+				.Select(n => n.LoadedAssembly.AssemblyDefinition)
+				.ToList();
 			
-			var window = new AssemblyBrowserWindow(assemblyDefinition)
+			var window = new AssemblyBrowserWindow(assemblyDefinitions)
 			             	{
 			             		Owner = MainWindow.Instance,
 			             		WindowState = WindowState.Maximized

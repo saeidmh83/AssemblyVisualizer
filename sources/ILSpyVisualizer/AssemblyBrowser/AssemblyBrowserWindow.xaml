@@ -4,10 +4,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:AssemblyBrowser="clr-namespace:ILSpyVisualizer.AssemblyBrowser" 
         Title="{Binding Title}" 
-        Height="300" 
-        Width="300">
+        Height="600" 
+        Width="800"
+        AllowDrop="True"
+        Drop="WindowDrop">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+        <Style x:Key="ViewModeRadioButtonStyle" TargetType="{x:Type RadioButton}">
+            <Setter Property="TextBlock.FontSize" Value="12"/>
+            <Setter Property="TextBlock.Foreground" Value="#666666"/>  
+            <Setter Property="Margin" Value="4"/>
+        </Style>
 
         <DataTemplate DataType="{x:Type AssemblyBrowser:MemberViewModel}">
             <Grid Margin="0, 2">
@@ -32,7 +40,7 @@
                     <Setter Property="Text" Value="{Binding Name}"/>
                     <Setter Property="ToolTip" Value="{Binding FullName}"/>
                     <Setter Property="HorizontalAlignment" Value="Center"/>
-                    <Setter Property="Margin" Value="8, 5, 8, 3"/>                    
+                    <Setter Property="Margin" Value="8, 5, 8, 3"/>
                     <Setter Property="FontWeight" Value="Bold"/>
                 </Style>
                 <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
@@ -77,8 +85,10 @@
                         </Border.Effect>
                     </Border>
                 </Grid>
-                <ItemsControl ItemsSource="{Binding DerivedTypes}"
-                              Grid.Row="1">
+                <ItemsControl x:Name="icDerivedTypes"
+                              ItemsSource="{Binding DerivedTypes}"
+                              Grid.Row="1"
+                              >
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal"/>
@@ -92,9 +102,15 @@
                     <Setter TargetName="icMembers" Property="Visibility" Value="Collapsed"/>
                     <Setter TargetName="brdDivider" Property="BorderThickness" Value="0"/>
                 </DataTrigger>
+                <DataTrigger Binding="{Binding ShowDerivedTypes}" Value="False">
+                    <Setter TargetName="icDerivedTypes" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
             </DataTemplate.Triggers>
         </DataTemplate>
     </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="Search" Executed="SearchExecuted"/>
+    </Window.CommandBindings>
     <Grid UseLayoutRounding="True"
           TextOptions.TextFormattingMode="Display">
         <Grid.RowDefinitions>
@@ -102,70 +118,137 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid>
-            <StackPanel>
-                <RadioButton GroupName="ViewMode" 
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel HorizontalAlignment="Left"
+                            Margin="4, 6">
+                    <RadioButton GroupName="ViewMode" 
                              Content="Type Hierarchies" 
                              IsChecked="{Binding ShowTypeHierarchies}"
-                             Margin="4"/>
-                <RadioButton GroupName="ViewMode" 
+                             Style="{StaticResource ViewModeRadioButtonStyle}"/>
+                    <RadioButton GroupName="ViewMode" 
                              Content="Single Types" 
                              IsChecked="{Binding ShowSingleTypes}"
-                             Margin="4"/>
-            </StackPanel>
-            
-            <TextBox Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
-                     HorizontalAlignment="Right"
-                     VerticalAlignment="Top"
-                     Width="200"
-                     Margin="10">
-                <TextBox.Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsSearchPerformed}" Value="False">
-                                <Setter Property="BorderBrush" Value="#4db74a"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
-                    
-               
-            
-        </Grid>
+                             Style="{StaticResource ViewModeRadioButtonStyle}"/>
+                </StackPanel>
 
-        <Grid Grid.Row="1">            
-            <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                          VerticalScrollBarVisibility="Auto"
-                          Visibility="{Binding ShowTypeHierarchies, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <ItemsControl ItemsSource="{Binding HierarchyRootTypes}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Border BorderThickness="0, 0, 0, 1"
-                                        BorderBrush="Black">
-                                    <ContentControl Content="{Binding}"
-                                                    Margin="10, 15"/>
-                                </Border>
-                                <Border BorderThickness="0, 0, 0, 1"
-                                        BorderBrush="Black">
-                                    <Border.Effect>
-                                        <DropShadowEffect/>
-                                    </Border.Effect>
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                <ItemsControl Grid.Column="1"
+                              ItemsSource="{Binding Assemblies}"
+                              Margin="10">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical"/>
+                            <WrapPanel Orientation="Horizontal"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Name}"
+                                           FontSize="13"
+                                           Foreground="#555555"
+                                           FontWeight="DemiBold"/>
+                                <Button x:Name="btnRemove"
+                                        Command="{Binding RemoveCommand}"
+                                        Grid.Column="1"                                        
+                                        MinWidth="16"
+                                        VerticalAlignment="Center"
+                                        Opacity="0.3"
+                                        Margin="0, 3, 0, 0">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Border Background="Transparent">
+                                                <Path Stretch="Fill" 
+                                                      StrokeThickness="0.5" 
+                                                      Stroke="#FF333333" 
+                                                      Fill="#FF969696" 
+                                                      Data="F1 M 0,1.3333L 1.33333,0L 4,2.6666L 6.6666,0 8,1.3333L 5.3333,4L 8,6.6666L 6.6666,8L 4,5.3333L 1.3333,8L 0,6.6666L 2.6666,4L 0,1.3333 Z " 
+                                                      HorizontalAlignment="Stretch" 
+                                                      VerticalAlignment="Stretch"
+                                                      Height="10"
+                                                      Width="10"
+                                                      Margin="5, 0"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+
+                            </Grid>
+                            <DataTemplate.Triggers>
+                                <Trigger SourceName="btnRemove" Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="btnRemove" Property="Opacity" Value="1"/>
+                                </Trigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </ScrollViewer>
+
+                <TextBox x:Name="txtSearch"
+                         Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Top"
+                         Width="200"
+                         Margin="10"
+                         Grid.Column="2">
+                    <TextBox.Style>
+                        <Style TargetType="{x:Type TextBox}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSearchPerformed}" Value="False">
+                                    <Setter Property="BorderBrush" Value="#4db74a"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+            </Grid>
+
+
+        </Grid>
+
+        <Grid Grid.Row="1">
+
+            <ItemsControl ItemsSource="{Binding Types}"
+                              Visibility="{Binding ShowTypeHierarchies, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <ItemsControl.Template>
+                    <ControlTemplate TargetType="{x:Type ItemsControl}">
+                        <ScrollViewer CanContentScroll="True"
+                                      HorizontalScrollBarVisibility="Auto">
+                            <VirtualizingStackPanel IsItemsHost="True"                                                     
+                                                    VirtualizingStackPanel.VirtualizationMode="Recycling"/>
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Border BorderThickness="0, 0, 0, 1"
+                                        BorderBrush="Black">
+                                <ContentControl Content="{Binding}"
+                                                    Margin="10, 15"/>
+                            </Border>
+                            <Border BorderThickness="0, 0, 0, 1"
+                                        BorderBrush="Black">
+                                <Border.Effect>
+                                    <DropShadowEffect/>
+                                </Border.Effect>
+                            </Border>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
             <ScrollViewer VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled"
                           Visibility="{Binding ShowSingleTypes, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <ItemsControl ItemsSource="{Binding SingleTypes}"
+                <ItemsControl ItemsSource="{Binding Types}"
                               Grid.Row="1">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>

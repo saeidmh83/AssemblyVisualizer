@@ -21,11 +21,11 @@ namespace ILSpyVisualizer.AssemblyBrowser
 	/// </summary>
 	internal partial class AssemblyBrowserWindow : Window
 	{
-		public AssemblyBrowserWindow(AssemblyDefinition assemblyDefinition)
+		public AssemblyBrowserWindow(IEnumerable<AssemblyDefinition> assemblyDefinitions)
 		{
 			InitializeComponent();
 
-			ViewModel = new AssemblyBrowserWindowViewModel(assemblyDefinition, Dispatcher);
+			ViewModel = new AssemblyBrowserWindowViewModel(assemblyDefinitions, Dispatcher);
 		}
 
 		internal AssemblyBrowserWindowViewModel ViewModel
@@ -40,6 +40,23 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			var typeViewModel = frameworkElement.DataContext as TypeViewModel;
 			MainWindow.Instance.JumpToReference(typeViewModel.TypeDefinition);
 			e.Handled = true;
+		}
+
+		private void WindowDrop(object sender, DragEventArgs e)
+		{
+			var assemblyFilePaths = e.Data.GetData("ILSpyAssemblies") as string[];
+			foreach (var assemblyFilePath in assemblyFilePaths)
+			{
+				var loadedAssembly =
+					MainWindow.Instance.CurrentAssemblyList.OpenAssembly(assemblyFilePath);
+				
+				ViewModel.AddAssemblyDefinition(loadedAssembly.AssemblyDefinition);
+			}
+		}
+
+		private void SearchExecuted(object sender, ExecutedRoutedEventArgs e)
+		{
+			txtSearch.Focus();
 		}
 	}
 }

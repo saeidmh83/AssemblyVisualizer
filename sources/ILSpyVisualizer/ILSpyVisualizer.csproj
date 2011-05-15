@@ -80,6 +80,7 @@
       <DependentUpon>AssemblyBrowserWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AssemblyBrowser\AssemblyBrowserWindowViewModel.cs" />
+    <Compile Include="AssemblyBrowser\AssemblyViewModel.cs" />
     <Compile Include="AssemblyBrowser\BrowseAssemblyContextMenuEntry.cs" />
     <Compile Include="AssemblyBrowser\EventViewModel.cs" />
     <Compile Include="AssemblyBrowser\MemberViewModel.cs" />

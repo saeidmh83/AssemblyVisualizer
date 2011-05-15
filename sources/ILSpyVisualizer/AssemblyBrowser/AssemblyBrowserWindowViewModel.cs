@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
 using System.Windows.Threading;
 using ICSharpCode.ILSpy;
+using System.Diagnostics;
 
 namespace ILSpyVisualizer.AssemblyBrowser
 {
@@ -13,9 +15,18 @@ namespace ILSpyVisualizer.AssemblyBrowser
 	{
 		#region // Private fields
 
-		private readonly AssemblyDefinition _assemblyDefinition;
-		private readonly IEnumerable<TypeViewModel> _hierarchyRootTypes;
-		private readonly IEnumerable<TypeViewModel> _singleTypes;
+		private readonly IList<AssemblyDefinition> _assemblyDefinitions;
+		private IEnumerable<TypeViewModel> _types;
+		private IEnumerable<TypeViewModel> _rootTypes;
+		private readonly ObservableCollection<AssemblyViewModel> _assemblies;
+
+		private readonly IEnumerable<string> _specialTypes = new[]
+		                                                     	{
+		                                                     		"System.Object",
+		                                                     		"System.ValueType",
+		                                                     		"System.Enum",
+		                                                     		"System.Attribute"
+		                                                     	};
 
 		private bool _showTypeHierarchies = true;
 		private string _searchTerm = string.Empty;
@@ -28,50 +39,16 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		#region // .ctor
 
-		public AssemblyBrowserWindowViewModel(AssemblyDefinition assemblyDefinition, Dispatcher dispatcher)
+		public AssemblyBrowserWindowViewModel(IEnumerable<AssemblyDefinition> assemblyDefinitions, Dispatcher dispatcher)
 		{
-			_assemblyDefinition = assemblyDefinition;
+			_assemblyDefinitions = assemblyDefinitions.ToList();
+			_assemblies = new ObservableCollection<AssemblyViewModel>(
+								_assemblyDefinitions.Select(a => new AssemblyViewModel(a, this)));
+
 			_dispatcher = dispatcher;
 
-			var typeViewModelsDictionary = new Dictionary<TypeDefinition, TypeViewModel>();
-			
-			var types = _assemblyDefinition.MainModule.Types
-				.Select(t =>
-				        	{
-				        		var viewModel = new TypeViewModel(t);
-								typeViewModelsDictionary.Add(t, viewModel);
-				        		return viewModel;
-				        	}).ToList();
-
-			foreach (var typeDefinition in _assemblyDefinition.MainModule.Types
-				.Where(t => t.BaseType != null))
-			{
-				var baseType = typeDefinition.BaseType.Resolve();
-				if (typeViewModelsDictionary.ContainsKey(baseType))
-				{
-					typeViewModelsDictionary[baseType].AddDerivedType(
-						typeViewModelsDictionary[typeDefinition]);
-				}
-			}
-
-			var specialTypes = new[]
-			                   	{
-									"System.Object", 
-									"System.ValueType", 
-									"System.Enum", 
-									"System.Attribute"
-			                   	};
-
-			var baseTypes = types.Where(t => (t.BaseType == null 
-										|| specialTypes.Contains(t.BaseType.FullName))
-										&& !specialTypes.Contains(t.FullName));
-
-			_hierarchyRootTypes = baseTypes.Where(t => t.DerivedTypes.Count() > 0)
-				.OrderBy(t => t.Name);
-			_singleTypes = baseTypes.Where(t => t.DerivedTypes.Count() == 0)
-				.OrderBy(t => t.Name);
-
-			RefreshTypeCollections();
+			UpdateInternalTypeCollections();
+			RefreshTypesView();
 
 			InitializeSearchTimer();
 		}
@@ -82,7 +59,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		public string Title
 		{
-			get { return _assemblyDefinition.Name.Name; }
+			get { return "Assembly Browser"; }
 		}
 
 		public bool IsSearchPerformed
@@ -110,28 +87,29 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			}
 		}
 
-		public IEnumerable<TypeViewModel> HierarchyRootTypes
+		public IEnumerable<TypeViewModel> Types
 		{
 			get
 			{
+				if (ShowTypeHierarchies)
+				{
+					if (string.IsNullOrEmpty(SearchTerm))
+					{
+						return _rootTypes;
+					}
+					return _rootTypes.Where(SatisfiesSearchTerm);
+				}
 				if (string.IsNullOrEmpty(SearchTerm))
 				{
-					return _hierarchyRootTypes;
+					return _types;
 				}
-				return _hierarchyRootTypes.Where(SatisfiesSearchTerm);
+				return _types.Where(SatisfiesSearchTerm);
 			}
 		}
 
-		public IEnumerable<TypeViewModel> SingleTypes
+		public ObservableCollection<AssemblyViewModel> Assemblies
 		{
-			get
-			{
-				if (string.IsNullOrEmpty(SearchTerm))
-				{
-					return _singleTypes;
-				}
-				return _singleTypes.Where(SatisfiesSearchTerm);
-			}
+			get { return _assemblies; }
 		}
 
 		public bool ShowTypeHierarchies
@@ -139,7 +117,12 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			get { return _showTypeHierarchies; }
 			set
 			{
+				if (_showTypeHierarchies == value)
+				{
+					return;
+				}
 				_showTypeHierarchies = value;
+				UpdateTypesAccordingToViewMode();
 				OnPropertyChanged("ShowTypeHierarchies");
 				OnPropertyChanged("ShowSingleTypes");
 			}
@@ -150,7 +133,12 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			get { return !_showTypeHierarchies; }
 			set
 			{
+				if (_showTypeHierarchies == !value)
+				{
+					return;
+				}
 				_showTypeHierarchies = !value;
+				UpdateTypesAccordingToViewMode();
 				OnPropertyChanged("ShowTypeHierarchies");
 				OnPropertyChanged("ShowSingleTypes");
 			}
@@ -158,13 +146,95 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		#endregion
 
+		#region // Private properties
+
+		private IEnumerable<TypeDefinition> AllTypeDefinitions
+		{
+			get
+			{
+				return _assemblyDefinitions.SelectMany(a => a.Modules)
+										   .SelectMany(m => m.Types)
+										   .ToList();
+			}
+		}
+
+		#endregion
+
+		#region // Public methods
+
+		public void AddAssemblyDefinition(AssemblyDefinition assemblyDefinition)
+		{
+			if (_assemblyDefinitions.Contains(assemblyDefinition))
+			{
+				return;
+			}
+
+			_assemblyDefinitions.Add(assemblyDefinition);
+			_assemblies.Add(new AssemblyViewModel(assemblyDefinition, this));
+
+			UpdateInternalTypeCollections();
+			RefreshTypesView();
+		}
+
+		public void RemoveAssemblyDefinition(AssemblyDefinition assemblyDefinition)
+		{
+			_assemblyDefinitions.Remove(assemblyDefinition);
+			var assemblyViewModel = _assemblies
+				.Where(a => a.AssemblyDefinition == assemblyDefinition)
+				.Single();
+			_assemblies.Remove(assemblyViewModel);
+
+			UpdateInternalTypeCollections();
+			RefreshTypesView();
+		}
+
+		#endregion
+
 		#region // Private methods
 
-		private void RefreshTypeCollections()
+		private void RefreshTypesView()
 		{
-			OnPropertyChanged("HierarchyRootTypes");
-			OnPropertyChanged("SingleTypes");
-			IsSearchPerformed = true;
+			OnPropertyChanged("Types");
+		}
+
+		private void UpdateInternalTypeCollections()
+		{
+			var typeViewModelsDictionary = new Dictionary<TypeDefinition, TypeViewModel>();
+
+			_types = AllTypeDefinitions
+						.Select(t =>
+						{
+							var viewModel = new TypeViewModel(t);
+							typeViewModelsDictionary.Add(t, viewModel);
+							return viewModel;
+						})
+						.ToList();
+
+
+			foreach (var typeDefinition in AllTypeDefinitions
+				.Where(t => t.BaseType != null))
+			{
+				var baseType = typeDefinition.BaseType.Resolve();
+				if (typeViewModelsDictionary.ContainsKey(baseType))
+				{
+					typeViewModelsDictionary[baseType].AddDerivedType(
+						typeViewModelsDictionary[typeDefinition]);
+				}
+			}
+
+			_rootTypes = _types.Where(t => (t.BaseType == null
+											|| _specialTypes.Contains(t.BaseType.FullName))
+											&& !_specialTypes.Contains(t.FullName))
+							   .ToList();
+		}
+
+		private void UpdateTypesAccordingToViewMode()
+		{
+			foreach (var typeViewModel in _types)
+			{
+				typeViewModel.ShowDerivedTypes = ShowTypeHierarchies;
+			}
+			RefreshTypesView();
 		}
 
 		#endregion
@@ -173,13 +243,21 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		private bool SatisfiesSearchTerm(TypeViewModel typeViewModel)
 		{
-			return typeViewModel.Name.IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase) >= 0
-				   || typeViewModel.DerivedTypes.Any(SatisfiesSearchTerm);
+			var currentSatisfies = typeViewModel.Name.IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase) >= 0;
+			if (currentSatisfies)
+			{
+				return true;
+			}
+			if (ShowTypeHierarchies)
+			{
+				return typeViewModel.DerivedTypes.Any(SatisfiesSearchTerm);
+			}
+			return false;
 		}
 
 		private void InitializeSearchTimer()
 		{
-			_searchTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(1000), 
+			_searchTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(300),
 											   DispatcherPriority.Normal,
 											   SearchTimerTick,
 											   _dispatcher);
@@ -188,7 +266,8 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		private void SearchTimerTick(object sender, EventArgs e)
 		{
 			_searchTimer.Stop();
-			RefreshTypeCollections();
+			RefreshTypesView();
+			IsSearchPerformed = true;
 		}
 
 		#endregion

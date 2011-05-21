@@ -4,6 +4,7 @@ using Mono.Cecil;
 using System.Collections.ObjectModel;
 using System.Linq;
 using ICSharpCode.ILSpy.TreeNodes;
+using System.Windows.Input;
 
 namespace ILSpyVisualizer.AssemblyBrowser
 {
@@ -12,11 +13,13 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		private readonly TypeDefinition _typeDefinition;
 		private readonly IList<TypeViewModel> _derivedTypes = new List<TypeViewModel>();
 		private bool _showMembers;
-		private bool _showDerivedTypes = true;
 
-		public TypeViewModel(TypeDefinition typeDefinition)
+		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
+
+		public TypeViewModel(TypeDefinition typeDefinition, AssemblyBrowserWindowViewModel windowViewModel)
 		{
 			_typeDefinition = typeDefinition;
+			_windowViewModel = windowViewModel;
 
 			var properties = typeDefinition.Properties
 				.Where(p => p.GetMethod != null && p.GetMethod.IsPublic
@@ -35,11 +38,28 @@ namespace ILSpyVisualizer.AssemblyBrowser
 				.OfType<MemberViewModel>();
 
 			Members = properties.Concat(events).Concat(methods);
+
+			NavigateCommand = new DelegateCommand(NavigateCommandHandler);
 		}
+
+		public ICommand NavigateCommand { get; private set; }
 
 		public TypeDefinition TypeDefinition
 		{
 			get { return _typeDefinition; }
+		}
+
+		public IEnumerable<TypeViewModel> FlattenedHierarchy
+		{
+			get 
+			{ 
+				var list = new List<TypeViewModel> {this};
+				foreach (var typeViewModel in DerivedTypes)
+				{
+					list.AddRange(typeViewModel.FlattenedHierarchy);
+				}
+				return list;
+			}
 		}
 
 		public string Name
@@ -71,20 +91,20 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			}
 		} 
 
-		public bool ShowDerivedTypes
+		public bool ShowNavigateCommand
 		{
-			get { return _showDerivedTypes; }
-			set
-			{
-				_showDerivedTypes = value;
-				OnPropertyChanged("ShowDerivedTypes");
-			}
+			get { return DerivedTypes.Count() > 0; }
 		}
 
 		public void AddDerivedType(TypeViewModel typeViewModel)
 		{
 			_derivedTypes.Add(typeViewModel);
 			typeViewModel.BaseType = this;
+		}
+
+		private void NavigateCommandHandler()
+		{
+			_windowViewModel.ShowHierarchy(this);
 		}
 	}
 }

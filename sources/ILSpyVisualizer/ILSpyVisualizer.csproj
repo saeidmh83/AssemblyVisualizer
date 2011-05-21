@@ -34,6 +34,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GraphSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\GraphSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="GraphSharp.Controls, Version=1.0.3438.42543, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\GraphSharp.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\ICSharpCode.AvalonEdit.dll</HintPath>
@@ -59,6 +67,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\Mono.Cecil.dll</HintPath>
     </Reference>
+    <Reference Include="QuickGraph, Version=3.2.40122.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\QuickGraph.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
@@ -73,6 +85,10 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WPFExtensions, Version=1.0.3437.34043, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\WPFExtensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analyzer\AnalyzeInWindowContextMenuEntry.cs" />
@@ -83,6 +99,7 @@
     <Compile Include="AssemblyBrowser\AssemblyViewModel.cs" />
     <Compile Include="AssemblyBrowser\BrowseAssemblyContextMenuEntry.cs" />
     <Compile Include="AssemblyBrowser\EventViewModel.cs" />
+    <Compile Include="AssemblyBrowser\Graph.cs" />
     <Compile Include="AssemblyBrowser\MemberViewModel.cs" />
     <Compile Include="AssemblyBrowser\MethodViewModel.cs" />
     <Compile Include="AssemblyBrowser\PropertyViewModel.cs" />
@@ -96,6 +113,18 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="AssemblyBrowser\AssemblyBrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AssemblyBrowser\ControlStylesDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AssemblyBrowser\DataTemplatesDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AssemblyBrowser\ImagesDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -8,6 +8,8 @@ using Mono.Cecil;
 using System.Windows.Threading;
 using ICSharpCode.ILSpy;
 using System.Diagnostics;
+using QuickGraph;
+using System.Windows.Input;
 
 namespace ILSpyVisualizer.AssemblyBrowser
 {
@@ -15,20 +17,12 @@ namespace ILSpyVisualizer.AssemblyBrowser
 	{
 		#region // Private fields
 
-		private readonly IList<AssemblyDefinition> _assemblyDefinitions;
-		private IEnumerable<TypeViewModel> _types;
-		private IEnumerable<TypeViewModel> _rootTypes;
 		private readonly ObservableCollection<AssemblyViewModel> _assemblies;
+		private IEnumerable<TypeViewModel> _types;
+		private IEnumerable<TypeDefinition> _allTypeDefinitions;
+		private TypeGraph _graph;
+		private bool _showGraph;
 
-		private readonly IEnumerable<string> _specialTypes = new[]
-		                                                     	{
-		                                                     		"System.Object",
-		                                                     		"System.ValueType",
-		                                                     		"System.Enum",
-		                                                     		"System.Attribute"
-		                                                     	};
-
-		private bool _showTypeHierarchies = true;
 		private string _searchTerm = string.Empty;
 		private bool _isSearchPerformed = true;
 
@@ -41,14 +35,14 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		public AssemblyBrowserWindowViewModel(IEnumerable<AssemblyDefinition> assemblyDefinitions, Dispatcher dispatcher)
 		{
-			_assemblyDefinitions = assemblyDefinitions.ToList();
 			_assemblies = new ObservableCollection<AssemblyViewModel>(
-								_assemblyDefinitions.Select(a => new AssemblyViewModel(a, this)));
+								assemblyDefinitions.Select(a => new AssemblyViewModel(a, this)));
 
 			_dispatcher = dispatcher;
 
-			UpdateInternalTypeCollections();
-			RefreshTypesView();
+			NavigateToSearchViewCommand = new DelegateCommand(NavigateToSearchViewCommandHandler);
+
+			OnAssembliesChanged();
 
 			InitializeSearchTimer();
 		}
@@ -56,6 +50,10 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		#endregion
 
 		#region // Public properties
+
+		public event Action GraphChanged;
+
+		public ICommand NavigateToSearchViewCommand { get; private set; }
 
 		public string Title
 		{
@@ -87,19 +85,37 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			}
 		}
 
+		public TypeGraph Graph
+		{
+			get { return _graph; }
+			set
+			{
+				_graph = value;
+				OnPropertyChanged("Graph");
+			}
+		}
+
+		public bool ShowGraph
+		{
+			get { return _showGraph; }
+			set
+			{
+				_showGraph = value;
+				OnPropertyChanged("ShowGraph");
+				OnPropertyChanged("IsInSearchView");
+			}
+		}
+
+		public bool IsInSearchView
+		{
+			get { return !_showGraph; }
+		}
+
 		public IEnumerable<TypeViewModel> Types
 		{
 			get
 			{
-				if (ShowTypeHierarchies)
-				{
-					if (string.IsNullOrEmpty(SearchTerm))
-					{
-						return _rootTypes;
-					}
-					return _rootTypes.Where(SatisfiesSearchTerm);
-				}
-				if (string.IsNullOrEmpty(SearchTerm))
+				if (string.IsNullOrWhiteSpace(SearchTerm))
 				{
 					return _types;
 				}
@@ -112,38 +128,6 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			get { return _assemblies; }
 		}
 
-		public bool ShowTypeHierarchies
-		{
-			get { return _showTypeHierarchies; }
-			set
-			{
-				if (_showTypeHierarchies == value)
-				{
-					return;
-				}
-				_showTypeHierarchies = value;
-				UpdateTypesAccordingToViewMode();
-				OnPropertyChanged("ShowTypeHierarchies");
-				OnPropertyChanged("ShowSingleTypes");
-			}
-		}
-
-		public bool ShowSingleTypes
-		{
-			get { return !_showTypeHierarchies; }
-			set
-			{
-				if (_showTypeHierarchies == !value)
-				{
-					return;
-				}
-				_showTypeHierarchies = !value;
-				UpdateTypesAccordingToViewMode();
-				OnPropertyChanged("ShowTypeHierarchies");
-				OnPropertyChanged("ShowSingleTypes");
-			}
-		}
-
 		#endregion
 
 		#region // Private properties
@@ -152,9 +136,26 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		{
 			get
 			{
-				return _assemblyDefinitions.SelectMany(a => a.Modules)
-										   .SelectMany(m => m.Types)
-										   .ToList();
+				if (_allTypeDefinitions == null)
+				{
+					_allTypeDefinitions = _assemblies
+						.Select(a => a.AssemblyDefinition)
+						.SelectMany(a => a.Modules)
+						.SelectMany(m => m.Types)
+						.ToList();
+				}
+				return _allTypeDefinitions;
+			}
+		}
+
+		private bool AreRemoveAssemblyButtonsVisible
+		{	
+			set
+			{
+				foreach (var assembly in _assemblies)
+				{
+					assembly.ShowRemoveCommand = value;
+				}
 			}
 		}
 
@@ -162,35 +163,57 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		#region // Public methods
 
-		public void AddAssemblyDefinition(AssemblyDefinition assemblyDefinition)
+		public void ShowHierarchy(TypeViewModel type)
 		{
-			if (_assemblyDefinitions.Contains(assemblyDefinition))
+			Graph = CreateGraph(type);
+			ShowGraph = true;
+			AreRemoveAssemblyButtonsVisible = false;
+			OnGraphChanged();
+		}
+
+		public void AddAssemblies(IEnumerable<AssemblyDefinition> assemblies)
+		{
+			var newAssemblies = assemblies.Except(_assemblies.Select(a => a.AssemblyDefinition));
+			foreach (var assembly in newAssemblies)
+			{
+				_assemblies.Add(new AssemblyViewModel(assembly, this));
+			}
+
+			OnAssembliesChanged();
+		}
+
+		public void AddAssembly(AssemblyDefinition assemblyDefinition)
+		{
+			if (_assemblies.Any(vm => vm.AssemblyDefinition == assemblyDefinition))
 			{
 				return;
 			}
 
-			_assemblyDefinitions.Add(assemblyDefinition);
 			_assemblies.Add(new AssemblyViewModel(assemblyDefinition, this));
 
-			UpdateInternalTypeCollections();
-			RefreshTypesView();
+			OnAssembliesChanged();
 		}
 
-		public void RemoveAssemblyDefinition(AssemblyDefinition assemblyDefinition)
+		public void RemoveAssembly(AssemblyDefinition assemblyDefinition)
 		{
-			_assemblyDefinitions.Remove(assemblyDefinition);
 			var assemblyViewModel = _assemblies
-				.Where(a => a.AssemblyDefinition == assemblyDefinition)
-				.Single();
-			_assemblies.Remove(assemblyViewModel);
-
-			UpdateInternalTypeCollections();
-			RefreshTypesView();
+				.FirstOrDefault(vm => vm.AssemblyDefinition == assemblyDefinition);
+			if (assemblyViewModel != null)
+			{
+				_assemblies.Remove(assemblyViewModel);
+				OnAssembliesChanged();
+			}
 		}
 
 		#endregion
 
 		#region // Private methods
+
+		private void OnAssembliesChanged()
+		{
+			UpdateInternalTypeCollections();
+				RefreshTypesView();
+		}
 
 		private void RefreshTypesView()
 		{
@@ -199,42 +222,49 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		private void UpdateInternalTypeCollections()
 		{
-			var typeViewModelsDictionary = new Dictionary<TypeDefinition, TypeViewModel>();
-
+			_allTypeDefinitions = null;
 			_types = AllTypeDefinitions
-						.Select(t =>
-						{
-							var viewModel = new TypeViewModel(t);
-							typeViewModelsDictionary.Add(t, viewModel);
-							return viewModel;
-						})
-						.ToList();
-
+				.OrderBy(t => t.Name)
+				.Select(t => new TypeViewModel(t, this))
+				.ToList();
+			var typesDictionary = _types.ToDictionary(type => type.TypeDefinition);
 
 			foreach (var typeDefinition in AllTypeDefinitions
 				.Where(t => t.BaseType != null))
 			{
 				var baseType = typeDefinition.BaseType.Resolve();
-				if (typeViewModelsDictionary.ContainsKey(baseType))
+				if (typesDictionary.ContainsKey(baseType))
 				{
-					typeViewModelsDictionary[baseType].AddDerivedType(
-						typeViewModelsDictionary[typeDefinition]);
+					typesDictionary[baseType].AddDerivedType(
+						typesDictionary[typeDefinition]);
 				}
 			}
-
-			_rootTypes = _types.Where(t => (t.BaseType == null
-											|| _specialTypes.Contains(t.BaseType.FullName))
-											&& !_specialTypes.Contains(t.FullName))
-							   .ToList();
 		}
 
-		private void UpdateTypesAccordingToViewMode()
+		private static TypeGraph CreateGraph(TypeViewModel typeViewModel)
 		{
-			foreach (var typeViewModel in _types)
+			var graph = new TypeGraph(true);
+			var flattededHierarchy = typeViewModel.FlattenedHierarchy;
+			graph.AddVertexRange(flattededHierarchy);
+			foreach (var viewModel in flattededHierarchy)
 			{
-				typeViewModel.ShowDerivedTypes = ShowTypeHierarchies;
+				if (viewModel.BaseType == null || viewModel == typeViewModel)
+				{
+					continue;
+				}
+				graph.AddEdge(new Edge<TypeViewModel>(viewModel, viewModel.BaseType));
 			}
-			RefreshTypesView();
+			return graph;
+		}
+
+		private void OnGraphChanged()
+		{
+			var handler = GraphChanged;
+
+			if (handler != null)
+			{
+				GraphChanged();
+			}
 		}
 
 		#endregion
@@ -243,16 +273,9 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		private bool SatisfiesSearchTerm(TypeViewModel typeViewModel)
 		{
-			var currentSatisfies = typeViewModel.Name.IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase) >= 0;
-			if (currentSatisfies)
-			{
-				return true;
-			}
-			if (ShowTypeHierarchies)
-			{
-				return typeViewModel.DerivedTypes.Any(SatisfiesSearchTerm);
-			}
-			return false;
+			return typeViewModel
+				.Name.IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase) >= 0;
+			
 		}
 
 		private void InitializeSearchTimer()
@@ -268,6 +291,17 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			_searchTimer.Stop();
 			RefreshTypesView();
 			IsSearchPerformed = true;
+		}
+
+		#endregion
+
+		#region // Command handlers
+
+		private void NavigateToSearchViewCommandHandler()
+		{
+			ShowGraph = false;
+			Graph = null;
+			AreRemoveAssemblyButtonsVisible = true;
 		}
 
 		#endregion

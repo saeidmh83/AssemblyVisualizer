@@ -26,20 +26,13 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			InitializeComponent();
 
 			ViewModel = new AssemblyBrowserWindowViewModel(assemblyDefinitions, Dispatcher);
+			ViewModel.GraphChanged += GraphChangedHandler;
 		}
 
 		internal AssemblyBrowserWindowViewModel ViewModel
 		{
 			get { return DataContext as AssemblyBrowserWindowViewModel; }
 			set { DataContext = value; }
-		}
-
-		private void TypeMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-		{
-			var frameworkElement = sender as FrameworkElement;
-			var typeViewModel = frameworkElement.DataContext as TypeViewModel;
-			MainWindow.Instance.JumpToReference(typeViewModel.TypeDefinition);
-			e.Handled = true;
 		}
 
 		private void WindowDrop(object sender, DragEventArgs e)
@@ -50,13 +43,18 @@ namespace ILSpyVisualizer.AssemblyBrowser
 				var loadedAssembly =
 					MainWindow.Instance.CurrentAssemblyList.OpenAssembly(assemblyFilePath);
 				
-				ViewModel.AddAssemblyDefinition(loadedAssembly.AssemblyDefinition);
+				ViewModel.AddAssembly(loadedAssembly.AssemblyDefinition);
 			}
 		}
 
 		private void SearchExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
 			txtSearch.Focus();
+		}
+
+		private void GraphChangedHandler()
+		{
+			zoomControl.ZoomToFill();
 		}
 	}
 }

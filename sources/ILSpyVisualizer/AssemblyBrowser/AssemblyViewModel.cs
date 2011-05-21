@@ -12,6 +12,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 	{
 		private readonly AssemblyDefinition _assemblyDefinition;
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
+		private bool _showRemoveCommand = true;
 		
 		public AssemblyViewModel(AssemblyDefinition assemblyDefinition, 
 								 AssemblyBrowserWindowViewModel windowViewModel)
@@ -29,6 +30,16 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		public ICommand RemoveCommand { get; private set; }
 
+		public bool ShowRemoveCommand
+		{
+			get { return _showRemoveCommand; }
+			set
+			{
+				_showRemoveCommand = value;
+				OnPropertyChanged("ShowRemoveCommand");
+			}
+		}
+
 		public AssemblyDefinition AssemblyDefinition
 		{
 			get { return _assemblyDefinition; }
@@ -36,7 +47,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		private void RemoveCommandHandler()
 		{
-			_windowViewModel.RemoveAssemblyDefinition(_assemblyDefinition);
+			_windowViewModel.RemoveAssembly(_assemblyDefinition);
 		}
 	}
 }

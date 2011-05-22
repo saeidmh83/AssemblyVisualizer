@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="ILSpyVisualizer.AssemblyBrowser.Screens.GraphScreenView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:zoom="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions" 
+             xmlns:AssemblyBrowser="clr-namespace:ILSpyVisualizer.AssemblyBrowser"               
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Dictionaries\DataTemplatesDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <Grid>
+        <zoom:ZoomControl x:Name="zoomControl"
+                              Grid.Row="1"  
+                              Zoom="0.2"
+                              ZoomBoxOpacity="0.5">
+            <AssemblyBrowser:TypeGraphLayout x:Name="graphLayout" 
+                                             Margin="10"
+                                             Graph="{Binding Graph}"
+                                             LayoutAlgorithmType="LinLog"
+                                             OverlapRemovalAlgorithmType="FSA"
+                                             HighlightAlgorithmType="Simple" />
+        </zoom:ZoomControl>
+
+        <Border VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Background="White"
+                CornerRadius="8"
+                Margin="0, 8, 12, 0">
+            <ItemsControl ItemsSource="{Binding Assemblies}"/>
+        </Border>
+    </Grid>
+</UserControl>

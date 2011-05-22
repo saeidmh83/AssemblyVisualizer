@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using ILSpyVisualizer.AssemblyBrowser.ViewModels;
 using Mono.Cecil;
 using ICSharpCode.ILSpy;
 
@@ -26,7 +27,6 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			InitializeComponent();
 
 			ViewModel = new AssemblyBrowserWindowViewModel(assemblyDefinitions, Dispatcher);
-			ViewModel.GraphChanged += GraphChangedHandler;
 		}
 
 		internal AssemblyBrowserWindowViewModel ViewModel
@@ -49,12 +49,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		private void SearchExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
-			txtSearch.Focus();
-		}
-
-		private void GraphChangedHandler()
-		{
-			zoomControl.ZoomToFill();
+			ViewModel.ShowSearch();
 		}
 	}
 }

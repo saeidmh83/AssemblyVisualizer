@@ -4,7 +4,8 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="DataTemplatesDictionary.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    <Style TargetType="{x:Type Hyperlink}">
+    <Style TargetType="{x:Type Hyperlink}"
+           x:Key="HyperlinkStyle">
         <Setter Property="TextDecorations" Value="{x:Null}"/>
         <Setter Property="Foreground" Value="#FF0083BF"/>
         <Setter Property="FontWeight" Value="Bold"/>

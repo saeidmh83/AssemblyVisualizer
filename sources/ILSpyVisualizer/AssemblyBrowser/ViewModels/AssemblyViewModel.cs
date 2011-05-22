@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
 
-namespace ILSpyVisualizer.AssemblyBrowser
+namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
 	class AssemblyViewModel : ViewModelBase
 	{

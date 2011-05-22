@@ -1,132 +1,32 @@
 ﻿<Window x:Class="ILSpyVisualizer.AssemblyBrowser.AssemblyBrowserWindow"
         x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:zoom="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions" 
-        xmlns:AssemblyBrowser="clr-namespace:ILSpyVisualizer.AssemblyBrowser" Title="{Binding Title}" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Screens="clr-namespace:ILSpyVisualizer.AssemblyBrowser.Screens" xmlns:UserControls="clr-namespace:ILSpyVisualizer.AssemblyBrowser.UserControls" Title="{Binding Title}" 
         Height="600" 
-        Width="800"
-        AllowDrop="{Binding IsInSearchView}"
-        Drop="WindowDrop">
+        Width="800"        
+        Drop="WindowDrop"
+        AllowDrop="{Binding Screen.AllowAssemblyDrop}">
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="DataTemplatesDictionary.xaml"/>
-                <ResourceDictionary Source="ControlStylesDictionary.xaml"/>
+            <ResourceDictionary.MergedDictionaries>                
+                <ResourceDictionary Source="Dictionaries\ControlStylesDictionary.xaml"/>                
             </ResourceDictionary.MergedDictionaries> 
-            
-            <Style x:Key="InvisibleInGraphViewStyle" TargetType="{x:Type FrameworkElement}">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding ShowGraph}" Value="True">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
-            <Style x:Key="InvisibleInSearchViewStyle" TargetType="{x:Type FrameworkElement}">
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding IsInSearchView}" Value="True">
-                        <Setter Property="Visibility" Value="Collapsed"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-            
         </ResourceDictionary>
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="Search" Executed="SearchExecuted"/>
     </Window.CommandBindings>
     <Grid UseLayoutRounding="True"
-          TextOptions.TextFormattingMode="Display">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        
-        <!--Header-->
-        <Grid>
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+          TextOptions.TextFormattingMode="Display">      
 
-                <TextBlock Style="{StaticResource InvisibleInSearchViewStyle}"
-                           Margin="10"
-                           VerticalAlignment="Top">
-                    <Hyperlink Command="{Binding NavigateToSearchViewCommand}">  
-                        <TextBlock Text="Back to search results"/>                                   
-                    </Hyperlink>                    
-                </TextBlock>
-                
-                <ItemsControl Grid.Column="1"
-                              ItemsSource="{Binding Assemblies}"
-                              Margin="10">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
+        <!--Content-->  
+        <UserControls:CachingScreenPresenter Screen="{Binding Screen}"
+                                        Grid.Row="1"/>
 
-                <TextBox x:Name="txtSearch"
-                         Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
-                         HorizontalAlignment="Right"
-                         VerticalAlignment="Top"
-                         Width="200"
-                         Margin="10"
-                         Grid.Column="2">
-                    <TextBox.Style>
-                        <Style TargetType="{x:Type TextBox}" 
-                               BasedOn="{StaticResource InvisibleInGraphViewStyle}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsSearchPerformed}" Value="False">
-                                    <Setter Property="BorderBrush" Value="#4db74a"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBox.Style>
-                </TextBox>
-            </Grid>
-        </Grid>  
-
-        <!--Content-->
-        <Grid Grid.Row="1">
-            
-            <!--Search results-->
-            <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                          HorizontalScrollBarVisibility="Disabled"
-                          Style="{StaticResource InvisibleInGraphViewStyle}">
-                <ItemsControl ItemsSource="{Binding Types}"
-                          ItemTemplate="{StaticResource TypeDataTemplate}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel Orientation="Horizontal"/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemContainerStyle>
-                        <Style TargetType="{x:Type ContentPresenter}">
-                            <Setter Property="Margin" Value="8"/>
-                        </Style>
-                    </ItemsControl.ItemContainerStyle>
-                </ItemsControl>                
-            </ScrollViewer>
-            
-            <!--Graph-->
-            <zoom:ZoomControl x:Name="zoomControl"
-                              Grid.Row="1"  
-                              Zoom="0.2"
-                              ZoomBoxOpacity="0.5"
-                              Style="{StaticResource InvisibleInSearchViewStyle}">
-                <AssemblyBrowser:TypeGraphLayout x:Name="graphLayout" 
-                                                     Margin="10"
-                                                     Graph="{Binding Graph}"
-                                                     LayoutAlgorithmType="LinLog"
-                                                     OverlapRemovalAlgorithmType="FSA"
-                                                     HighlightAlgorithmType="Simple" />
-                
-            </zoom:ZoomControl>
-        </Grid>
+        <!--Commands-->
+        <UserControls:CommandsView HorizontalAlignment="Center"
+                              VerticalAlignment="Top"
+                              DataContext="{Binding Screen.Commands}"
+                              Margin="4"/>
     </Grid>
 </Window>

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 using ICSharpCode.ILSpy.TreeNodes;
 using Mono.Cecil;
 using ICSharpCode.ILSpy;
 
-namespace ILSpyVisualizer.AssemblyBrowser
+namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
 	class MethodViewModel : MemberViewModel
 	{

@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
-using System.Collections.ObjectModel;
 using System.Linq;
-using ICSharpCode.ILSpy.TreeNodes;
 using System.Windows.Input;
 
-namespace ILSpyVisualizer.AssemblyBrowser
+namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
 	class TypeViewModel : ViewModelBase
 	{
@@ -104,7 +102,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		private void NavigateCommandHandler()
 		{
-			_windowViewModel.ShowHierarchy(this);
+			_windowViewModel.ShowGraph(this);
 		}
 	}
 }

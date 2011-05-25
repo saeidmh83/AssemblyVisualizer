@@ -14,7 +14,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 
 		public GraphScreen(AssemblyBrowserWindowViewModel windowViewModel) : base(windowViewModel)
 		{
-			Commands.Add(new UserCommand("Search", new DelegateCommand(() => WindowViewModel.ShowSearch())));
+			Commands.Add(WindowViewModel.ShowSearchUserCommand);
 		}
 		
 		public event Action GraphChanged;

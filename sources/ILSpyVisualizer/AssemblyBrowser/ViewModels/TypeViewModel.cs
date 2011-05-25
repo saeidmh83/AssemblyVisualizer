@@ -12,6 +12,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private readonly IList<TypeViewModel> _derivedTypes = new List<TypeViewModel>();
 		private bool _showMembers;
 
+		private int _descendantsCount;
+		private int _directDescendantsCount;
+
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
 
 		public TypeViewModel(TypeDefinition typeDefinition, AssemblyBrowserWindowViewModel windowViewModel)
@@ -37,10 +40,10 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 			Members = properties.Concat(events).Concat(methods);
 
-			NavigateCommand = new DelegateCommand(NavigateCommandHandler);
+			VisualizeCommand = new DelegateCommand(VisualizeCommandHandler);
 		}
 
-		public ICommand NavigateCommand { get; private set; }
+		public ICommand VisualizeCommand { get; private set; }
 
 		public TypeDefinition TypeDefinition
 		{
@@ -70,6 +73,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			get { return _typeDefinition.FullName; }
 		}
 
+		public int DescendantsCount
+		{
+			get { return _descendantsCount; }
+		}
+
+		public int DirectDescendantsCount
+		{
+			get { return _directDescendantsCount; }
+		}
+
 		public IEnumerable<MemberViewModel> Members { get; set; }
 
 		public IEnumerable<TypeViewModel> DerivedTypes
@@ -78,6 +91,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		}
 
 		public TypeViewModel BaseType { get; private set; }
+
+		public string BaseTypeName
+		{
+			get { return _typeDefinition.BaseType.Name; }
+		}
 
 		public bool ShowMembers
 		{
@@ -100,7 +118,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			typeViewModel.BaseType = this;
 		}
 
-		private void NavigateCommandHandler()
+		public void CountDescendants()
+		{
+			_descendantsCount = FlattenedHierarchy.Count() - 1;
+			_directDescendantsCount = DerivedTypes.Count();
+
+			OnPropertyChanged("DescendantsCount");
+			OnPropertyChanged("DirectDescendantsCount");
+		}
+
+		private void VisualizeCommandHandler()
 		{
 			_windowViewModel.ShowGraph(this);
 		}

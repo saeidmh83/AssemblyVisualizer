@@ -10,35 +10,95 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Dictionaries\DataTemplatesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+            <DataTemplate x:Key="AssemblyTemplate">
+                <Grid Margin="5">
+                    <Border Background="#DBE1FF">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="{Binding Name}"
+                                               FontSize="16"
+                                               FontWeight="Bold"
+                                               Margin="6"/>
+
+                            <Button x:Name="btnRemove"
+                                            Command="{Binding RemoveCommand}"                                                                               
+                                            MinWidth="16"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Right"
+                                            Opacity="0.3"
+                                            Margin="3">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Border Background="Transparent">
+                                            <Path Stretch="Fill" 
+                                                          StrokeThickness="0.5" 
+                                                          Stroke="#FF333333" 
+                                                          Fill="#FF969696" 
+                                                          Data="F1 M 0,1.3333L 1.33333,0L 4,2.6666L 6.6666,0 8,1.3333L 5.3333,4L 8,6.6666L 6.6666,8L 4,5.3333L 1.3333,8L 0,6.6666L 2.6666,4L 0,1.3333 Z " 
+                                                          HorizontalAlignment="Stretch" 
+                                                          VerticalAlignment="Stretch"
+                                                          Height="10"
+                                                          Width="10"
+                                                          Margin="5, 0"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+
+                            <TextBlock Text="Some information"
+                                               Margin="6"
+                                               Grid.Row="1"/>
+                        </Grid>
+                    </Border>
+                    <!--<Border Style="{StaticResource BorderStyle}"
+                            BorderBrush="Purple">
+                        <Border.Effect>
+                            <DropShadowEffect/>
+                        </Border.Effect>
+                    </Border>-->
+                </Grid>
+                <DataTemplate.Triggers>
+                    <Trigger SourceName="btnRemove" Property="IsMouseOver" Value="True">
+                        <Setter TargetName="btnRemove" Property="Opacity" Value="1"/>
+                    </Trigger>
+                    <DataTrigger Binding="{Binding ShowRemoveCommand}" Value="False">
+                        <Setter TargetName="btnRemove" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <RowDefinition/>
+            <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Margin="0, 24">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <ItemsControl ItemsSource="{Binding Assemblies}"
-                              Margin="10">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-
+            <TextBlock Text="Filter:"
+                       VerticalAlignment="Center"
+                       FontSize="20"
+                       Margin="20, 0"/>
             <TextBox x:Name="txtSearch"
-                         Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
-                         HorizontalAlignment="Right"
-                         VerticalAlignment="Top"
-                         Width="200"
-                         Margin="10"
-                         Grid.Column="1">
+                     Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"                                            
+                     Margin="0, 0, 20, 0"
+                     Grid.Column="1"
+                     FontSize="20">
                 <TextBox.Style>
                     <Style TargetType="{x:Type TextBox}">
                         <Style.Triggers>
@@ -50,22 +110,78 @@
                 </TextBox.Style>
             </TextBox>
         </Grid>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" 
-                          HorizontalScrollBarVisibility="Disabled"
+
+        <ItemsControl ItemsSource="{Binding SearchResults}"
                           Grid.Row="1">
-            <ItemsControl ItemsSource="{Binding SearchResults}"
-                          ItemTemplate="{StaticResource TypeDataTemplate}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemContainerStyle>
-                    <Style TargetType="{x:Type ContentPresenter}">
-                        <Setter Property="Margin" Value="8"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-            </ItemsControl>
-        </ScrollViewer>
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer CanContentScroll="True"
+                                      VerticalScrollBarVisibility="Auto">
+                        <VirtualizingStackPanel Orientation="Vertical"
+                                                    VirtualizingStackPanel.IsVirtualizing="True"
+                                                    VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                                    IsItemsHost="True"/>
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="5">
+                        <Border Style="{StaticResource BorderStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Name}"
+                                       ToolTip="{Binding FullName}"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Margin="6" />
+
+                                <StackPanel Orientation="Horizontal"
+                                                Grid.Row="1"
+                                                Margin="4">
+                                    <TextBlock Text="Direct descendants:"/>
+                                    <TextBlock Text="{Binding DirectDescendantsCount}"
+                                                   Margin="4, 0"
+                                                   FontWeight="Bold"/>
+                                    <TextBlock Text="Total descendants:"/>
+                                    <TextBlock Text="{Binding DescendantsCount}"
+                                                   Margin="4, 0"
+                                                   FontWeight="Bold"/>
+                                </StackPanel>
+
+                                <TextBlock VerticalAlignment="Center"
+                                               Margin="8, 0"
+                                               Grid.Column="1"
+                                               Grid.RowSpan="2"
+                                               Visibility="{Binding ShowNavigateCommand, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        <Hyperlink Command="{Binding VisualizeCommand}"
+                                                   Style="{StaticResource HyperlinkStyle}">
+                                            <TextBlock Text="Visualize"/>
+                                        </Hyperlink>
+                                    </TextBlock>
+                            </Grid>
+                        </Border>
+                        <Border Style="{StaticResource BorderStyle}">
+                            <Border.Effect>
+                                <DropShadowEffect/>
+                            </Border.Effect>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <ItemsControl Grid.Column="1"
+                          Grid.Row="1"
+                          ItemsSource="{Binding Assemblies}"
+                          ItemTemplate="{StaticResource AssemblyTemplate}"/>
+
+
     </Grid>
 </UserControl>

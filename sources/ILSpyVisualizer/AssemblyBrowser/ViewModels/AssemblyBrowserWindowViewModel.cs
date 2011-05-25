@@ -91,6 +91,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			get { return _assemblies; }
 		}
 
+		public UserCommand ShowSearchUserCommand
+		{
+			get { return new UserCommand("Search", new DelegateCommand(ShowSearch)); } 
+		}
+
 		#endregion
 
 		#region // Private properties
@@ -175,11 +180,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		#endregion
 
 		#region // Private methods
-
+		
 		private void OnAssembliesChanged()
 		{
 			UpdateInternalTypeCollections();
-			Screen.NotifyAssembliesChanged();
+			_searchScreen.NotifyAssembliesChanged();
 		}
 
 		private void UpdateInternalTypeCollections()
@@ -200,6 +205,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 					typesDictionary[baseType].AddDerivedType(
 						typesDictionary[typeDefinition]);
 				}
+			}
+
+			foreach (var type in Types)
+			{
+				type.CountDescendants();
 			}
 		}
 

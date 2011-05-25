@@ -4,14 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:zoom="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions" 
-             xmlns:AssemblyBrowser="clr-namespace:ILSpyVisualizer.AssemblyBrowser"               
-             mc:Ignorable="d" 
+             xmlns:AssemblyBrowser="clr-namespace:ILSpyVisualizer.AssemblyBrowser" 
+             xmlns:Controls="clr-namespace:GraphSharp.Controls;assembly=GraphSharp.Controls" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Dictionaries\DataTemplatesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="{x:Type Controls:VertexControl}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Controls:VertexControl}">
+
+                            <ContentPresenter Content="{TemplateBinding Vertex}" 
+                                      ContentTemplate="{StaticResource TypeDataTemplate}"/>
+
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
@@ -27,11 +40,11 @@
                                              HighlightAlgorithmType="Simple" />
         </zoom:ZoomControl>
 
-        <Border VerticalAlignment="Top"
+        <Border VerticalAlignment="Bottom"
                 HorizontalAlignment="Right"
                 Background="White"
                 CornerRadius="8"
-                Margin="0, 8, 12, 0">
+                Margin="0, 0, 12, 8">
             <ItemsControl ItemsSource="{Binding Assemblies}"/>
         </Border>
     </Grid>

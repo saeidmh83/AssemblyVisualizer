@@ -1,7 +1,9 @@
 ﻿<Window x:Class="ILSpyVisualizer.AssemblyBrowser.AssemblyBrowserWindow"
         x:ClassModifier="internal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:Screens="clr-namespace:ILSpyVisualizer.AssemblyBrowser.Screens" xmlns:UserControls="clr-namespace:ILSpyVisualizer.AssemblyBrowser.UserControls" Title="{Binding Title}" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"         
+        xmlns:UserControls="clr-namespace:ILSpyVisualizer.AssemblyBrowser.UserControls" 
+        Title="{Binding Title}" 
         Height="600" 
         Width="800"        
         Drop="WindowDrop"
@@ -9,9 +11,12 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>                
-                <ResourceDictionary Source="Dictionaries\ControlStylesDictionary.xaml"/>                
-            </ResourceDictionary.MergedDictionaries> 
-        </ResourceDictionary>
+                <ResourceDictionary Source="Dictionaries\ControlStylesDictionary.xaml"/>
+                <ResourceDictionary Source="Dictionaries\ImagesDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>-->
+        </ResourceDictionary>    
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="Search" Executed="SearchExecuted"/>
@@ -25,8 +30,18 @@
 
         <!--Commands-->
         <UserControls:CommandsView HorizontalAlignment="Center"
-                              VerticalAlignment="Top"
-                              DataContext="{Binding Screen.Commands}"
-                              Margin="4"/>
+                                   VerticalAlignment="Top"
+                                   DataContext="{Binding Screen.Commands}"
+                                   Margin="4"/>
+        
+        <!--<Grid Visibility="{Binding ShowNavigationArrows, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Background="{StaticResource RightArrowDrawing}"
+                    Width="100"
+                    Height="100"/>
+        </Grid>-->
     </Grid>
 </Window>

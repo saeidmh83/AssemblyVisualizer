@@ -22,7 +22,7 @@
             <DataTemplate>
                 <Border Background="White"
                         CornerRadius="8">
-                    <TextBlock Margin="4">
+                    <TextBlock Margin="8, 4">
                         <Hyperlink Command="{Binding Command}"
                                    Style="{StaticResource HyperlinkStyle}">
                             <TextBlock Text="{Binding Text}"/>

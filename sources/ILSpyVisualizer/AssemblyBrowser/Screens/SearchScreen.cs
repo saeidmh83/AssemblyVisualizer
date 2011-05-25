@@ -48,6 +48,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			}
 		}
 
+		
 		public IEnumerable<TypeViewModel> SearchResults
 		{
 			get
@@ -56,6 +57,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 				{
 					return WindowViewModel.Types;
 				}
+
 				return WindowViewModel.Types.Where(SatisfiesSearchTerm);
 			}
 		}
@@ -70,19 +72,22 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			OnSearchFocusRequested();
 		}
 
+		#region // Private methods
+
 		private bool SatisfiesSearchTerm(TypeViewModel typeViewModel)
 		{
 			return typeViewModel
-				.Name.IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase) >= 0;
+				.Name.StartsWith(SearchTerm, StringComparison.InvariantCultureIgnoreCase);
 
 		}
 
 		private void InitializeSearchTimer()
 		{
-			_searchTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(500),
-											   DispatcherPriority.Normal,
-											   SearchTimerTick,
-											   WindowViewModel.Dispatcher);
+			_searchTimer = new DispatcherTimer(DispatcherPriority.Normal, WindowViewModel.Dispatcher)
+			               	{
+			               		Interval = TimeSpan.FromMilliseconds(400)
+			               	};
+			_searchTimer.Tick += SearchTimerTick;
 		}
 
 		private void SearchTimerTick(object sender, EventArgs e)
@@ -105,5 +110,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 				handler();
 			}
 		}
+
+		#endregion
 	}
 }

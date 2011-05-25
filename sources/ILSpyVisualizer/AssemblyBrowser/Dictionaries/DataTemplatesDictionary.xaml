@@ -3,10 +3,19 @@
                     xmlns:ViewModels="clr-namespace:ILSpyVisualizer.AssemblyBrowser.ViewModels">
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ImagesDictionary.xaml"/>
+        <ResourceDictionary Source="ControlStylesDictionary.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-    
+
+        
+    <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+    </Style>
+
     <!--Image button-->
     <ControlTemplate x:Key="ImageButtonTemplate" TargetType="{x:Type ButtonBase}">
         <Border Width="{TemplateBinding Width}" 
@@ -43,12 +52,6 @@
                 <Setter Property="Margin" Value="8, 5, 8, 3"/>
                 <Setter Property="FontWeight" Value="Bold"/>
             </Style>
-            <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
-                <Setter Property="CornerRadius" Value="10"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="BorderBrush" Value="Black"/>
-                <Setter Property="SnapsToDevicePixels" Value="True"/>
-            </Style>
         </DataTemplate.Resources>
 
         <Grid>
@@ -70,7 +73,7 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition/>
-                                <ColumnDefinition Width="Auto"/>                                
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Style="{StaticResource TypeNameTextBlockStyle}"
                                        HorizontalAlignment="Center"
@@ -84,7 +87,7 @@
                                     VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
                                     <Button VerticalAlignment="Center"                                                                      
-                                        Command="{Binding NavigateCommand}" 
+                                        Command="{Binding VisualizeCommand}" 
                                         Margin="4, 0"
                                         Width="16"
                                         Height="16"
@@ -174,5 +177,7 @@
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>
+
+   
 
 </ResourceDictionary>

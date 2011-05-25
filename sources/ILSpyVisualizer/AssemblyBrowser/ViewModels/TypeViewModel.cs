@@ -3,6 +3,7 @@ using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
 using System.Linq;
 using System.Windows.Input;
+using ICSharpCode.ILSpy;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
@@ -41,9 +42,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			Members = properties.Concat(events).Concat(methods);
 
 			VisualizeCommand = new DelegateCommand(VisualizeCommandHandler);
+			NavigateCommand = new DelegateCommand(NavigateCommandHandler);
 		}
 
 		public ICommand VisualizeCommand { get; private set; }
+		public ICommand NavigateCommand { get; private set; }
 
 		public TypeDefinition TypeDefinition
 		{
@@ -107,7 +110,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			}
 		} 
 
-		public bool ShowNavigateCommand
+		public bool ShowVisualizeCommand
 		{
 			get { return DerivedTypes.Count() > 0; }
 		}
@@ -130,6 +133,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private void VisualizeCommandHandler()
 		{
 			_windowViewModel.ShowGraph(this);
+		}
+
+		private void NavigateCommandHandler()
+		{
+			MainWindow.Instance.JumpToReference(_typeDefinition);
 		}
 	}
 }

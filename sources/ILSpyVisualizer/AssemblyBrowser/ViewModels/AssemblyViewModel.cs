@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using System.Linq;
 using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
 
@@ -9,12 +10,19 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private readonly AssemblyDefinition _assemblyDefinition;
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
 		private bool _showRemoveCommand = true;
+		private int _exportedTypesCount;
+		private int _internalTypesCount;
 		
 		public AssemblyViewModel(AssemblyDefinition assemblyDefinition, 
 								 AssemblyBrowserWindowViewModel windowViewModel)
 		{
 			_assemblyDefinition = assemblyDefinition;
 			_windowViewModel = windowViewModel;
+
+			var types = _assemblyDefinition.Modules
+				.SelectMany(m => m.Types);
+			_exportedTypesCount = types.Count(t => t.IsPublic);
+			_internalTypesCount = types.Count(t => t.IsNotPublic);
 
 			RemoveCommand = new DelegateCommand(RemoveCommandHandler);
 		}
@@ -39,6 +47,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		public AssemblyDefinition AssemblyDefinition
 		{
 			get { return _assemblyDefinition; }
+		}
+
+		public int ExportedTypesCount
+		{
+			get { return _exportedTypesCount; }
+		}
+
+		public int InternalTypesCount
+		{
+			get { return _internalTypesCount; }
 		}
 
 		private void RemoveCommandHandler()

@@ -95,7 +95,7 @@
                                         MinHeight="0"
                                         Background="{StaticResource RightArrowDrawing}"
                                         Template="{StaticResource ImageButtonTemplate}"
-                                        Visibility="{Binding ShowNavigateCommand, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        Visibility="{Binding ShowVisualizeCommand, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                                     <ToggleButton IsChecked="{Binding ShowMembers}"                                          
                                               Width="16"

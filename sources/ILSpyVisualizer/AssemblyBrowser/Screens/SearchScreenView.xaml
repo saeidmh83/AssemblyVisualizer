@@ -14,29 +14,28 @@
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
 
             <DataTemplate x:Key="AssemblyTemplate">
-                <Grid Margin="5">
-                    <Border Background="#DBE1FF">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="{Binding Name}"
+                <Grid Background="#DBE1FF"
+                              Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding Name}"
                                                FontSize="16"
                                                FontWeight="Bold"
                                                Margin="6"/>
 
-                            <Button x:Name="btnRemove"
+                    <Button x:Name="btnRemove"
                                             Command="{Binding RemoveCommand}"                                                                               
                                             MinWidth="16"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Right"
                                             Opacity="0.3"
                                             Margin="3">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Border Background="Transparent">
-                                            <Path Stretch="Fill" 
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border Background="Transparent">
+                                    <Path Stretch="Fill" 
                                                           StrokeThickness="0.5" 
                                                           Stroke="#FF333333" 
                                                           Fill="#FF969696" 
@@ -46,22 +45,23 @@
                                                           Height="10"
                                                           Width="10"
                                                           Margin="5, 0"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
 
-                            <TextBlock Text="Some information"
-                                               Margin="6"
-                                               Grid.Row="1"/>
-                        </Grid>
-                    </Border>
-                    <!--<Border Style="{StaticResource BorderStyle}"
-                            BorderBrush="Purple">
-                        <Border.Effect>
-                            <DropShadowEffect/>
-                        </Border.Effect>
-                    </Border>-->
+                    <StackPanel Grid.Row="1"
+                                Margin="8, 0, 8, 3">
+                        <TextBlock Margin="0, 3">
+                            <Run Text="Exported types: "/>
+                            <TextBlock Text="{Binding ExportedTypesCount}"/>
+                        </TextBlock>
+                        <TextBlock Margin="0, 3">
+                            <Run Text="Internal types: "/>
+                            <TextBlock Text="{Binding InternalTypesCount}"/>
+                        </TextBlock>
+                    </StackPanel>
+                    
                 </Grid>
                 <DataTemplate.Triggers>
                     <Trigger SourceName="btnRemove" Property="IsMouseOver" Value="True">
@@ -137,11 +137,15 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Name}"
+                                <TextBlock 
                                        ToolTip="{Binding FullName}"
                                        FontSize="16"
                                        FontWeight="Bold"
-                                       Margin="6" />
+                                       Margin="6">
+                                    <TextBlock Text="{Binding Name}"/>
+                                    <Run Text=" : "/>
+                                    <TextBlock Text="{Binding BaseTypeName}"/>
+                                </TextBlock>
 
                                 <StackPanel Orientation="Horizontal"
                                                 Grid.Row="1"
@@ -157,15 +161,24 @@
                                 </StackPanel>
 
                                 <TextBlock VerticalAlignment="Center"
-                                               Margin="8, 0"
-                                               Grid.Column="1"
-                                               Grid.RowSpan="2"
-                                               Visibility="{Binding ShowNavigateCommand, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                        <Hyperlink Command="{Binding VisualizeCommand}"
-                                                   Style="{StaticResource HyperlinkStyle}">
-                                            <TextBlock Text="Visualize"/>
-                                        </Hyperlink>
-                                    </TextBlock>
+                                           Margin="8, 2, 8, 0"
+                                           Grid.Column="1"                                           
+                                           Visibility="{Binding ShowVisualizeCommand, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                    <Hyperlink Command="{Binding VisualizeCommand}"
+                                               Style="{StaticResource HyperlinkStyle}">
+                                        <TextBlock Text="Visualize"/>
+                                    </Hyperlink>
+                                </TextBlock>
+                                <TextBlock VerticalAlignment="Center"
+                                           Margin="8, 0, 8, 2"
+                                           Grid.Column="1"    
+                                           Grid.Row="1">
+                                    <Hyperlink Command="{Binding NavigateCommand}"
+                                               Style="{StaticResource HyperlinkStyle}">
+                                        <TextBlock Text="Navigate"/>
+                                    </Hyperlink>
+                                </TextBlock>
+                                
                             </Grid>
                         </Border>
                         <Border Style="{StaticResource BorderStyle}">

@@ -86,6 +86,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			get { return _directDescendantsCount; }
 		}
 
+		public bool HasBaseType
+		{
+			get { return _typeDefinition.BaseType != null; }
+		}
+
 		public IEnumerable<MemberViewModel> Members { get; set; }
 
 		public IEnumerable<TypeViewModel> DerivedTypes
@@ -97,7 +102,14 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public string BaseTypeName
 		{
-			get { return _typeDefinition.BaseType.Name; }
+			get
+			{
+				if (!HasBaseType)
+				{
+					return string.Empty;
+				}
+				return _typeDefinition.BaseType.Name;
+			}
 		}
 
 		public bool ShowMembers

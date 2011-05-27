@@ -7,6 +7,7 @@ using System.Windows.Threading;
 using ILSpyVisualizer.AssemblyBrowser.ViewModels;
 using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
+using System.Windows.Input;
 
 namespace ILSpyVisualizer.AssemblyBrowser.Screens
 {
@@ -16,12 +17,25 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private bool _isSearchPerformed = true;
 		private DispatcherTimer _searchTimer;
 
-		public SearchScreen(AssemblyBrowserWindowViewModel windowViewModel) : base(windowViewModel)
+		private bool _sortByName;
+		private bool _showClasses = true;
+		private bool _showStructures = true;
+		private bool _showInterfaces = true;
+		private bool _showEnums = true;
+
+		public SearchScreen(AssemblyBrowserWindowViewModel windowViewModel)
+			: base(windowViewModel)
 		{
 			InitializeSearchTimer();
+
+			SortByNameCommand = new DelegateCommand(SortByNameCommandHandler);
+			SortByDescendantsCountCommand = new DelegateCommand(SortByDescendantsCountCommandHandler);
 		}
 
 		public event Action SearchFocusRequested;
+
+		public ICommand SortByNameCommand { get; private set; }
+		public ICommand SortByDescendantsCountCommand { get; private set; }
 
 		public bool IsSearchPerformed
 		{
@@ -48,29 +62,105 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			}
 		}
 
-		
+
 		public IEnumerable<TypeViewModel> SearchResults
 		{
 			get
 			{
-				if (string.IsNullOrWhiteSpace(SearchTerm))
+				var results = WindowViewModel.Types;
+
+				if (!string.IsNullOrWhiteSpace(SearchTerm))
 				{
-					return WindowViewModel.Types;
+					results = results.Where(SatisfiesSearchTerm);
 				}
 
-				return WindowViewModel.Types.Where(SatisfiesSearchTerm);
+				results = _sortByName ? results.OrderBy(t => t.Name)
+									  : results.OrderByDescending(t => t.DescendantsCount);
+
+				if (!ShowClasses)
+				{
+					results = results.Where(t => !t.TypeDefinition.IsClass);
+				}
+				else
+				{
+					if (!ShowStructures)
+					{
+						results = results.Where(t => !t.TypeDefinition.IsValueType);
+					}
+					else
+					{
+						if (!ShowEnums)
+						{
+							results = results.Where(t => !t.TypeDefinition.IsEnum);
+						}
+					}
+				}
+				if (!ShowInterfaces)
+				{
+					results = results.Where(t => !t.TypeDefinition.IsInterface);
+				}
+
+				return results;
 			}
 		}
 
+		public bool ShowClasses
+		{
+			get { return _showClasses; }
+			set
+			{
+				_showClasses = value;
+				OnPropertyChanged("ShowClasses");
+				TriggerSearch();
+			}
+		}
+
+		public bool ShowStructures
+		{
+			get { return _showStructures; }
+			set
+			{
+				_showStructures = value;
+				OnPropertyChanged("ShowStructures");
+				TriggerSearch();
+			}
+		}
+
+		public bool ShowInterfaces
+		{
+			get { return _showInterfaces; }
+			set
+			{
+				_showInterfaces = value;
+				OnPropertyChanged("ShowInterfaces");
+				TriggerSearch();
+			}
+		}
+
+		public bool ShowEnums
+		{
+			get { return _showEnums; }
+			set
+			{
+				_showEnums = value;
+				OnPropertyChanged("ShowEnums");
+				TriggerSearch();
+			}
+		}
+
+		#region // Public methods
+
 		public override void NotifyAssembliesChanged()
 		{
-			OnPropertyChanged("SearchResults");
+			TriggerSearch();
 		}
 
 		public void FocusSearchField()
 		{
 			OnSearchFocusRequested();
 		}
+
+		#endregion
 
 		#region // Private methods
 
@@ -84,9 +174,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private void InitializeSearchTimer()
 		{
 			_searchTimer = new DispatcherTimer(DispatcherPriority.Normal, WindowViewModel.Dispatcher)
-			               	{
-			               		Interval = TimeSpan.FromMilliseconds(400)
-			               	};
+							{
+								Interval = TimeSpan.FromMilliseconds(400)
+							};
 			_searchTimer.Tick += SearchTimerTick;
 		}
 
@@ -109,6 +199,22 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			{
 				handler();
 			}
+		}
+
+		#endregion
+
+		#region // Command handlers
+
+		private void SortByNameCommandHandler()
+		{
+			_sortByName = true;
+			TriggerSearch();
+		}
+
+		private void SortByDescendantsCountCommandHandler()
+		{
+			_sortByName = false;
+			TriggerSearch();
 		}
 
 		#endregion

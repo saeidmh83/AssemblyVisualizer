@@ -61,7 +61,7 @@
                             <TextBlock Text="{Binding InternalTypesCount}"/>
                         </TextBlock>
                     </StackPanel>
-                    
+
                 </Grid>
                 <DataTemplate.Triggers>
                     <Trigger SourceName="btnRemove" Property="IsMouseOver" Value="True">
@@ -80,11 +80,14 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Margin="0, 24">
+        <!--Search filter by name-->
+        <Grid Margin="0, 24"
+              Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
@@ -111,8 +114,40 @@
             </TextBox>
         </Grid>
 
+        <!--Search filters and sorting-->
+        <Grid Grid.Row="1"
+              TextBlock.FontSize="14">
+            <StackPanel Margin="20, 0">
+                <StackPanel Margin="0, 10">
+                    <TextBlock Text="Sort by:"
+                           Foreground="Gray"/>
+                    <TextBlock Margin="0, 1">
+                        <Hyperlink Style="{StaticResource HyperlinkStyle}"
+                                   Command="{Binding SortByNameCommand}">
+                            <TextBlock Text="Name"/>
+                        </Hyperlink>
+                    </TextBlock>
+                    <TextBlock>
+                        <Hyperlink Style="{StaticResource HyperlinkStyle}"
+                                   Command="{Binding SortByDescendantsCountCommand}">
+                            <TextBlock Text="Descendants count"/>
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel Margin="0, 10"
+                            TextBlock.FontFamily="Verdana">
+                    <CheckBox Content=" Classes" IsChecked="{Binding ShowClasses}" Margin="0, 1"/>
+                    <CheckBox Content=" Interfaces" IsChecked="{Binding ShowInterfaces}" Margin="0, 1"/>
+                    <CheckBox Content=" Value types" IsChecked="{Binding ShowStructures}" Margin="0, 1"/>                    
+                    <CheckBox Content=" Enums" IsChecked="{Binding ShowEnums}" Margin="0, 1" />
+                </StackPanel>                
+            </StackPanel>
+        </Grid>
+
+        <!--Search results-->
         <ItemsControl ItemsSource="{Binding SearchResults}"
-                          Grid.Row="1">
+                      Grid.Row="1"
+                      Grid.Column="1">
             <ItemsControl.Template>
                 <ControlTemplate>
                     <ScrollViewer CanContentScroll="True"
@@ -141,23 +176,25 @@
                                        ToolTip="{Binding FullName}"
                                        FontSize="16"
                                        FontWeight="Bold"
-                                       Margin="6">
+                                       Margin="9, 6">
                                     <TextBlock Text="{Binding Name}"/>
-                                    <Run Text=" : "/>
-                                    <TextBlock Text="{Binding BaseTypeName}"/>
+                                    <TextBlock x:Name="txtBaseType">
+                                        <Run Text=" : "/>
+                                        <TextBlock Text="{Binding BaseTypeName}"/>
+                                    </TextBlock>
                                 </TextBlock>
 
                                 <StackPanel Orientation="Horizontal"
                                                 Grid.Row="1"
-                                                Margin="4">
+                                                Margin="11, 4">
                                     <TextBlock Text="Direct descendants:"/>
-                                    <TextBlock Text="{Binding DirectDescendantsCount}"
-                                                   Margin="4, 0"
-                                                   FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding DirectDescendantsCount}"                                                   
+                                                   FontWeight="Bold"
+                                               Margin="4, 0, 6, 0"/>
                                     <TextBlock Text="Total descendants:"/>
-                                    <TextBlock Text="{Binding DescendantsCount}"
-                                                   Margin="4, 0"
-                                                   FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding DescendantsCount}"                                                   
+                                                   FontWeight="Bold"
+                                               Margin="4, 0, 6, 0"/>
                                 </StackPanel>
 
                                 <TextBlock VerticalAlignment="Center"
@@ -187,10 +224,17 @@
                             </Border.Effect>
                         </Border>
                     </Grid>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding HasBaseType}" Value="False">
+                            <Setter TargetName="txtBaseType" Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </DataTemplate.Triggers>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <ItemsControl Grid.Column="1"
+
+        <!--Assemblies-->
+        <ItemsControl Grid.Column="2"
                           Grid.Row="1"
                           ItemsSource="{Binding Assemblies}"
                           ItemTemplate="{StaticResource AssemblyTemplate}"/>

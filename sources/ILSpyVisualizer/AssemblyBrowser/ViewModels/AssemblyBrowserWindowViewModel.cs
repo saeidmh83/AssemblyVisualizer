@@ -191,7 +191,6 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		{
 			_allTypeDefinitions = null;
 			_types = AllTypeDefinitions
-				.OrderBy(t => t.Name)
 				.Select(t => new TypeViewModel(t, this))
 				.ToList();
 			var typesDictionary = _types.ToDictionary(type => type.TypeDefinition);

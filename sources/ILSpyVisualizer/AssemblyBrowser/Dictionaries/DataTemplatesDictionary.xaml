@@ -14,14 +14,7 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-    </Style>
-
-    <!--Image button-->
-    <ControlTemplate x:Key="ImageButtonTemplate" TargetType="{x:Type ButtonBase}">
-        <Border Width="{TemplateBinding Width}" 
-                Height="{TemplateBinding Height}"
-                Background="{TemplateBinding Background}"/>
-    </ControlTemplate>
+    </Style>    
 
     <!--Member-->
     <DataTemplate DataType="{x:Type ViewModels:MemberViewModel}">
@@ -94,7 +87,7 @@
                                         MinWidth="0"
                                         MinHeight="0"
                                         Background="{StaticResource RightArrowDrawing}"
-                                        Template="{StaticResource ImageButtonTemplate}"
+                                        Style="{StaticResource ImageButtonStyle}"
                                         Visibility="{Binding ShowVisualizeCommand, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
                                     <ToggleButton IsChecked="{Binding ShowMembers}"                                          
@@ -102,7 +95,7 @@
                                               Height="16"
                                               Margin="4, 0"                                          
                                               Background="{StaticResource MagnifierDrawing}"
-                                              Template="{StaticResource ImageButtonTemplate}"/>
+                                              Style="{StaticResource ImageButtonStyle}"/>
                                 </StackPanel>
                             </Border>
                         </Grid>

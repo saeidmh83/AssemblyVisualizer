@@ -172,11 +172,11 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock 
-                                       ToolTip="{Binding FullName}"
-                                       FontSize="16"
-                                       FontWeight="Bold"
-                                       Margin="9, 6">
+                                <TextBlock ToolTip="{Binding FullName}"
+                                           FontSize="16"
+                                           FontWeight="Bold"
+                                           Margin="9, 6"
+                                           HorizontalAlignment="Left">
                                     <TextBlock Text="{Binding Name}"/>
                                     <TextBlock x:Name="txtBaseType">
                                         <Run Text=" : "/>

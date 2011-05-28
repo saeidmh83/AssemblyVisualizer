@@ -16,6 +16,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private int _descendantsCount;
 		private int _directDescendantsCount;
 
+		private bool _isCurrent;
+
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
 
 		public TypeViewModel(TypeDefinition typeDefinition, AssemblyBrowserWindowViewModel windowViewModel)
@@ -89,6 +91,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		public bool HasBaseType
 		{
 			get { return _typeDefinition.BaseType != null; }
+		}
+
+		public bool IsCurrent
+		{
+			get { return _isCurrent; }
+			set
+			{
+				_isCurrent = value;
+				OnPropertyChanged("IsCurrent");
+			}
 		}
 
 		public IEnumerable<MemberViewModel> Members { get; set; }

@@ -10,7 +10,28 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 {
 	class GraphScreen : Screen
 	{
+		#region // Static members
+
+		private static TypeViewModel _currentType;
+
+		private static TypeViewModel CurrentType
+		{
+			get { return _currentType; }
+			set
+			{
+				if (_currentType != null)
+				{
+					_currentType.IsCurrent = false;
+				}
+				_currentType = value;
+				value.IsCurrent = true;
+			}
+		}
+
+		#endregion
+
 		private TypeGraph _graph;
+		private TypeViewModel _type;
 
 		public GraphScreen(AssemblyBrowserWindowViewModel windowViewModel) : base(windowViewModel)
 		{
@@ -22,6 +43,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		public override bool AllowAssemblyDrop
 		{
 			get { return false; }
+		}
+
+		public TypeViewModel Type
+		{
+			get { return _type; }
+			set
+			{
+				_type = value;
+				OnPropertyChanged("Type");
+			}
 		}
 
 		public TypeGraph Graph
@@ -36,6 +67,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 
 		public void Show(TypeViewModel type)
 		{
+			CurrentType = type;
+			Type = type;
 			Graph = CreateGraph(type);
 			OnGraphChanged();
 		}

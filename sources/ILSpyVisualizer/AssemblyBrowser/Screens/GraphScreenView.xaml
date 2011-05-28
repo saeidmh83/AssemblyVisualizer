@@ -39,7 +39,7 @@
                                              OverlapRemovalAlgorithmType="FSA"
                                              HighlightAlgorithmType="Simple" />
         </zoom:ZoomControl>
-
+        
         <Border VerticalAlignment="Bottom"
                 HorizontalAlignment="Right"
                 Background="White"
@@ -47,5 +47,16 @@
                 Margin="0, 0, 12, 8">
             <ItemsControl ItemsSource="{Binding Assemblies}"/>
         </Border>
+
+        <Border VerticalAlignment="Bottom"
+                HorizontalAlignment="Left"
+                Margin="10"
+                Background="White"
+                CornerRadius="8">
+            <TextBlock Text="{Binding Type.Name}"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   Foreground="#555555" />
+        </Border>        
     </Grid>
 </UserControl>

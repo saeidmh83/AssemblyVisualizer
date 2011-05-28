@@ -13,6 +13,31 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
 	class AssemblyBrowserWindowViewModel : ViewModelBase
 	{
+		#region // Nested types
+
+		class NavigationItem
+		{
+			public NavigationItem(Screen screen)
+			{
+				Screen = screen;
+			}
+
+			public NavigationItem(TypeViewModel type)
+			{
+				Type = type;
+			}
+
+			public Screen Screen { get; private set; }
+			public TypeViewModel Type { get; private set; }
+
+			public bool IsScreen
+			{
+				get { return Screen != null; }
+			}
+		}
+
+		#endregion
+
 		#region // Private fields
 
 		private readonly Dispatcher _dispatcher;
@@ -21,6 +46,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private IEnumerable<TypeViewModel> _types;
 		private Screen _screen;
 		private readonly SearchScreen _searchScreen;
+
+		private readonly Stack<NavigationItem> _previousNavigationItems = new Stack<NavigationItem>();
+		private readonly Stack<NavigationItem> _nextNavigationItems = new Stack<NavigationItem>();
 
 		#endregion
 
@@ -36,13 +64,19 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 			_searchScreen = new SearchScreen(this);
 			Screen = _searchScreen;
-			
+
 			OnAssembliesChanged();
+
+			NavigateBackCommand = new DelegateCommand(NavigateBackCommandHandler);
+			NavigateForwardCommand = new DelegateCommand(NavigateForwardCommandHandler);
 		}
 
 		#endregion
 
 		#region // Public properties
+
+		public ICommand NavigateBackCommand { get; private set; }
+		public ICommand NavigateForwardCommand { get; private set; }
 
 		public Screen Screen
 		{
@@ -76,6 +110,21 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			get { return "Assembly Browser"; }
 		}
 
+		public bool ShowNavigationArrows
+		{
+			get { return true; }
+		}
+
+		public bool CanNavigateBack
+		{
+			get { return _previousNavigationItems.Count > 0; }
+		}
+
+		public bool CanNavigateForward
+		{
+			get { return _nextNavigationItems.Count > 0; }
+		}
+
 		public IEnumerable<TypeViewModel> Types
 		{
 			get { return _types; }
@@ -93,7 +142,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public UserCommand ShowSearchUserCommand
 		{
-			get { return new UserCommand("Search", new DelegateCommand(ShowSearch)); } 
+			get { return new UserCommand("Search", new DelegateCommand(ShowSearch)); }
 		}
 
 		#endregion
@@ -101,12 +150,42 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		#region // Private properties
 
 		private bool AreAssembliesEditable
-		{	
+		{
 			set
 			{
 				foreach (var assembly in Assemblies)
 				{
 					assembly.ShowRemoveCommand = value;
+				}
+			}
+		}
+
+		private NavigationItem CurrentNavigationItem
+		{
+			get
+			{
+				var graphScreen = Screen as GraphScreen;
+				if (graphScreen != null)
+				{
+					return new NavigationItem(graphScreen.Type);
+				}
+				return new NavigationItem(Screen);
+			}
+			set
+			{
+				if (value.IsScreen)
+				{
+					Screen = value.Screen;
+				}
+				else
+				{
+					var graphScreen = Screen as GraphScreen;
+					if (graphScreen == null)
+					{
+						graphScreen = new GraphScreen(this);
+						Screen = graphScreen;
+					}
+					graphScreen.Show(value.Type);
 				}
 			}
 		}
@@ -117,14 +196,18 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public void ShowSearch()
 		{
-			if (Screen != _searchScreen)
-			{
-				Screen = _searchScreen;
-			}
-			else
+			if (Screen == _searchScreen)
 			{
 				_searchScreen.FocusSearchField();
+				return;
 			}
+
+			Navigate(new NavigationItem(_searchScreen));
+		}
+
+		public void ShowGraph(TypeViewModel type)
+		{
+			Navigate(new NavigationItem(type));
 		}
 
 		public void AddAssemblies(IEnumerable<AssemblyDefinition> assemblies)
@@ -139,7 +222,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				_assemblies.Add(new AssemblyViewModel(assembly, this));
 			}
-			
+
 			OnAssembliesChanged();
 		}
 
@@ -166,21 +249,10 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			}
 		}
 
-		public void ShowGraph(TypeViewModel type)
-		{
-			if (!(Screen is GraphScreen))
-			{
-				Screen = new GraphScreen(this);
-			}
-			var graphScreen = Screen as GraphScreen;
-			graphScreen.Show(type);
-
-		}
-
 		#endregion
 
 		#region // Private methods
-		
+
 		private void OnAssembliesChanged()
 		{
 			UpdateInternalTypeCollections();
@@ -210,6 +282,54 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				type.CountDescendants();
 			}
+		}
+
+		private void Navigate(NavigationItem item)
+		{
+			if (Screen != null)
+			{
+				_previousNavigationItems.Push(CurrentNavigationItem);
+			}
+
+			CurrentNavigationItem = item;
+			_nextNavigationItems.Clear();
+
+			RefreshNavigationCommands();
+		}
+
+		private void RefreshNavigationCommands()
+		{
+			OnPropertyChanged("CanNavigateBack");
+			OnPropertyChanged("CanNavigateForward");
+		}
+
+		#endregion
+
+		#region // Command handlers
+
+		private void NavigateBackCommandHandler()
+		{
+			if (_previousNavigationItems.Count == 0)
+			{
+				return;
+			}
+			_nextNavigationItems.Push(CurrentNavigationItem);
+			CurrentNavigationItem = _previousNavigationItems.Pop();
+
+			RefreshNavigationCommands();
+		}
+
+		private void NavigateForwardCommandHandler()
+		{
+			if (_nextNavigationItems.Count == 0)
+			{
+				return;
+			}
+			
+			_previousNavigationItems.Push(CurrentNavigationItem);
+			CurrentNavigationItem = _nextNavigationItems.Pop();
+
+			RefreshNavigationCommands();
 		}
 
 		#endregion

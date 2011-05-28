@@ -13,9 +13,13 @@
             <ResourceDictionary.MergedDictionaries>                
                 <ResourceDictionary Source="Dictionaries\ControlStylesDictionary.xaml"/>
                 <ResourceDictionary Source="Dictionaries\ImagesDictionary.xaml"/>
+
+                <ResourceDictionary Source="/PresentationFramework.Aero, Version=3.0.0.0,
+                                            Culture=neutral, PublicKeyToken=31bf3856ad364e35,
+                                            ProcessorArchitecture=MSIL;component/themes/aero.normalcolor.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!--<BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>-->
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>    
     </Window.Resources>
     <Window.CommandBindings>
@@ -34,14 +38,30 @@
                                    DataContext="{Binding Screen.Commands}"
                                    Margin="4"/>
         
-        <!--<Grid Visibility="{Binding ShowNavigationArrows, Converter={StaticResource BooleanToVisibilityConverter}}">
+        <Grid Visibility="{Binding ShowNavigationArrows, Converter={StaticResource BooleanToVisibilityConverter}}"
+              VerticalAlignment="Top"
+              HorizontalAlignment="Right"
+              Margin="18">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Border Background="{StaticResource RightArrowDrawing}"
-                    Width="100"
-                    Height="100"/>
-        </Grid>-->
+            <Button Style="{StaticResource ImageButtonStyle}"
+                    Width="42"
+                    Height="42"
+                    Background="{StaticResource LeftArrowDrawing}"
+                    Margin="0, 0, 8, 0"
+                    Command="{Binding NavigateBackCommand}"
+                    IsEnabled="{Binding CanNavigateBack}"/>                
+            
+            <Button Style="{StaticResource ImageButtonStyle}"
+                    Width="42"
+                    Height="42"
+                    Grid.Column="1"
+                    Background="{StaticResource RightArrowDrawing}"
+                    Command="{Binding NavigateForwardCommand}"
+                    IsEnabled="{Binding CanNavigateForward}"/>                
+           
+        </Grid>
     </Grid>
 </Window>

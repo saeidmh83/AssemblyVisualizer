@@ -5,7 +5,9 @@
         xmlns:UserControls="clr-namespace:ILSpyVisualizer.AssemblyBrowser.UserControls" 
         Title="{Binding Title}" 
         Height="600" 
-        Width="800"        
+        Width="800" 
+        MinWidth="690"
+        MinHeight="500"
         Drop="WindowDrop"
         AllowDrop="{Binding Screen.AllowAssemblyDrop}">
     <Window.Resources>

@@ -121,7 +121,6 @@
     <Compile Include="AssemblyBrowser\ViewModels\EventViewModel.cs" />
     <Compile Include="AssemblyBrowser\Graph.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\GroupedUserCommand.cs" />
-    <Compile Include="AssemblyBrowser\ViewModels\HierarchyViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\MemberViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\MethodViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\PropertyViewModel.cs" />

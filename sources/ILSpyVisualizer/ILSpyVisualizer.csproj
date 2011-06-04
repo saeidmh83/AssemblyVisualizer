@@ -42,15 +42,15 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\GraphSharp.Controls.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.AvalonEdit, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.AvalonEdit, Version=4.1.0.7411, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\ICSharpCode.AvalonEdit.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.Decompiler, Version=1.0.0.821, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.Decompiler, Version=1.0.0.906, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\ICSharpCode.Decompiler.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.NRefactory, Version=1.0.4141.25229, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.NRefactory, Version=1.0.4163.33123, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\ICSharpCode.NRefactory.dll</HintPath>
     </Reference>
@@ -92,11 +92,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analyzer\AnalyzeInWindowContextMenuEntry.cs" />
+    <Compile Include="AssemblyBrowser\AddAssemblyContextMenuEntry.cs" />
     <Compile Include="AssemblyBrowser\AssemblyBrowserWindow.xaml.cs">
       <DependentUpon>AssemblyBrowserWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AssemblyBrowser\UserControls\CachingScreenPresenter.xaml.cs">
       <DependentUpon>CachingScreenPresenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AssemblyBrowser\UserControls\CommandsGroupView.xaml.cs">
+      <DependentUpon>CommandsGroupView.xaml</DependentUpon>
     </Compile>
     <Compile Include="AssemblyBrowser\UserControls\CommandsView.xaml.cs">
       <DependentUpon>CommandsView.xaml</DependentUpon>
@@ -113,8 +117,10 @@
     <Compile Include="AssemblyBrowser\ViewModels\AssemblyBrowserWindowViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\AssemblyViewModel.cs" />
     <Compile Include="AssemblyBrowser\BrowseAssemblyContextMenuEntry.cs" />
+    <Compile Include="AssemblyBrowser\ViewModels\CommandsGroupViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\EventViewModel.cs" />
     <Compile Include="AssemblyBrowser\Graph.cs" />
+    <Compile Include="AssemblyBrowser\ViewModels\GroupedUserCommand.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\HierarchyViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\MemberViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\MethodViewModel.cs" />
@@ -127,6 +133,7 @@
       <SubType>Code</SubType>
     </Compile>
     <AppDesigner Include="Properties\" />
+    <Compile Include="WindowManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="AssemblyBrowser\AssemblyBrowserWindow.xaml">
@@ -146,6 +153,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AssemblyBrowser\UserControls\CachingScreenPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AssemblyBrowser\UserControls\CommandsGroupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -142,7 +142,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public UserCommand ShowSearchUserCommand
 		{
-			get { return new UserCommand("Search", new DelegateCommand(ShowSearch)); }
+			get { return new UserCommand("Back to Search", new DelegateCommand(ShowSearch)); }
 		}
 
 		#endregion

@@ -17,6 +17,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private int _directDescendantsCount;
 
 		private bool _isCurrent;
+		private string _name;
 
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
 
@@ -24,6 +25,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		{
 			_typeDefinition = typeDefinition;
 			_windowViewModel = windowViewModel;
+
+			_name = MainWindow.Instance.CurrentLanguage.FormatTypeName(typeDefinition);
 
 			var properties = typeDefinition.Properties
 				.Where(p => p.GetMethod != null && p.GetMethod.IsPublic
@@ -70,7 +73,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public string Name
 		{
-			get { return _typeDefinition.Name; }
+			get { return _name; }
 		}
 
 		public string FullName
@@ -86,6 +89,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		public int DirectDescendantsCount
 		{
 			get { return _directDescendantsCount; }
+		}
+
+		public bool IsInternal
+		{
+			get { return _typeDefinition.IsNotPublic; }
 		}
 
 		public bool HasBaseType

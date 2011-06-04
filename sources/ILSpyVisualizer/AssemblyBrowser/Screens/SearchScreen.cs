@@ -8,34 +8,82 @@ using ILSpyVisualizer.AssemblyBrowser.ViewModels;
 using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
 using System.Windows.Input;
+using System.Diagnostics;
 
 namespace ILSpyVisualizer.AssemblyBrowser.Screens
 {
 	class SearchScreen : Screen
 	{
+		private enum SearchMode
+		{
+			All,
+			Interfaces,
+			ValueTypes,
+			Enums
+		}
+
+		private const string HomePageUri = @"http://denismarkelov.blogspot.com/p/ilspy-visualizer.html";
+
 		private string _searchTerm = string.Empty;
 		private bool _isSearchPerformed = true;
 		private DispatcherTimer _searchTimer;
+		private SearchMode _searchMode = SearchMode.All;
 
 		private bool _sortByName;
-		private bool _showClasses = true;
-		private bool _showStructures = true;
-		private bool _showInterfaces = true;
-		private bool _showEnums = true;
+
+		#region // .ctor
 
 		public SearchScreen(AssemblyBrowserWindowViewModel windowViewModel)
 			: base(windowViewModel)
 		{
 			InitializeSearchTimer();
 
-			SortByNameCommand = new DelegateCommand(SortByNameCommandHandler);
-			SortByDescendantsCountCommand = new DelegateCommand(SortByDescendantsCountCommandHandler);
+			NavigateToHomePageCommand = new DelegateCommand(() => Process.Start(HomePageUri));
+
+			InitializeSearchControl();
 		}
+
+		private void InitializeSearchTimer()
+		{
+			_searchTimer = new DispatcherTimer(DispatcherPriority.Normal, WindowViewModel.Dispatcher)
+			{
+				Interval = TimeSpan.FromMilliseconds(400)
+			};
+			_searchTimer.Tick += SearchTimerTick;
+		}
+
+		private void InitializeSearchControl()
+		{
+			var sortingGroup = new CommandsGroupViewModel(
+					"Sort by",
+				    new List<GroupedUserCommand>
+				    	{
+				    		new GroupedUserCommand("Name", SortByName),
+				    		new GroupedUserCommand("Descendants count", SortByDescendantsCount, true)
+				    	});
+
+			var filteringGroup = new CommandsGroupViewModel(
+					"Types",
+					new List<GroupedUserCommand>
+			         	{
+			            	new GroupedUserCommand("All", ShowAll, true),
+			            	new GroupedUserCommand("Interfaces", ShowInterfaces),
+							new GroupedUserCommand("Value types", ShowValueTypes),
+							new GroupedUserCommand("Enums", ShowEnums)
+			            });
+			
+			SearchControlGroups = new ObservableCollection<CommandsGroupViewModel>
+			                      	{
+			                      		sortingGroup,
+										filteringGroup
+			                      	};
+		}
+
+		#endregion
 
 		public event Action SearchFocusRequested;
 
-		public ICommand SortByNameCommand { get; private set; }
-		public ICommand SortByDescendantsCountCommand { get; private set; }
+		public ICommand NavigateToHomePageCommand { get; private set; }
 
 		public bool IsSearchPerformed
 		{
@@ -62,6 +110,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			}
 		}
 
+		public ObservableCollection<CommandsGroupViewModel> SearchControlGroups { get; private set; }
 
 		public IEnumerable<TypeViewModel> SearchResults
 		{
@@ -74,77 +123,23 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 					results = results.Where(SatisfiesSearchTerm);
 				}
 
+				switch (_searchMode)
+				{
+					case SearchMode.Interfaces:
+						results = results.Where(t => t.TypeDefinition.IsInterface);
+						break;
+					case SearchMode.ValueTypes:
+						results = results.Where(t => t.TypeDefinition.IsValueType);
+						break;
+					case SearchMode.Enums:
+						results = results.Where(t => t.TypeDefinition.IsEnum);
+						break;
+				}
+				
 				results = _sortByName ? results.OrderBy(t => t.Name)
 									  : results.OrderByDescending(t => t.DescendantsCount);
 
-				if (!ShowClasses)
-				{
-					results = results.Where(t => !t.TypeDefinition.IsClass);
-				}
-				else
-				{
-					if (!ShowStructures)
-					{
-						results = results.Where(t => !t.TypeDefinition.IsValueType);
-					}
-					else
-					{
-						if (!ShowEnums)
-						{
-							results = results.Where(t => !t.TypeDefinition.IsEnum);
-						}
-					}
-				}
-				if (!ShowInterfaces)
-				{
-					results = results.Where(t => !t.TypeDefinition.IsInterface);
-				}
-
 				return results;
-			}
-		}
-
-		public bool ShowClasses
-		{
-			get { return _showClasses; }
-			set
-			{
-				_showClasses = value;
-				OnPropertyChanged("ShowClasses");
-				TriggerSearch();
-			}
-		}
-
-		public bool ShowStructures
-		{
-			get { return _showStructures; }
-			set
-			{
-				_showStructures = value;
-				OnPropertyChanged("ShowStructures");
-				TriggerSearch();
-			}
-		}
-
-		public bool ShowInterfaces
-		{
-			get { return _showInterfaces; }
-			set
-			{
-				_showInterfaces = value;
-				OnPropertyChanged("ShowInterfaces");
-				TriggerSearch();
-			}
-		}
-
-		public bool ShowEnums
-		{
-			get { return _showEnums; }
-			set
-			{
-				_showEnums = value;
-				OnPropertyChanged("ShowEnums");
-				TriggerSearch();
 			}
 		}
 
@@ -169,15 +164,6 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			return typeViewModel
 				.Name.StartsWith(SearchTerm, StringComparison.InvariantCultureIgnoreCase);
 
-		}
-
-		private void InitializeSearchTimer()
-		{
-			_searchTimer = new DispatcherTimer(DispatcherPriority.Normal, WindowViewModel.Dispatcher)
-							{
-								Interval = TimeSpan.FromMilliseconds(400)
-							};
-			_searchTimer.Tick += SearchTimerTick;
 		}
 
 		private void SearchTimerTick(object sender, EventArgs e)
@@ -205,15 +191,39 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 
 		#region // Command handlers
 
-		private void SortByNameCommandHandler()
+		private void SortByName()
 		{
 			_sortByName = true;
 			TriggerSearch();
 		}
 
-		private void SortByDescendantsCountCommandHandler()
+		private void SortByDescendantsCount()
 		{
 			_sortByName = false;
+			TriggerSearch();
+		}
+
+		private void ShowInterfaces()
+		{
+			_searchMode = SearchMode.Interfaces;
+			TriggerSearch();
+		}
+
+		private void ShowValueTypes()
+		{
+			_searchMode = SearchMode.ValueTypes;
+			TriggerSearch();
+		}
+
+		private void ShowEnums()
+		{
+			_searchMode = SearchMode.Enums;
+			TriggerSearch();
+		}
+
+		private void ShowAll()
+		{
+			_searchMode = SearchMode.All;
 			TriggerSearch();
 		}
 

@@ -12,9 +12,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.UserControls
 	/// </summary>
 	partial class CachingScreenPresenter : UserControl
 	{
-		private static readonly Dictionary<Type, UserControl> ScreensDictionary = new Dictionary<Type, UserControl>();
-		private static readonly Type[] NonCacheableScreenTypes = new[] {typeof (GraphScreen)};
-
+		private static readonly Type[] NonCacheableScreenTypes = new[] { typeof(GraphScreen) };
+		private readonly Dictionary<Type, UserControl> _screensDictionary = new Dictionary<Type, UserControl>();
+		
 		#region // Screen Dependency Property
 
 		public Screen Screen
@@ -30,7 +30,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.UserControls
 		{
 			var cachingScreenPresenter = dependencyObject as CachingScreenPresenter;
 			var screenType = e.NewValue.GetType();
-			var view = GetViewForScreenType(screenType);
+			var view = cachingScreenPresenter.GetViewForScreenType(screenType);
 
 			view.DataContext = e.NewValue;
 			cachingScreenPresenter.cpPresenter.Content = view;
@@ -43,18 +43,18 @@ namespace ILSpyVisualizer.AssemblyBrowser.UserControls
 			InitializeComponent();
 		}
 
-		private static UserControl GetViewForScreenType(Type screenType)
+		private UserControl GetViewForScreenType(Type screenType)
 		{
 			if (NonCacheableScreenTypes.Contains(screenType))
 			{
 				return CreateViewForScreenType(screenType);
 			}
 
-			if (!ScreensDictionary.ContainsKey(screenType))
+			if (!_screensDictionary.ContainsKey(screenType))
 			{
-				ScreensDictionary[screenType] = CreateViewForScreenType(screenType);
+				_screensDictionary[screenType] = CreateViewForScreenType(screenType);
 			}
-			return ScreensDictionary[screenType];
+			return _screensDictionary[screenType];
 		}
 
 		private static UserControl CreateViewForScreenType(Type screenType)

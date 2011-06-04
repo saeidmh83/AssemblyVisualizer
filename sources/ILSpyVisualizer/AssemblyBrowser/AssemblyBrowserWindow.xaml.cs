@@ -27,6 +27,8 @@ namespace ILSpyVisualizer.AssemblyBrowser
 			InitializeComponent();
 
 			ViewModel = new AssemblyBrowserWindowViewModel(assemblyDefinitions, Dispatcher);
+
+			WindowManager.AddAssemblyBrowser(this);
 		}
 
 		internal AssemblyBrowserWindowViewModel ViewModel
@@ -50,6 +52,13 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		private void SearchExecuted(object sender, ExecutedRoutedEventArgs e)
 		{
 			ViewModel.ShowSearch();
+		}
+
+		protected override void OnClosed(EventArgs e)
+		{
+			base.OnClosed(e);
+
+			WindowManager.RemoveAssemblyBrowser(this);
 		}
 	}
 }

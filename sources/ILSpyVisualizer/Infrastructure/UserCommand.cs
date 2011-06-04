@@ -14,7 +14,11 @@ namespace ILSpyVisualizer.Infrastructure
 			Command = command;
 		}
 
+		public UserCommand(string text, Action action) : this(text, new DelegateCommand(action))
+		{
+		}
+
 		public string Text { get; private set; }
-		public ICommand Command { get; private set; }
+		public ICommand Command { get; set; }
 	}
 }

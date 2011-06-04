@@ -6,7 +6,7 @@
         Title="{Binding Title}" 
         Height="600" 
         Width="800" 
-        MinWidth="690"
+        MinWidth="800"
         MinHeight="500"
         Drop="WindowDrop"
         AllowDrop="{Binding Screen.AllowAssemblyDrop}">

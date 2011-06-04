@@ -119,6 +119,7 @@
             </DataTrigger>
             <Trigger SourceName="brdMain" Property="IsMouseOver" Value="True">
                 <Setter TargetName="pnlButtons" Property="Visibility" Value="Visible"/>
+                <Setter TargetName="brdMain" Property="Background" Value="White"/>
             </Trigger>
             <DataTrigger Binding="{Binding IsCurrent}" Value="True">
                 <Setter TargetName="brdMain" Property="Background" Value="Yellow"/>                

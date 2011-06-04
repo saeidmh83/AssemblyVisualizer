@@ -56,7 +56,8 @@
             <TextBlock Text="{Binding Type.Name}"
                    FontSize="18"
                    FontWeight="Bold"
-                   Foreground="#555555" />
+                   Foreground="#555555"
+                   Margin="4, 0"/>
         </Border>        
     </Grid>
 </UserControl>

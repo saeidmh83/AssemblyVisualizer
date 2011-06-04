@@ -2,18 +2,28 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.TreeView;
 
 namespace ILSpyVisualizer.AssemblyBrowser
 {
-	[ExportContextMenuEntry(Header = "Browse Assembly")]
-	sealed class BrowseAssemblyContextMenuEntry : IContextMenuEntry
+	[ExportContextMenuEntry(Header = "Add to Browser")]
+	sealed class AddAssemblyContextMenuEntry : IContextMenuEntry
 	{
 		public bool IsVisible(SharpTreeNode[] selectedNodes)
 		{
+			if (WindowManager.AssemblyBrowsers.Count != 1)
+			{
+				return false;
+			}
+
+			var window = WindowManager.AssemblyBrowsers.Single();
+			if (!window.ViewModel.Screen.AllowAssemblyDrop)
+			{
+				return false;
+			}
+
 			return selectedNodes.All(n => n is AssemblyTreeNode);
 		}
 
@@ -28,12 +38,9 @@ namespace ILSpyVisualizer.AssemblyBrowser
 				.OfType<AssemblyTreeNode>()
 				.Select(n => n.LoadedAssembly.AssemblyDefinition)
 				.ToList();
-			
-			var window = new AssemblyBrowserWindow(assemblyDefinitions)
-			             	{
-			             		Owner = MainWindow.Instance
-			             	};
-			window.Show();
+
+			var window = WindowManager.AssemblyBrowsers.Single();
+			window.ViewModel.AddAssemblies(assemblyDefinitions);
 		}
 	}
 }

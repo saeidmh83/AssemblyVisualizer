@@ -12,7 +12,7 @@ Components:
     Intention: type hierarchies visualization
     Usage: 'Browse Assembly' context menu item for assemblies
 
-How to start use a plugin:
+How to start to use a plugin:
  Download the latest build from the Downloads section, it contains 5 libraries,
  which should be placed into the ILSpy folder.
  Another option is to download source code and build it manually.

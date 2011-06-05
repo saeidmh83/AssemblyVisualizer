@@ -135,16 +135,17 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="{Binding Name}"
-                                           FontSize="13"
-                                           Foreground="#555555"
-                                           FontWeight="DemiBold"/>
+                       ToolTip="{Binding FullName}"
+                       FontSize="13"
+                       Foreground="#555555"
+                       FontWeight="DemiBold" />
             <Button x:Name="btnRemove"
-                                        Command="{Binding RemoveCommand}"
-                                        Grid.Column="1"                                        
-                                        MinWidth="16"
-                                        VerticalAlignment="Center"
-                                        Opacity="0.3"
-                                        Margin="0, 3, 0, 0">
+                    Command="{Binding RemoveCommand}"
+                    Grid.Column="1"                                        
+                    MinWidth="16"
+                    VerticalAlignment="Center"
+                    Opacity="0.3"
+                    Margin="0, 3, 0, 0">
                 <Button.Template>
                     <ControlTemplate>
                         <Border Background="Transparent">

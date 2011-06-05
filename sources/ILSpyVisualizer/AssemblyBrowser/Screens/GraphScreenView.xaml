@@ -54,10 +54,11 @@
                 Background="White"
                 CornerRadius="8">
             <TextBlock Text="{Binding Type.Name}"
-                   FontSize="18"
-                   FontWeight="Bold"
-                   Foreground="#555555"
-                   Margin="4, 0"/>
+                       ToolTip="{Binding Type.FullName}"
+                       FontSize="18"
+                       FontWeight="Bold"
+                       Foreground="#555555"
+                       Margin="4, 0"/>
         </Border>        
     </Grid>
 </UserControl>

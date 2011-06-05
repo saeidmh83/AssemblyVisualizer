@@ -24,6 +24,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="{Binding Name}"
+                               ToolTip="{Binding FullName}"
                                FontSize="16"
                                FontWeight="Bold"
                                Margin="6, 6, 2, 3"                               

@@ -9,9 +9,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 	{
 		private readonly AssemblyDefinition _assemblyDefinition;
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
+		private readonly int _exportedTypesCount;
+		private readonly int _internalTypesCount;
 		private bool _showRemoveCommand = true;
-		private int _exportedTypesCount;
-		private int _internalTypesCount;
 		
 		public AssemblyViewModel(AssemblyDefinition assemblyDefinition, 
 								 AssemblyBrowserWindowViewModel windowViewModel)
@@ -30,6 +30,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		public string Name
 		{
 			get { return _assemblyDefinition.Name.Name; }
+		}
+
+		public string FullName
+		{
+			get { return _assemblyDefinition.FullName; }
 		}
 
 		public ICommand RemoveCommand { get; private set; }

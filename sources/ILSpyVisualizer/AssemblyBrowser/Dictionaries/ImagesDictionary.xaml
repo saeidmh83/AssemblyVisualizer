@@ -261,4 +261,34 @@
             </DrawingGroup>
         </DrawingBrush.Drawing>
     </DrawingBrush>
+
+    <!--Question mark drawing-->
+    <SolidColorBrush x:Key="Brush1" Color="#555555" ></SolidColorBrush>
+    <SolidColorBrush x:Key="Brush2" Color="White" ></SolidColorBrush>
+    <DrawingBrush x:Key="QuestionMarkDrawing" Stretch="Uniform">
+        <DrawingBrush.Drawing>
+            <DrawingGroup>
+                <GeometryDrawing Brush="{StaticResource Brush1}" Geometry="F1M82.350,17.339C41.015,17.339,17.779,38.710,17.779,82.375L17.779,532.497C17.779,573.340,38.670,594.725,79.971,594.725L531.995,594.725C573.298,594.725,594.221,574.405,594.221,532.497L594.221,82.375C594.221,39.775 573.298,17.339 530.698,17.339 530.698,17.339 82.207,17.197 82.350,17.339z">
+                    <GeometryDrawing.Pen>
+                        <Pen Brush="{StaticResource Brush1}" Thickness="3.408" MiterLimit="4" ></Pen>
+                    </GeometryDrawing.Pen>
+                </GeometryDrawing>
+                <DrawingGroup Transform="1,0,0,1,-0.081899993121624,-0.585394382476807">
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="{StaticResource Brush2}" Geometry="F1M306.082,528.487C427.441,528.487 525.826,429.117 525.826,306.546 525.826,183.974 427.441,84.605 306.082,84.605 184.724,84.605 86.337,183.974 86.337,306.546 86.337,429.117 184.724,528.487 306.082,528.487z" ></GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="{StaticResource Brush1}" Geometry="F1M306.082,477.321C399.465,477.321 475.168,400.862 475.168,306.546 475.168,212.229 399.465,135.771 306.082,135.771 212.700,135.771 136.997,212.229 136.997,306.546 136.997,400.862 212.700,477.321 306.082,477.321z" ></GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup>
+                        <GeometryDrawing Brush="{StaticResource Brush2}" Geometry="F1M283.301,384.880L332.832,384.779 332.832,346.296C332.832,335.858 337.698,325.997 350.717,317.456 363.736,308.918 400.082,291.594 400.082,246.046 400.082,200.497 361.915,169.188 329.832,162.546 297.753,155.903 262.997,160.274 238.332,187.296 216.244,211.494 211.590,230.633 211.590,272.861L261.082,272.861 261.082,263.046C261.082,240.545 263.684,216.792 295.832,210.296 313.377,206.751 329.826,212.254 339.582,221.796 350.741,232.709 350.832,257.296 333.049,269.539L305.152,288.518C288.880,298.957,283.301,310.577,283.301,327.658L283.301,384.880z" ></GeometryDrawing>
+                        <DrawingGroup>
+                            <GeometryDrawing Brush="{StaticResource Brush2}" Geometry="F1M282.975,455.299L282.975,404.293 333.188,404.293 333.188,455.299 282.975,455.299z" ></GeometryDrawing>
+                        </DrawingGroup>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingBrush.Drawing>
+    </DrawingBrush>
+
 </ResourceDictionary>

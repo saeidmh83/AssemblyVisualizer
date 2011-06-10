@@ -32,7 +32,7 @@
                               Grid.Row="1"  
                               Zoom="0.2"
                               ZoomBoxOpacity="0.5">
-            <AssemblyBrowser:TypeGraphLayout x:Name="graphLayout" 
+            <AssemblyBrowser:TypeGraphLayout x:Name="graphLayout"                                             
                                              Margin="10"
                                              Graph="{Binding Graph}"
                                              LayoutAlgorithmType="LinLog"

@@ -22,15 +22,29 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			Enums
 		}
 
+		private enum TypeVisibility
+		{
+			Any,
+			Public,
+			Internal
+		}
+
+		private enum SortingMode
+		{
+			Name,
+			DescendantsCount,
+			MembersCount
+		}
+
 		private const string HomePageUri = @"http://denismarkelov.blogspot.com/p/ilspy-visualizer.html";
 
 		private string _searchTerm = string.Empty;
 		private bool _isSearchPerformed = true;
 		private DispatcherTimer _searchTimer;
 		private SearchMode _searchMode = SearchMode.All;
-
-		private bool _sortByName;
-
+		private SortingMode _sortingMode = SortingMode.DescendantsCount;
+		private TypeVisibility _typeVisibilityFilter = TypeVisibility.Any;
+		
 		#region // .ctor
 
 		public SearchScreen(AssemblyBrowserWindowViewModel windowViewModel)
@@ -59,23 +73,34 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 				    new List<GroupedUserCommand>
 				    	{
 				    		new GroupedUserCommand("Name", SortByName),
-				    		new GroupedUserCommand("Descendants count", SortByDescendantsCount, true)
+				    		new GroupedUserCommand("Descendants count", SortByDescendantsCount, true),
+							new GroupedUserCommand("Members count", SortByMembersCount)
 				    	});
 
-			var filteringGroup = new CommandsGroupViewModel(
+			var filteringByTypeGroup = new CommandsGroupViewModel(
 					"Types",
 					new List<GroupedUserCommand>
 			         	{
-			            	new GroupedUserCommand("All", ShowAll, true),
+			            	new GroupedUserCommand("All", ShowAllTypes, true),
 			            	new GroupedUserCommand("Interfaces", ShowInterfaces),
 							new GroupedUserCommand("Value types", ShowValueTypes),
 							new GroupedUserCommand("Enums", ShowEnums)
 			            });
-			
+
+			var filteringByVisibilityGroup = new CommandsGroupViewModel(
+					"Visibility",
+					new List<GroupedUserCommand>
+			         	{
+			            	new GroupedUserCommand("Any", ShowAnyVisibility, true),
+			            	new GroupedUserCommand("Public", ShowPublicTypes),
+							new GroupedUserCommand("Internal", ShowInternalTypes)
+			            });
+
 			SearchControlGroups = new ObservableCollection<CommandsGroupViewModel>
 			                      	{
 			                      		sortingGroup,
-										filteringGroup
+										filteringByTypeGroup,
+										filteringByVisibilityGroup
 			                      	};
 		}
 
@@ -135,9 +160,29 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 						results = results.Where(t => t.TypeDefinition.IsEnum);
 						break;
 				}
-				
-				results = _sortByName ? results.OrderBy(t => t.Name)
-									  : results.OrderByDescending(t => t.DescendantsCount);
+
+				switch (_typeVisibilityFilter)
+				{
+					case TypeVisibility.Internal:
+						results = results.Where(t => t.TypeDefinition.IsNotPublic);
+						break;
+					case TypeVisibility.Public:
+						results = results.Where(t => t.TypeDefinition.IsPublic);
+						break;
+				}
+
+				switch (_sortingMode)
+				{
+					case SortingMode.DescendantsCount:
+						results = results.OrderByDescending(t => t.DescendantsCount);
+						break;
+					case SortingMode.MembersCount:
+						results = results.OrderByDescending(t => t.MembersCount);
+						break;
+					case SortingMode.Name:
+						results = results.OrderByDescending(t => t.Name);
+						break;
+				}
 
 				return results;
 			}
@@ -193,13 +238,19 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 
 		private void SortByName()
 		{
-			_sortByName = true;
+			_sortingMode = SortingMode.Name;
 			TriggerSearch();
 		}
 
 		private void SortByDescendantsCount()
 		{
-			_sortByName = false;
+			_sortingMode = SortingMode.DescendantsCount;
+			TriggerSearch();
+		}
+
+		private void SortByMembersCount()
+		{
+			_sortingMode = SortingMode.MembersCount;
 			TriggerSearch();
 		}
 
@@ -221,9 +272,27 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			TriggerSearch();
 		}
 
-		private void ShowAll()
+		private void ShowAllTypes()
 		{
 			_searchMode = SearchMode.All;
+			TriggerSearch();
+		}
+
+		private void ShowAnyVisibility()
+		{
+			_typeVisibilityFilter = TypeVisibility.Any;
+			TriggerSearch();
+		}
+
+		private void ShowPublicTypes()
+		{
+			_typeVisibilityFilter = TypeVisibility.Public;
+			TriggerSearch();
+		}
+
+		private void ShowInternalTypes()
+		{
+			_typeVisibilityFilter = TypeVisibility.Internal;
 			TriggerSearch();
 		}
 

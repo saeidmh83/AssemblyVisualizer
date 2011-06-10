@@ -34,6 +34,18 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				get { return Screen != null; }
 			}
+
+			public string Hint
+			{
+				get
+				{
+					if (IsScreen)
+					{
+						return "Search";
+					}
+					return Type.FullName;
+				}
+			}
 		}
 
 		#endregion
@@ -69,6 +81,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 			NavigateBackCommand = new DelegateCommand(NavigateBackCommandHandler);
 			NavigateForwardCommand = new DelegateCommand(NavigateForwardCommandHandler);
+
+			RefreshNavigationCommands();
 		}
 
 		#endregion
@@ -123,6 +137,30 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		public bool CanNavigateForward
 		{
 			get { return _nextNavigationItems.Count > 0; }
+		}
+
+		public string NavigateForwardHint
+		{
+			get
+			{
+				if (!CanNavigateForward)
+				{
+					return "Cannot navigate forward";
+				}
+				return _nextNavigationItems.Peek().Hint;
+			}
+		}
+
+		public string NavigateBackHint
+		{
+			get
+			{
+				if (!CanNavigateBack)
+				{
+					return "Cannot navigate backward";
+				}
+				return _previousNavigationItems.Peek().Hint;
+			}
 		}
 
 		public IEnumerable<TypeViewModel> Types
@@ -301,6 +339,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		{
 			OnPropertyChanged("CanNavigateBack");
 			OnPropertyChanged("CanNavigateForward");
+			OnPropertyChanged("NavigateBackHint");
+			OnPropertyChanged("NavigateForwardHint");
 		}
 
 		#endregion

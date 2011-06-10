@@ -121,6 +121,7 @@
             </TextBox>
         </Grid>
 
+        <!--Search filters-->
         <ItemsControl ItemsSource="{Binding SearchControlGroups}"
                       Grid.Row="1"
                       Margin="20, 0, 4, 0">
@@ -128,7 +129,7 @@
                 <DataTemplate>
                     <UserControls:CommandsGroupView Commands="{Binding Commands}"
                                                     Header="{Binding Header}"
-                                                    Margin="0, 3"/>
+                                                    Margin="0, 4"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
@@ -175,18 +176,43 @@
                                     </TextBlock>
                                 </TextBlock>
 
-                                <StackPanel Orientation="Horizontal"
-                                                Grid.Row="1"
-                                                Margin="11, 4">
-                                    <TextBlock Text="Direct descendants:" FontStyle="Italic"/>
-                                    <TextBlock Text="{Binding DirectDescendantsCount}"                                                   
+                                <Grid Grid.Row="1"
+                                      Margin="11, 4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Orientation="Horizontal"
+                                                x:Name="pnlDescendants">
+                                        <TextBlock Text="Direct descendants:" 
+                                                   FontStyle="Italic"/>
+                                        <TextBlock Text="{Binding DirectDescendantsCount}"                                                   
+                                                       FontWeight="Bold"
+                                                   Margin="4, 0, 6, 0"/>
+                                        <TextBlock Text="Total descendants:" 
+                                                   FontStyle="Italic"/>
+                                        <TextBlock Text="{Binding DescendantsCount}"                                                   
+                                                       FontWeight="Bold"
+                                                   Margin="4, 0, 6, 0"/>
+                                    </StackPanel>
+                                    
+                                    <TextBlock x:Name="txtNoDescendants" 
+                                               Text="No descendants"
+                                               Visibility="Collapsed"
+                                               FontStyle="Italic"
+                                               Margin="0, 0, 10, 3"/>
+                                    
+                                    <StackPanel Orientation="Horizontal"
+                                                Grid.Column="1">
+                                        <TextBlock Text="Members:" 
+                                                   FontStyle="Italic"/>
+                                        <TextBlock Text="{Binding MembersCount}"                                                   
                                                    FontWeight="Bold"
-                                               Margin="4, 0, 6, 0"/>
-                                    <TextBlock Text="Total descendants:" FontStyle="Italic"/>
-                                    <TextBlock Text="{Binding DescendantsCount}"                                                   
-                                                   FontWeight="Bold"
-                                               Margin="4, 0, 6, 0"/>
-                                </StackPanel>
+                                                   Margin="4, 0, 6, 0"/>
+                                    </StackPanel>
+                                </Grid>
+                                
+                                <!--Commands-->
                                 <StackPanel Grid.Column="1"
                                             Grid.RowSpan="2"
                                             VerticalAlignment="Center">
@@ -223,6 +249,10 @@
                         <DataTrigger Binding="{Binding IsInternal}" Value="True">
                             <Setter TargetName="brdMain" Property="Background" Value="#F2F2F2"/>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding HasDescendants}" Value="False">
+                            <Setter TargetName="pnlDescendants" Property="Visibility" Value="Collapsed"/>
+                            <Setter TargetName="txtNoDescendants" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
@@ -236,7 +266,7 @@
                       ItemsSource="{Binding Assemblies}"
                       ItemTemplate="{StaticResource AssemblyTemplate}"/>
         </ScrollViewer>
-        
+
         <!--Home page-->
         <Border Margin="0, 6"
                 CornerRadius="6"

@@ -54,7 +54,8 @@
                     Background="{StaticResource LeftArrowDrawing}"
                     Margin="0, 0, 8, 0"
                     Command="{Binding NavigateBackCommand}"
-                    IsEnabled="{Binding CanNavigateBack}"/>                
+                    IsEnabled="{Binding CanNavigateBack}"
+                    ToolTip="{Binding NavigateBackHint}"/>                
             
             <Button Style="{StaticResource ImageButtonStyle}"
                     Width="42"
@@ -62,7 +63,8 @@
                     Grid.Column="1"
                     Background="{StaticResource RightArrowDrawing}"
                     Command="{Binding NavigateForwardCommand}"
-                    IsEnabled="{Binding CanNavigateForward}"/>                
+                    IsEnabled="{Binding CanNavigateForward}"
+                    ToolTip="{Binding NavigateForwardHint}"/>                
            
         </Grid>
     </Grid>

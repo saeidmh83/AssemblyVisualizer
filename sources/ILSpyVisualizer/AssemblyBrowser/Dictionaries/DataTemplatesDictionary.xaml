@@ -80,6 +80,17 @@
                                     VerticalAlignment="Center">
                                 <StackPanel Orientation="Horizontal">
                                     <Button VerticalAlignment="Center"                                                                      
+                                        Command="{Binding NavigateCommand}" 
+                                        Margin="4, 0"
+                                        Width="16"
+                                        Height="16"
+                                        MinWidth="0"
+                                        MinHeight="0"
+                                        Background="{StaticResource RightArrowBlueDrawing}"
+                                        Style="{StaticResource ImageButtonStyle}"
+                                            ToolTip="Navigate"/>
+
+                                    <Button VerticalAlignment="Center"                                                                      
                                         Command="{Binding VisualizeCommand}" 
                                         Margin="4, 0"
                                         Width="16"
@@ -88,14 +99,16 @@
                                         MinHeight="0"
                                         Background="{StaticResource RightArrowDrawing}"
                                         Style="{StaticResource ImageButtonStyle}"
-                                        Visibility="{Binding ShowVisualizeCommand, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        Visibility="{Binding ShowVisualizeCommand, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                            ToolTip="Visualize"/>
 
                                     <ToggleButton IsChecked="{Binding ShowMembers}"                                          
                                               Width="16"
                                               Height="16"
                                               Margin="4, 0"                                          
-                                              Background="{StaticResource MagnifierDrawing}"
-                                              Style="{StaticResource ImageButtonStyle}"/>
+                                              Background="{StaticResource FlatMagnifierDrawing}"
+                                              Style="{StaticResource ImageButtonStyle}"
+                                                  ToolTip="Show members"/>
                                 </StackPanel>
                             </Border>
                         </Grid>
@@ -121,6 +134,9 @@
                 <Setter TargetName="pnlButtons" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="brdMain" Property="Background" Value="White"/>
             </Trigger>
+            <DataTrigger Binding="{Binding IsInternal}" Value="True">
+                <Setter TargetName="brdMain" Property="Background" Value="#DEDEDE"/>
+            </DataTrigger>
             <DataTrigger Binding="{Binding IsCurrent}" Value="True">
                 <Setter TargetName="brdMain" Property="Background" Value="Yellow"/>                
             </DataTrigger>

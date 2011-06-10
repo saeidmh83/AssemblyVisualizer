@@ -15,9 +15,12 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private int _descendantsCount;
 		private int _directDescendantsCount;
+		private int _membersCount;
 
 		private bool _isCurrent;
-		private string _name;
+		private readonly string _name;
+		private readonly string _fullName;
+		private string _baseTypeName;
 
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
 
@@ -27,6 +30,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			_windowViewModel = windowViewModel;
 
 			_name = MainWindow.Instance.CurrentLanguage.FormatTypeName(typeDefinition);
+			_fullName = string.Format("{0}.{1}", _typeDefinition.Namespace, _name);
 
 			var properties = typeDefinition.Properties
 				.Where(p => p.GetMethod != null && p.GetMethod.IsPublic
@@ -45,6 +49,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				.OfType<MemberViewModel>();
 
 			Members = properties.Concat(events).Concat(methods);
+			_membersCount = Members.Count();
 
 			VisualizeCommand = new DelegateCommand(VisualizeCommandHandler);
 			NavigateCommand = new DelegateCommand(NavigateCommandHandler);
@@ -78,7 +83,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public string FullName
 		{
-			get { return _typeDefinition.FullName; }
+			get { return _fullName; }
 		}
 
 		public int DescendantsCount
@@ -91,6 +96,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			get { return _directDescendantsCount; }
 		}
 
+		public int MembersCount
+		{
+			get { return _membersCount; }
+		}
+
 		public bool IsInternal
 		{
 			get { return _typeDefinition.IsNotPublic; }
@@ -98,7 +108,15 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public bool HasBaseType
 		{
-			get { return _typeDefinition.BaseType != null; }
+			get
+			{
+				return _typeDefinition.BaseType != null;
+			}
+		}
+
+		public bool HasDescendants
+		{
+			get { return _descendantsCount > 0; }
 		}
 
 		public bool IsCurrent
@@ -128,7 +146,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				{
 					return string.Empty;
 				}
-				return _typeDefinition.BaseType.Name;
+				if (string.IsNullOrEmpty(_baseTypeName))
+				{
+					_baseTypeName = MainWindow.Instance.CurrentLanguage.FormatTypeName(_typeDefinition.BaseType.Resolve());
+				}
+				return _baseTypeName;
 			}
 		}
 

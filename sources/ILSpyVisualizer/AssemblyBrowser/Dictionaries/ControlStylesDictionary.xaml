@@ -22,7 +22,9 @@
                     <Border x:Name="brdImage"
                             Width="{TemplateBinding Width}" 
                             Height="{TemplateBinding Height}"
-                            Background="{TemplateBinding Background}"/>                        
+                            Background="{TemplateBinding Background}">
+                        <ContentPresenter/>
+                    </Border>                        
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter TargetName="brdImage" Property="Effect">

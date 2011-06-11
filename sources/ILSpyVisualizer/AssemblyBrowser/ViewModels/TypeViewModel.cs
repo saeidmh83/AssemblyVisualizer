@@ -4,6 +4,7 @@ using Mono.Cecil;
 using System.Linq;
 using System.Windows.Input;
 using ICSharpCode.ILSpy;
+using ILSpyVisualizer.AssemblyBrowser.Screens;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
@@ -15,7 +16,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private int _descendantsCount;
 		private int _directDescendantsCount;
-		private int _membersCount;
+		private readonly int _membersCount;
 
 		private bool _isCurrent;
 		private readonly string _name;
@@ -53,10 +54,12 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 			VisualizeCommand = new DelegateCommand(VisualizeCommandHandler);
 			NavigateCommand = new DelegateCommand(NavigateCommandHandler);
+			ShowMembersCommand = new DelegateCommand(ShowMembersCommandHandler);
 		}
 
 		public ICommand VisualizeCommand { get; private set; }
 		public ICommand NavigateCommand { get; private set; }
+		public ICommand ShowMembersCommand { get; private set; }
 
 		public TypeDefinition TypeDefinition
 		{
@@ -164,9 +167,14 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			}
 		} 
 
-		public bool ShowVisualizeCommand
+		public bool CanVisualize
 		{
 			get { return DerivedTypes.Count() > 0; }
+		}
+
+		public bool CanShowMembers
+		{
+			get { return _membersCount > 0; }
 		}
 
 		public void AddDerivedType(TypeViewModel typeViewModel)
@@ -192,6 +200,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private void NavigateCommandHandler()
 		{
 			MainWindow.Instance.JumpToReference(_typeDefinition);
+		}
+
+		private void ShowMembersCommandHandler()
+		{
+			var graphScreen = _windowViewModel.Screen as GraphScreen;
+			if (graphScreen == null)
+			{
+				return;
+			}
+			graphScreen.ShowDetails(this);
 		}
 	}
 }

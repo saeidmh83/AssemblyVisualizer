@@ -219,7 +219,7 @@
                                     <TextBlock VerticalAlignment="Center"
                                                Margin="8, 6, 10, 5"
                                                                                       
-                                               Visibility="{Binding ShowVisualizeCommand, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                               Visibility="{Binding CanVisualize, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <Hyperlink Command="{Binding VisualizeCommand}"
                                                    Style="{StaticResource HyperlinkStyle}">
                                             <TextBlock Text="Visualize"/>

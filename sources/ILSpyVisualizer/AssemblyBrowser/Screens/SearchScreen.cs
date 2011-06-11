@@ -180,7 +180,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 						results = results.OrderByDescending(t => t.MembersCount);
 						break;
 					case SortingMode.Name:
-						results = results.OrderByDescending(t => t.Name);
+						results = results.OrderBy(t => t.Name);
 						break;
 				}
 

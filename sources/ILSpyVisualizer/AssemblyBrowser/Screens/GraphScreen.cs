@@ -32,6 +32,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 
 		private TypeGraph _graph;
 		private TypeViewModel _type;
+		private TypeViewModel _typeForDetails;
+		//private bool _showDetails;
 
 		public GraphScreen(AssemblyBrowserWindowViewModel windowViewModel) : base(windowViewModel)
 		{
@@ -39,6 +41,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		}
 		
 		public event Action GraphChanged;
+		public event Action ShowDetailsRequest;
 
 		public override bool AllowAssemblyDrop
 		{
@@ -55,6 +58,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			}
 		}
 
+		public TypeViewModel TypeForDetails
+		{
+			get { return _typeForDetails; }
+			set
+			{
+				_typeForDetails = value;
+				OnPropertyChanged("TypeForDetails");
+			}
+		}
+
 		public TypeGraph Graph
 		{
 			get { return _graph; }
@@ -63,6 +76,22 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 				_graph = value;
 				OnPropertyChanged("Graph");
 			}
+		}
+
+		//public bool ShowDetails
+		//{	
+		//    get { return _showDetails; }
+		//    set
+		//    {
+		//        _showDetails = value;
+		//        OnPropertyChanged("ShowDetails");
+		//    }
+		//}
+
+		public void ShowDetails(TypeViewModel type)
+		{
+			TypeForDetails = type;
+			OnShowDetailsRequest();
 		}
 
 		public void Show(TypeViewModel type)
@@ -95,7 +124,17 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 
 			if (handler != null)
 			{
-				GraphChanged();
+				handler();
+			}
+		}
+
+		private void OnShowDetailsRequest()
+		{
+			var handler = ShowDetailsRequest;
+
+			if (handler != null)
+			{
+				handler();
 			}
 		}
 	}

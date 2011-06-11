@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.Generic;
+using System.Windows.Input;
 using System.Linq;
 using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
@@ -48,6 +49,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				OnPropertyChanged("ShowRemoveCommand");
 			}
 		}
+
+		public IEnumerable<TypeViewModel> Types { get; set; }
 
 		public AssemblyDefinition AssemblyDefinition
 		{

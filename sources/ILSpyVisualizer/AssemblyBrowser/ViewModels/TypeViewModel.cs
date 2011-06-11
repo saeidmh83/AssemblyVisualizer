@@ -11,6 +11,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 	class TypeViewModel : ViewModelBase
 	{
 		private readonly TypeDefinition _typeDefinition;
+		private readonly AssemblyViewModel _assembly;
 		private readonly IList<TypeViewModel> _derivedTypes = new List<TypeViewModel>();
 		private bool _showMembers;
 
@@ -25,9 +26,10 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
 
-		public TypeViewModel(TypeDefinition typeDefinition, AssemblyBrowserWindowViewModel windowViewModel)
+		public TypeViewModel(TypeDefinition typeDefinition, AssemblyViewModel assembly, AssemblyBrowserWindowViewModel windowViewModel)
 		{
 			_typeDefinition = typeDefinition;
+			_assembly = assembly;
 			_windowViewModel = windowViewModel;
 
 			_name = MainWindow.Instance.CurrentLanguage.FormatTypeName(typeDefinition);
@@ -130,6 +132,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				_isCurrent = value;
 				OnPropertyChanged("IsCurrent");
 			}
+		}
+
+		public string ExtendedInfo
+		{
+			get { return FullName; }
 		}
 
 		public IEnumerable<MemberViewModel> Members { get; set; }

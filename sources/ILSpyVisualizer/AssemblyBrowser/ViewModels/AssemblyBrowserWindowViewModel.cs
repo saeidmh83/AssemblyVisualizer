@@ -165,7 +165,29 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public IEnumerable<TypeViewModel> Types
 		{
-			get { return _types; }
+			get
+			{
+				if (_types == null)
+				{
+					var types = new List<TypeViewModel>();
+
+					foreach (var assembly in _assemblies)
+					{
+						var currentAssembly = assembly;
+
+						var assemblyTypes = currentAssembly.AssemblyDefinition.Modules
+							.SelectMany(m => m.Types)
+							.Select(t => new TypeViewModel(t, currentAssembly, this))
+							.ToList();
+						
+						currentAssembly.Types = assemblyTypes;
+						types.AddRange(assemblyTypes);
+					}
+
+					_types = types;
+				}
+				return _types;
+			}
 		}
 
 		public Dispatcher Dispatcher
@@ -300,10 +322,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private void UpdateInternalTypeCollections()
 		{
 			_allTypeDefinitions = null;
-			_types = AllTypeDefinitions
-				.Select(t => new TypeViewModel(t, this))
-				.ToList();
-			var typesDictionary = _types.ToDictionary(type => type.TypeDefinition);
+			_types = null;
+
+			var typesDictionary = Types.ToDictionary(type => type.TypeDefinition);
 
 			foreach (var typeDefinition in AllTypeDefinitions
 				.Where(t => t.BaseType != null))
@@ -365,7 +386,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				return;
 			}
-			
+
 			_previousNavigationItems.Push(CurrentNavigationItem);
 			CurrentNavigationItem = _nextNavigationItems.Pop();
 

@@ -108,7 +108,8 @@
                      Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"                                            
                      Margin="0, 0, 20, 0"
                      Grid.Column="1"
-                     FontSize="20">
+                     FontSize="20"
+                     PreviewKeyDown="SearchPreviewKeyDown">
                 <TextBox.Style>
                     <Style TargetType="{x:Type TextBox}">
                         <Style.Triggers>

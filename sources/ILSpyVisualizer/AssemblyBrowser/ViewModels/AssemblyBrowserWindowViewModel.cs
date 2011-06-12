@@ -157,7 +157,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				if (!CanNavigateBack)
 				{
-					return "Cannot navigate backward";
+					return "Cannot navigate back";
 				}
 				return _previousNavigationItems.Peek().Hint;
 			}
@@ -386,7 +386,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				return;
 			}
-
+			
 			_previousNavigationItems.Push(CurrentNavigationItem);
 			CurrentNavigationItem = _nextNavigationItems.Pop();
 

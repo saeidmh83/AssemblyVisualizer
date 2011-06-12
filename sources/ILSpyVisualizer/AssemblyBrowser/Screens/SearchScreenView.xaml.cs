@@ -46,5 +46,23 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		{
 			txtSearch.Focus();
 		}
+
+		private void SearchPreviewKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Escape)
+			{
+				txtSearch.Text = string.Empty;
+			}
+			else if (e.Key == Key.Right && ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control))
+			{
+				NavigationCommands.BrowseForward.Execute(null, this);
+				e.Handled = true;
+			}
+			else if (e.Key == Key.Left && ((Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control))
+			{
+				NavigationCommands.BrowseBack.Execute(null, this);
+				e.Handled = true;
+			}
+		}
 	}
 }

@@ -24,6 +24,10 @@
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>    
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Command="NavigationCommands.BrowseBack" Key="Left" Modifiers="Control"/>
+        <KeyBinding Command="NavigationCommands.BrowseForward" Key="Right" Modifiers="Control"/>
+    </Window.InputBindings>
     <Window.CommandBindings>
         <CommandBinding Command="Search" Executed="SearchExecuted"/>
     </Window.CommandBindings>
@@ -54,8 +58,17 @@
                     Background="{StaticResource LeftArrowDrawing}"
                     Margin="0, 0, 8, 0"
                     Command="{Binding NavigateBackCommand}"
-                    IsEnabled="{Binding CanNavigateBack}"
-                    ToolTip="{Binding NavigateBackHint}"/>                
+                    IsEnabled="{Binding CanNavigateBack}">
+                <Button.ToolTip>
+                    <TextBlock>
+                        <TextBlock Text="{Binding NavigateBackHint}"/>
+                        <LineBreak/>
+                        <TextBlock Text="CTRL + Left"
+                                   FontWeight="Bold"/>
+                    </TextBlock>
+                </Button.ToolTip>
+            </Button>
+                                 
             
             <Button Style="{StaticResource ImageButtonStyle}"
                     Width="42"
@@ -64,7 +77,16 @@
                     Background="{StaticResource RightArrowDrawing}"
                     Command="{Binding NavigateForwardCommand}"
                     IsEnabled="{Binding CanNavigateForward}"
-                    ToolTip="{Binding NavigateForwardHint}"/>                
+                    >
+                <Button.ToolTip>
+                    <TextBlock>
+                        <TextBlock Text="{Binding NavigateForwardHint}"/>
+                        <LineBreak/>
+                        <TextBlock Text="CTRL + Right"
+                                   FontWeight="Bold"/>
+                    </TextBlock>
+                </Button.ToolTip>
+            </Button>                
            
         </Grid>
     </Grid>

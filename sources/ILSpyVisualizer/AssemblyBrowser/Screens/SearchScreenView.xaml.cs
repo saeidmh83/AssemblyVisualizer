@@ -17,7 +17,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 	/// <summary>
 	/// Interaction logic for SearchScreenView.xaml
 	/// </summary>
-	public partial class SearchScreenView : UserControl
+	internal partial class SearchScreenView : UserControl
 	{
 		private bool _isInitialized;
 

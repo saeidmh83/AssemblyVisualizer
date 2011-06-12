@@ -17,7 +17,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 	/// <summary>
 	/// Interaction logic for GraphScreen.xaml
 	/// </summary>
-	public partial class GraphScreenView : UserControl
+	internal partial class GraphScreenView : UserControl
 	{
 		public GraphScreenView()
 		{

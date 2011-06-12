@@ -164,16 +164,28 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock ToolTip="{Binding ExtendedInfo}"
-                                           FontSize="16"
+                                <TextBlock FontSize="16"
                                            FontWeight="Bold"
                                            Margin="9, 6"
                                            HorizontalAlignment="Left"
                                            TextWrapping="Wrap">
-                                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
+                                    <TextBlock ToolTip="{Binding ExtendedInfo}">
+                                        <Hyperlink Command="{Binding NavigateCommand}"
+                                                   TextDecorations="None"
+                                                   Foreground="Black">
+                                            <TextBlock Text="{Binding Name}"                                                
+                                                       TextWrapping="Wrap"/>
+                                        </Hyperlink>
+                                    </TextBlock>
                                     <TextBlock x:Name="txtBaseType">
                                         <Run Text=" : "/>
-                                        <TextBlock Text="{Binding BaseTypeName}"/>
+                                        <TextBlock ToolTip="{Binding BaseTypeFullName}">
+                                            <Hyperlink TextDecorations="None"
+                                                       Foreground="Black"
+                                                       Command="{Binding NavigateToBaseCommand}">
+                                                <TextBlock Text="{Binding BaseTypeName}"/>
+                                            </Hyperlink>
+                                        </TextBlock>
                                     </TextBlock>
                                 </TextBlock>
 

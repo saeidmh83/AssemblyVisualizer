@@ -36,17 +36,7 @@
 
     <!--Type-->
     <DataTemplate DataType="{x:Type ViewModels:TypeViewModel}"
-                  x:Key="TypeDataTemplate">
-        <DataTemplate.Resources>
-            <Style x:Key="TypeNameTextBlockStyle" TargetType="{x:Type TextBlock}">
-                <Setter Property="Text" Value="{Binding Name}"/>
-                <Setter Property="ToolTip" Value="{Binding FullName}"/>
-                <Setter Property="HorizontalAlignment" Value="Center"/>
-                <Setter Property="Margin" Value="8, 5, 8, 3"/>
-                <Setter Property="FontWeight" Value="Bold"/>
-            </Style>
-        </DataTemplate.Resources>
-
+                  x:Key="TypeDataTemplate"> 
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -57,10 +47,13 @@
                     Background="Transparent">
                 <Grid>
 
-                    <TextBlock Style="{StaticResource TypeNameTextBlockStyle}"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       TextOptions.TextRenderingMode="Grayscale"/>
+                    <TextBlock Text="{Binding Name}"
+                               ToolTip="{Binding ExtendedInfo}"
+                               Margin="8, 5, 8, 3"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               TextOptions.TextRenderingMode="Grayscale"/>  
                     <Border Background="White"
                                     CornerRadius="8"
                                     x:Name="pnlButtons"
@@ -69,35 +62,35 @@
                                     VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal">
                             <Button VerticalAlignment="Center"                                                                      
-                                        Command="{Binding NavigateCommand}" 
-                                        Margin="4, 0"
-                                        Width="16"
-                                        Height="16"
-                                        MinWidth="0"
-                                        MinHeight="0"
-                                        Background="{StaticResource RightArrowBlueDrawing}"
-                                        Style="{StaticResource ImageButtonStyle}"
-                                            ToolTip="Navigate"/>
+                                    Command="{Binding NavigateCommand}" 
+                                    Margin="4, 0"
+                                    Width="16"
+                                    Height="16"
+                                    MinWidth="0"
+                                    MinHeight="0"
+                                    Background="{StaticResource RightArrowBlueDrawing}"
+                                    Style="{StaticResource ImageButtonStyle}"
+                                    ToolTip="Navigate"/>
 
                             <Button VerticalAlignment="Center"                                                                      
-                                        Command="{Binding VisualizeCommand}" 
-                                        Margin="4, 0"
-                                        Width="16"
-                                        Height="16"
-                                        MinWidth="0"
-                                        MinHeight="0"
-                                        Background="{StaticResource RightArrowDrawing}"
-                                        Style="{StaticResource ImageButtonStyle}"
-                                        Visibility="{Binding CanVisualize, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                            ToolTip="Visualize"/>
+                                    Command="{Binding VisualizeCommand}" 
+                                    Margin="4, 0"
+                                    Width="16"
+                                    Height="16"
+                                    MinWidth="0"
+                                    MinHeight="0"
+                                    Background="{StaticResource RightArrowDrawing}"
+                                    Style="{StaticResource ImageButtonStyle}"
+                                    Visibility="{Binding CanVisualize, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    ToolTip="Visualize"/>
 
                             <Button Command="{Binding ShowMembersCommand}"                   
-                                              Width="16"
-                                              Height="16"
-                                              Margin="4, 0"                                          
-                                              Background="{StaticResource FlatMagnifierDrawing}"
-                                              Style="{StaticResource ImageButtonStyle}"
-                                                  ToolTip="Show members"
+                                    Width="16"
+                                    Height="16"
+                                    Margin="4, 0"                                          
+                                    Background="{StaticResource FlatMagnifierDrawing}"
+                                    Style="{StaticResource ImageButtonStyle}"
+                                    ToolTip="Show members"
                                     Visibility="{Binding CanShowMembers, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         </StackPanel>
                     </Border>
@@ -109,11 +102,7 @@
                 </Border.Effect>
             </Border>
         </Grid>
-        <DataTemplate.Triggers>
-            <!--<DataTrigger Binding="{Binding ShowMembers}" Value="False">
-                <Setter TargetName="icMembers" Property="Visibility" Value="Collapsed"/>
-                <Setter TargetName="brdDivider" Property="BorderThickness" Value="0"/>
-            </DataTrigger>-->
+        <DataTemplate.Triggers>            
             <Trigger SourceName="brdMain" Property="IsMouseOver" Value="True">
                 <Setter TargetName="pnlButtons" Property="Visibility" Value="Visible"/>
                 <Setter TargetName="brdMain" Property="Background" Value="White"/>

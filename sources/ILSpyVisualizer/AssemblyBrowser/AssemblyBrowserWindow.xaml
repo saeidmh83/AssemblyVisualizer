@@ -44,6 +44,7 @@
                                    DataContext="{Binding Screen.Commands}"
                                    Margin="4"/>
         
+        <!--Navigation arrows-->
         <Grid Visibility="{Binding ShowNavigationArrows, Converter={StaticResource BooleanToVisibilityConverter}}"
               VerticalAlignment="Top"
               HorizontalAlignment="Right"
@@ -67,8 +68,7 @@
                                    FontWeight="Bold"/>
                     </TextBlock>
                 </Button.ToolTip>
-            </Button>
-                                 
+            </Button>                                
             
             <Button Style="{StaticResource ImageButtonStyle}"
                     Width="42"
@@ -86,8 +86,7 @@
                                    FontWeight="Bold"/>
                     </TextBlock>
                 </Button.ToolTip>
-            </Button>                
-           
+            </Button>
         </Grid>
     </Grid>
 </Window>

@@ -23,6 +23,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private readonly string _name;
 		private readonly string _fullName;
 		private string _baseTypeName;
+		private string _extendedInfo;
 
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
 
@@ -34,6 +35,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 			_name = MainWindow.Instance.CurrentLanguage.FormatTypeName(typeDefinition);
 			_fullName = string.Format("{0}.{1}", _typeDefinition.Namespace, _name);
+			_extendedInfo = IsInternal
+			                	? string.Format("{0}\nInternal", FullName)
+			                	: FullName;
 
 			var properties = typeDefinition.Properties
 				.Where(p => p.GetMethod != null && p.GetMethod.IsPublic
@@ -56,11 +60,13 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 			VisualizeCommand = new DelegateCommand(VisualizeCommandHandler);
 			NavigateCommand = new DelegateCommand(NavigateCommandHandler);
+			NavigateToBaseCommand = new DelegateCommand(NavigateToBaseCommandHandler);
 			ShowMembersCommand = new DelegateCommand(ShowMembersCommandHandler);
 		}
 
 		public ICommand VisualizeCommand { get; private set; }
 		public ICommand NavigateCommand { get; private set; }
+		public ICommand NavigateToBaseCommand { get; private set; }
 		public ICommand ShowMembersCommand { get; private set; }
 
 		public TypeDefinition TypeDefinition
@@ -136,7 +142,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public string ExtendedInfo
 		{
-			get { return FullName; }
+			get { return _extendedInfo; }
 		}
 
 		public IEnumerable<MemberViewModel> Members { get; set; }
@@ -162,6 +168,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				}
 				return _baseTypeName;
 			}
+		}
+
+		public string BaseTypeFullName
+		{
+			get { return string.Format("{0}.{1}", _typeDefinition.BaseType.Namespace, BaseTypeName); }
 		}
 
 		public bool ShowMembers
@@ -207,6 +218,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private void NavigateCommandHandler()
 		{
 			MainWindow.Instance.JumpToReference(_typeDefinition);
+		}
+
+		private void NavigateToBaseCommandHandler()
+		{
+			MainWindow.Instance.JumpToReference(_typeDefinition.BaseType);
 		}
 
 		private void ShowMembersCommandHandler()

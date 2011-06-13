@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Media.Animation;
+using WPFExtensions.Controls;
 
 namespace ILSpyVisualizer.AssemblyBrowser.Screens
 {
@@ -44,12 +46,25 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		{
 			ViewModel.GraphChanged += GraphChangedHandler;
 			ViewModel.ShowDetailsRequest += ShowDetailsRequestHandler;
+			ViewModel.FillGraphRequest += FillGraphRequestHandler;
+			ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;
 		}
 
 		private void ShowDetailsRequestHandler()
 		{
 			detailsPopup.MaxHeight = ActualHeight - 30;
 			detailsPopup.IsOpen = true;
+		}
+
+		private void FillGraphRequestHandler()
+		{
+			zoomControl.ZoomToFill();
+		}
+
+		private void OriginalSizeRequestHandler()
+		{
+			var animation = new DoubleAnimation(1, TimeSpan.FromSeconds(1));
+			zoomControl.BeginAnimation(ZoomControl.ZoomProperty, animation);
 		}
 	}
 }

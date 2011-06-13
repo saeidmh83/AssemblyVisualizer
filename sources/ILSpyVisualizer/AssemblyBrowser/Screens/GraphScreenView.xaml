@@ -6,7 +6,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:zoom="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions" 
              xmlns:AssemblyBrowser="clr-namespace:ILSpyVisualizer.AssemblyBrowser" 
-             xmlns:Controls="clr-namespace:GraphSharp.Controls;assembly=GraphSharp.Controls" mc:Ignorable="d" 
+             xmlns:Controls="clr-namespace:GraphSharp.Controls;assembly=GraphSharp.Controls" 
+             xmlns:Converters="clr-namespace:GraphSharp.Converters;assembly=GraphSharp.Controls" 
+             mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -14,6 +16,7 @@
                 <ResourceDictionary Source="..\Dictionaries\DataTemplatesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+            <!--Vertex style-->
             <Style TargetType="{x:Type Controls:VertexControl}">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -25,6 +28,94 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+            </Style>
+
+            <!--Edge style-->
+            <Converters:EdgeRouteToPathConverter x:Key="routeToPathConverter" />             
+            <Style TargetType="{x:Type Controls:EdgeControl}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Controls:EdgeControl}">
+                            <Path Stroke="{TemplateBinding Foreground}"
+                          StrokeThickness="2"
+                          MinWidth="1"
+                          MinHeight="1"
+                          ToolTip="{TemplateBinding ToolTip}"
+                          x:Name="edgePath">
+                                <Path.Data>
+                                    <PathGeometry>
+                                        <PathGeometry.Figures>
+                                            <MultiBinding Converter="{StaticResource routeToPathConverter}">
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                 Path="Source.(Controls:GraphCanvas.X)" />
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                 Path="Source.(Controls:GraphCanvas.Y)" />
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                 Path="Source.ActualWidth" />
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                 Path="Source.ActualHeight" />
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                 Path="Target.(Controls:GraphCanvas.X)" />
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                 Path="Target.(Controls:GraphCanvas.Y)" />
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                 Path="Target.ActualWidth" />
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                 Path="Target.ActualHeight" />
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                 Path="RoutePoints" />
+                                            </MultiBinding>
+                                        </PathGeometry.Figures>
+                                    </PathGeometry>
+                                </Path.Data>
+                            </Path>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Controls:GraphElementBehaviour.HighlightTrigger"
+                Value="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" />
+                <Setter Property="MinWidth"
+                Value="1" />
+                <Setter Property="MinHeight"
+                Value="1" />
+                <Setter Property="Background"
+                Value="Red" />
+                <Setter Property="Foreground"
+                Value="Silver" />
+                <Setter Property="Opacity"
+                Value="0.5" />
+                <Style.Triggers>
+                    <Trigger Property="Controls:GraphElementBehaviour.IsHighlighted"
+                     Value="True">
+                        <Setter Property="Foreground"
+                        Value="Black" />
+                    </Trigger>
+                    <Trigger Property="Controls:GraphElementBehaviour.IsSemiHighlighted"
+                     Value="True">
+                        <Setter Property="Foreground"
+                        Value="Yellow" />
+                    </Trigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="Controls:GraphElementBehaviour.IsSemiHighlighted"
+                               Value="True" />
+                            <Condition Property="Controls:GraphElementBehaviour.SemiHighlightInfo"
+                               Value="InEdge" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Foreground"
+                        Value="DarkGreen" />
+                    </MultiTrigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="Controls:GraphElementBehaviour.IsSemiHighlighted"
+                               Value="True" />
+                            <Condition Property="Controls:GraphElementBehaviour.SemiHighlightInfo"
+                               Value="OutEdge" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Foreground"
+                        Value="#3578FF" />
+                    </MultiTrigger>
+                </Style.Triggers>
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -75,9 +166,9 @@
         </Popup>
 
         <zoom:ZoomControl x:Name="zoomControl"
-                              Grid.Row="1"  
-                              Zoom="0.2"
-                              ZoomBoxOpacity="0.5">
+                          Grid.Row="1"
+                          ZoomBoxOpacity="0.5"
+                          HideZoom="Collapsed">
             <AssemblyBrowser:TypeGraphLayout x:Name="graphLayout"                                             
                                              Margin="10"
                                              Graph="{Binding Graph}"
@@ -94,17 +185,39 @@
             <ItemsControl ItemsSource="{Binding Assemblies}"/>
         </Border>
 
-        <Border VerticalAlignment="Bottom"
-                HorizontalAlignment="Left"
-                Margin="10"
-                Background="White"
-                CornerRadius="8">
-            <TextBlock Text="{Binding Type.Name}"
-                       ToolTip="{Binding Type.FullName}"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       Foreground="#555555"
-                       Margin="4, 0"/>
-        </Border>
+        <StackPanel VerticalAlignment="Bottom"
+                    HorizontalAlignment="Left"
+                    Margin="10">
+            <Border Background="{StaticResource QuestionMarkDrawing}"
+                    Width="20"
+                    Height="20"                    
+                    ToolTipService.InitialShowDelay="0"
+                    Margin="4, 0, 0, 6"
+                    HorizontalAlignment="Left">
+                <Border.ToolTip>
+                    <TextBlock Margin="4">
+                        <Run FontWeight="Bold"
+                             Text="CTRL + Wheel: "/>
+                        <Run Text="Zoom in / out"/>
+                        <LineBreak/>
+                        <Run FontWeight="Bold"
+                             Text="ALT + Drag: "/>
+                        <Run Text="Zoom box"/>
+                    </TextBlock>
+                </Border.ToolTip>
+            </Border>
+            
+            <Border Background="White"
+                    CornerRadius="8">
+                <TextBlock Text="{Binding Type.Name}"
+                           ToolTip="{Binding Type.FullName}"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Foreground="#555555"
+                           Margin="4, 0"/>
+            </Border>
+            
+        </StackPanel>
+        
     </Grid>
 </UserControl>

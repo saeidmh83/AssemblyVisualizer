@@ -94,21 +94,11 @@
         </Grid.ColumnDefinitions>
 
         <!--Search filter by name-->
-        <Grid Margin="0, 24"
-              Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Text="Filter:"
-                       VerticalAlignment="Center"
-                       FontSize="20"
-                       Margin="20, 0"/>
-            <TextBox x:Name="txtSearch"
-                     Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"                                            
-                     Margin="0, 0, 20, 0"
-                     Grid.Column="1"
+         
+        <Grid Grid.ColumnSpan="2"
+              Margin="132, 24, 20, 24">
+            <TextBox x:Name="txtSearch"                     
+                     Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}" 
                      FontSize="20"
                      PreviewKeyDown="SearchPreviewKeyDown">
                 <TextBox.Style>
@@ -121,6 +111,23 @@
                     </Style>
                 </TextBox.Style>
             </TextBox>
+            <TextBlock Text="Start typing to filter search results"
+                       FontSize="14"
+                       FontStyle="Oblique"
+                       Foreground="#777777"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Margin="8, 0, 0, 2">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSearchTermEmpty}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
         </Grid>
 
         <!--Search filters-->
@@ -285,8 +292,7 @@
         <Border Margin="0, 6"
                 CornerRadius="6"
                 Background="White"
-                Grid.Row="1"
-                Grid.Column="2"
+                Grid.Row="1"                
                 VerticalAlignment="Bottom"
                 HorizontalAlignment="Center">
             <TextBlock FontSize="12"

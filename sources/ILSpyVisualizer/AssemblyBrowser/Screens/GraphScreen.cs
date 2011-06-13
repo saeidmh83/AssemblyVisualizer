@@ -37,15 +37,18 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private TypeGraph _graph;
 		private TypeViewModel _type;
 		private TypeViewModel _typeForDetails;
-		//private bool _showDetails;
 
 		public GraphScreen(AssemblyBrowserWindowViewModel windowViewModel) : base(windowViewModel)
 		{
+			Commands.Add(new UserCommand("Fill Graph", OnFillGraphRequest));
+			Commands.Add(new UserCommand("Original Size", OnOriginalSizeRequest));
 			Commands.Add(WindowViewModel.ShowSearchUserCommand);
 		}
 		
 		public event Action GraphChanged;
 		public event Action ShowDetailsRequest;
+		public event Action FillGraphRequest;
+		public event Action OriginalSizeRequest;
 
 		public override bool AllowAssemblyDrop
 		{
@@ -81,16 +84,6 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 				OnPropertyChanged("Graph");
 			}
 		}
-
-		//public bool ShowDetails
-		//{	
-		//    get { return _showDetails; }
-		//    set
-		//    {
-		//        _showDetails = value;
-		//        OnPropertyChanged("ShowDetails");
-		//    }
-		//}
 
 		public void ShowDetails(TypeViewModel type)
 		{
@@ -135,6 +128,26 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private void OnShowDetailsRequest()
 		{
 			var handler = ShowDetailsRequest;
+
+			if (handler != null)
+			{
+				handler();
+			}
+		}
+
+		private void OnFillGraphRequest()
+		{
+			var handler = FillGraphRequest;
+
+			if (handler != null)
+			{
+				handler();
+			}
+		}
+
+		private void OnOriginalSizeRequest()
+		{
+			var handler = OriginalSizeRequest;
 
 			if (handler != null)
 			{

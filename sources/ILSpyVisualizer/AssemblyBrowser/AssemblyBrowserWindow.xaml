@@ -36,7 +36,7 @@
 
         <!--Content-->  
         <UserControls:CachingScreenPresenter Screen="{Binding Screen}"
-                                        Grid.Row="1"/>
+                                             Grid.Row="1"/>
 
         <!--Commands-->
         <UserControls:CommandsView HorizontalAlignment="Center"
@@ -47,7 +47,7 @@
         <!--Navigation arrows-->
         <Grid Visibility="{Binding ShowNavigationArrows, Converter={StaticResource BooleanToVisibilityConverter}}"
               VerticalAlignment="Top"
-              HorizontalAlignment="Right"
+              HorizontalAlignment="Left"
               Margin="18">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>

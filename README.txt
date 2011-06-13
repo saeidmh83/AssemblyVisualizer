@@ -4,6 +4,7 @@ obtained using ILSpy.
 Website: http://denismarkelov.blogspot.com/p/ilspy-visualizer.html
 
 Copyright 2011 Denis Markelov
+Licensed under the Apache License, Version 2.0
 
 Included open-source libraries:
   GraphSharp: Ms-PL

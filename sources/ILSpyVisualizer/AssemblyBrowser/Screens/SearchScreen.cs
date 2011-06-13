@@ -136,7 +136,14 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 				}
 				_searchTimer.Start();
 				IsSearchPerformed = false;
+
+				OnPropertyChanged("IsSearchTermEmpty");
 			}
+		}
+
+		public bool IsSearchTermEmpty
+		{
+			get { return string.IsNullOrEmpty(SearchTerm); }
 		}
 
 		public ObservableCollection<CommandsGroupViewModel> SearchControlGroups { get; private set; }

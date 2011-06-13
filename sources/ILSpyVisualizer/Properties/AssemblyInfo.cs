@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿// Copyright 2011 Denis Markelov
+// This code is distributed under Apache 2.0 license 
+// (for details please see \docs\LICENSE, \docs\NOTICE)
+
+using System.Reflection;
 using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;

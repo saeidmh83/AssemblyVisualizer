@@ -6,16 +6,16 @@ Website: http://denismarkelov.blogspot.com/p/ilspy-visualizer.html
 Copyright 2011 Denis Markelov
 
 Included open-source libraries:
- GraphSharp (Ms-PL)
- QuickGraph (Ms-PL)
- WPFExtensions (Ms-PL)
+  GraphSharp: Ms-PL
+  QuickGraph: Ms-PL
+  WPFExtensions: Ms-PL
 
 Components:
- Assembly browser
+  Assembly browser
     Intention: type hierarchies visualization
     Usage: 'Browse Assembly' context menu item for assemblies
 
 How to start to use a plugin:
- Download the latest build from the Downloads section, it contains 5 libraries,
- which should be placed into the ILSpy folder.
- Another option is to download source code and build it manually.
+  Download the latest build from the Downloads section, it contains 5 libraries,
+  which should be placed into the ILSpy folder.
+  Another option is to download source code and build it manually.

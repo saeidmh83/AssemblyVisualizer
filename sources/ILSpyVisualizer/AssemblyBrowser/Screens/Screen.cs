@@ -39,5 +39,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		{
 		}
 
+		public virtual void ShowInnerSearch()
+		{
+		}
 	}
 }

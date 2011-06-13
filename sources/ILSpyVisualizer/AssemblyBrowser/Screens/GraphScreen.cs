@@ -10,6 +10,7 @@ using ILSpyVisualizer.AssemblyBrowser.ViewModels;
 using ILSpyVisualizer.Infrastructure;
 using QuickGraph;
 using System.Windows.Input;
+using System.Windows;
 
 namespace ILSpyVisualizer.AssemblyBrowser.Screens
 {
@@ -20,23 +21,32 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private TypeViewModel _typeForDetails;
 		private TypeViewModel _currentType;
 		private bool _isMembersPopupPinned;
+		private Visibility _searchVisibility = Visibility.Collapsed;
+		private string _searchTerm;
+		private IEnumerable<TypeViewModel> _types;
 
 		public GraphScreen(AssemblyBrowserWindowViewModel windowViewModel) : base(windowViewModel)
 		{
+			PinCommand = new DelegateCommand(PinCommandHandler);
+			HideSearchCommand = new DelegateCommand(HideSearchCommandHandler);
+			ShowSearchCommand = new DelegateCommand(ShowSearchCommandHandler);
+
 			Commands.Add(new UserCommand("Fill Graph", OnFillGraphRequest));
 			Commands.Add(new UserCommand("Original Size", OnOriginalSizeRequest));
 			Commands.Add(WindowViewModel.ShowSearchUserCommand);
-
-			PinCommand = new DelegateCommand(PinCommandHandler);
+			Commands.Add(new UserCommand("Search in Graph", ShowSearchCommand));
 		}
 
 		public ICommand PinCommand { get; private set; }
+		public ICommand HideSearchCommand { get; private set; }
+		public ICommand ShowSearchCommand { get; private set; }
 		
 		public event Action GraphChanged;
 		public event Action ShowDetailsRequest;
 		public event Action HideDetailsRequest;
 		public event Action FillGraphRequest;
 		public event Action OriginalSizeRequest;
+		public event Action FocusSearchRequest;
 
 		public override bool AllowAssemblyDrop
 		{
@@ -73,6 +83,27 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			}
 		}
 
+		public Visibility SearchVisibility
+		{
+			get { return _searchVisibility; }
+			set
+			{
+				_searchVisibility = value;
+				OnPropertyChanged("SearchVisibility");
+			}
+		}
+
+		public string SearchTerm
+		{
+			get { return _searchTerm; }
+			set
+			{
+				_searchTerm = value;
+				OnPropertyChanged("SearchTerm");
+				PerformSearch();
+			}
+		}
+
 		public bool IsMembersPopupPinned
 		{
 			get { return _isMembersPopupPinned; }
@@ -96,6 +127,23 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			}
 		}
 
+		private IEnumerable<TypeViewModel> Types
+		{
+			get
+			{
+				if (_types == null)
+				{
+					_types = _currentType.FlattenedHierarchy;
+				}
+				return _types;
+			}
+		}
+
+		public override void ShowInnerSearch()
+		{
+			ShowSearchCommand.Execute(null);
+		}
+
 		public void ShowDetails(TypeViewModel type)
 		{
 			TypeForDetails = type;
@@ -105,9 +153,18 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		public void Show(TypeViewModel type)
 		{
 			CurrentType = type;
+			_types = null;
 			Type = type;
 			Graph = CreateGraph(type);
 			OnGraphChanged();
+		}
+
+		public void ClearSearch()
+		{
+			foreach (var type in Types)
+			{
+				type.IsMarked = false;
+			}
 		}
 
 		private static TypeGraph CreateGraph(TypeViewModel typeViewModel)
@@ -126,6 +183,20 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			return graph;
 		}
 
+		private void PerformSearch()
+		{
+			if (string.IsNullOrEmpty(SearchTerm) || string.IsNullOrEmpty(SearchTerm.Trim()))
+			{
+				ClearSearch();
+				return;
+			}
+
+			foreach (var type in Types)
+			{
+				type.IsMarked = type.Name.StartsWith(SearchTerm, StringComparison.OrdinalIgnoreCase);
+			}
+		}
+
 		private void PinCommandHandler()
 		{
 			if (!IsMembersPopupPinned)
@@ -135,6 +206,18 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			}
 			IsMembersPopupPinned = false;
 			OnHideDetailsRequest();
+		}
+
+		private void HideSearchCommandHandler()
+		{
+			SearchVisibility = Visibility.Collapsed;
+			SearchTerm = string.Empty;
+		}
+
+		private void ShowSearchCommandHandler()
+		{
+			SearchVisibility = Visibility.Visible;
+			OnFocusSearchRequest();
 		}
 
 		private void OnGraphChanged()
@@ -180,6 +263,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private void OnOriginalSizeRequest()
 		{
 			var handler = OriginalSizeRequest;
+
+			if (handler != null)
+			{
+				handler();
+			}
+		}
+
+		private void OnFocusSearchRequest()
+		{
+			var handler = FocusSearchRequest;
 
 			if (handler != null)
 			{

@@ -27,6 +27,7 @@
     <Window.InputBindings>
         <KeyBinding Command="NavigationCommands.BrowseBack" Key="Left" Modifiers="Control"/>
         <KeyBinding Command="NavigationCommands.BrowseForward" Key="Right" Modifiers="Control"/>
+        <KeyBinding Command="{Binding ShowInnerSearchCommand}" Key="F" Modifiers="Control"/>
     </Window.InputBindings>
     <Window.CommandBindings>
         <CommandBinding Command="Search" Executed="SearchExecuted"/>

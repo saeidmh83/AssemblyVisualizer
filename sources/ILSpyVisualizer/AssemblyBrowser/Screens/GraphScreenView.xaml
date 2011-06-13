@@ -37,11 +37,11 @@
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type GraphControls:EdgeControl}">
                             <Path Stroke="{TemplateBinding Foreground}"
-                          StrokeThickness="2"
-                          MinWidth="1"
-                          MinHeight="1"
-                          ToolTip="{TemplateBinding ToolTip}"
-                          x:Name="edgePath">
+                                  StrokeThickness="2"
+                                  MinWidth="1"
+                                  MinHeight="1"
+                                  ToolTip="{TemplateBinding ToolTip}"
+                                  x:Name="edgePath">
                                 <Path.Data>
                                     <PathGeometry>
                                         <PathGeometry.Figures>
@@ -188,8 +188,8 @@
                     </Border.Effect>
                 </Border>
             </Grid>
-        </Controls:PopupNonTopmost>
-
+        </Controls:PopupNonTopmost>        
+        
         <!--Main content-->
         <zoom:ZoomControl x:Name="zoomControl"
                           Grid.Row="1"
@@ -202,6 +202,38 @@
                                              OverlapRemovalAlgorithmType="FSA"
                                              HighlightAlgorithmType="Simple" />
         </zoom:ZoomControl>
+
+        <!--Search-->
+        <Border x:Name="brdSearch"
+                Background="White"
+                BorderBrush="#666666"
+                BorderThickness="1"
+                CornerRadius="8"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Center"
+                Margin="0, 40, 0, 0"
+                Visibility="{Binding SearchVisibility}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="txtSearch"
+                         Margin="22, 22, 0, 22"
+                         Width="250"
+                         FontSize="19"
+                         Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                         PreviewKeyDown="SearchPreviewKeyDown"/>
+                <Button Style="{StaticResource ImageButtonStyle}"
+                        Background="{StaticResource BlueCrossDrawing}"
+                        Grid.Column="1"
+                        Margin="12, 0"
+                        VerticalAlignment="Center"
+                        Height="22"
+                        Width="22"
+                        Command="{Binding HideSearchCommand}"/>
+            </Grid>
+        </Border>
 
         <!--Assemblies-->
         <Border VerticalAlignment="Bottom"
@@ -231,6 +263,14 @@
                         <Run FontWeight="Bold"
                              Text="ALT + Drag: "/>
                         <Run Text="Zoom box"/>
+                        <LineBreak/>
+                        <Run FontWeight="Bold"
+                             Text="CTRL + F: "/>
+                        <Run Text="Search in Graph"/>
+                        <LineBreak/>
+                        <Run FontWeight="Bold"
+                             Text="F3: "/>
+                        <Run Text="Back to Main Search"/>
                     </TextBlock>
                 </Border.ToolTip>
             </Border>

@@ -37,14 +37,16 @@
     <!--Type-->
     <DataTemplate DataType="{x:Type ViewModels:TypeViewModel}"
                   x:Key="TypeDataTemplate"> 
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition />
-            </Grid.RowDefinitions>
+        <Grid>            
+            <Border x:Name="brdMark"
+                    Margin="-15" 
+                    CornerRadius="15"
+                    Background="#3578FF"
+                    Visibility="Collapsed"/>
+            
             <Border x:Name="brdMain"
                     Style="{StaticResource BorderStyle}"                            
-                    Background="Transparent">
+                    Background="White">
                 <Grid>
 
                     <TextBlock Text="{Binding Name}"
@@ -104,14 +106,16 @@
         </Grid>
         <DataTemplate.Triggers>            
             <Trigger SourceName="brdMain" Property="IsMouseOver" Value="True">
-                <Setter TargetName="pnlButtons" Property="Visibility" Value="Visible"/>
-                <Setter TargetName="brdMain" Property="Background" Value="White"/>
+                <Setter TargetName="pnlButtons" Property="Visibility" Value="Visible"/>                
             </Trigger>
             <DataTrigger Binding="{Binding IsInternal}" Value="True">
                 <Setter TargetName="brdMain" Property="Background" Value="#DEDEDE"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding IsCurrent}" Value="True">
                 <Setter TargetName="brdMain" Property="Background" Value="Yellow"/>                
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsMarked}" Value="True">
+                <Setter TargetName="brdMark" Property="Visibility" Value="Visible"/>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

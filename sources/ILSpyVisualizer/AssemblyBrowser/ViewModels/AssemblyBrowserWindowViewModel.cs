@@ -85,6 +85,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 			NavigateBackCommand = new DelegateCommand(NavigateBackCommandHandler);
 			NavigateForwardCommand = new DelegateCommand(NavigateForwardCommandHandler);
+			ShowInnerSearchCommand = new DelegateCommand(ShowInnerSearchCommandHandler);
 
 			RefreshNavigationCommands();
 		}
@@ -95,6 +96,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public ICommand NavigateBackCommand { get; private set; }
 		public ICommand NavigateForwardCommand { get; private set; }
+		public ICommand ShowInnerSearchCommand { get; private set; }
 
 		public Screen Screen
 		{
@@ -237,13 +239,18 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			}
 			set
 			{
+				var graphScreen = Screen as GraphScreen;
+				if (graphScreen != null && value.IsScreen)
+				{
+					graphScreen.ClearSearch();
+				}
+
 				if (value.IsScreen)
 				{
 					Screen = value.Screen;
 				}
 				else
 				{
-					var graphScreen = Screen as GraphScreen;
 					if (graphScreen == null)
 					{
 						graphScreen = new GraphScreen(this);
@@ -395,6 +402,14 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			CurrentNavigationItem = _nextNavigationItems.Pop();
 
 			RefreshNavigationCommands();
+		}
+
+		private void ShowInnerSearchCommandHandler()
+		{
+			if (Screen != null)
+			{
+				Screen.ShowInnerSearch();
+			}
 		}
 
 		#endregion

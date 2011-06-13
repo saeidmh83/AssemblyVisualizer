@@ -17,13 +17,14 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private readonly TypeDefinition _typeDefinition;
 		private readonly AssemblyViewModel _assembly;
 		private readonly IList<TypeViewModel> _derivedTypes = new List<TypeViewModel>();
-		private bool _showMembers;
 
 		private int _descendantsCount;
 		private int _directDescendantsCount;
 		private readonly int _membersCount;
-
+		
+		private bool _showMembers;
 		private bool _isCurrent;
+		private bool _isMarked;
 		private readonly string _name;
 		private readonly string _fullName;
 		private string _baseTypeName;
@@ -141,6 +142,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				_isCurrent = value;
 				OnPropertyChanged("IsCurrent");
+			}
+		}
+
+		public bool IsMarked
+		{
+			get { return _isMarked; }
+			set
+			{
+				_isMarked = value;
+				OnPropertyChanged("IsMarked");
 			}
 		}
 

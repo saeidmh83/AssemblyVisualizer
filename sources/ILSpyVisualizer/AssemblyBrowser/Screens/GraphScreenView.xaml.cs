@@ -49,6 +49,12 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			ViewModel.HideDetailsRequest += HideDetailsRequestHandler;
 			ViewModel.FillGraphRequest += FillGraphRequestHandler;
 			ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;
+			ViewModel.FocusSearchRequest += FocusSearchRequestHandler;
+		}
+
+		private void FocusSearchRequestHandler()
+		{
+			txtSearch.Focus();
 		}
 
 		private void ShowDetailsRequestHandler()
@@ -71,6 +77,15 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		{
 			var animation = new DoubleAnimation(1, TimeSpan.FromSeconds(1));
 			zoomControl.BeginAnimation(ZoomControl.ZoomProperty, animation);
+		}
+
+		private void SearchPreviewKeyDown(object sender, KeyEventArgs e)
+		{
+			if (e.Key == Key.Escape)
+			{
+				e.Handled = true;
+				ViewModel.HideSearchCommand.Execute(null);
+			}
 		}
 	}
 }

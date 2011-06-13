@@ -9,44 +9,32 @@ using System.Text;
 using ILSpyVisualizer.AssemblyBrowser.ViewModels;
 using ILSpyVisualizer.Infrastructure;
 using QuickGraph;
+using System.Windows.Input;
 
 namespace ILSpyVisualizer.AssemblyBrowser.Screens
 {
 	class GraphScreen : Screen
 	{
-		#region // Static members
-
-		private static TypeViewModel _currentType;
-
-		private static TypeViewModel CurrentType
-		{
-			get { return _currentType; }
-			set
-			{
-				if (_currentType != null)
-				{
-					_currentType.IsCurrent = false;
-				}
-				_currentType = value;
-				value.IsCurrent = true;
-			}
-		}
-
-		#endregion
-
 		private TypeGraph _graph;
 		private TypeViewModel _type;
 		private TypeViewModel _typeForDetails;
+		private TypeViewModel _currentType;
+		private bool _isMembersPopupPinned;
 
 		public GraphScreen(AssemblyBrowserWindowViewModel windowViewModel) : base(windowViewModel)
 		{
 			Commands.Add(new UserCommand("Fill Graph", OnFillGraphRequest));
 			Commands.Add(new UserCommand("Original Size", OnOriginalSizeRequest));
 			Commands.Add(WindowViewModel.ShowSearchUserCommand);
+
+			PinCommand = new DelegateCommand(PinCommandHandler);
 		}
+
+		public ICommand PinCommand { get; private set; }
 		
 		public event Action GraphChanged;
 		public event Action ShowDetailsRequest;
+		public event Action HideDetailsRequest;
 		public event Action FillGraphRequest;
 		public event Action OriginalSizeRequest;
 
@@ -85,6 +73,29 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			}
 		}
 
+		public bool IsMembersPopupPinned
+		{
+			get { return _isMembersPopupPinned; }
+			set
+			{
+				_isMembersPopupPinned = value;
+				OnPropertyChanged("IsMembersPopupPinned");
+			}
+		}
+
+		private TypeViewModel CurrentType
+		{
+			set
+			{
+				if (_currentType != null)
+				{
+					_currentType.IsCurrent = false;
+				}
+				_currentType = value;
+				value.IsCurrent = true;
+			}
+		}
+
 		public void ShowDetails(TypeViewModel type)
 		{
 			TypeForDetails = type;
@@ -115,6 +126,17 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			return graph;
 		}
 
+		private void PinCommandHandler()
+		{
+			if (!IsMembersPopupPinned)
+			{
+				IsMembersPopupPinned = true;
+				return;
+			}
+			IsMembersPopupPinned = false;
+			OnHideDetailsRequest();
+		}
+
 		private void OnGraphChanged()
 		{
 			var handler = GraphChanged;
@@ -128,6 +150,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private void OnShowDetailsRequest()
 		{
 			var handler = ShowDetailsRequest;
+
+			if (handler != null)
+			{
+				handler();
+			}
+		}
+
+		private void OnHideDetailsRequest()
+		{
+			var handler = HideDetailsRequest;
 
 			if (handler != null)
 			{

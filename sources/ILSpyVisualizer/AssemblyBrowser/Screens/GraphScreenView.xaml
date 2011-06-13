@@ -6,9 +6,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:zoom="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions" 
              xmlns:AssemblyBrowser="clr-namespace:ILSpyVisualizer.AssemblyBrowser" 
-             xmlns:Controls="clr-namespace:GraphSharp.Controls;assembly=GraphSharp.Controls" 
+             xmlns:GraphControls="clr-namespace:GraphSharp.Controls;assembly=GraphSharp.Controls" 
              xmlns:Converters="clr-namespace:GraphSharp.Converters;assembly=GraphSharp.Controls" 
-             mc:Ignorable="d" 
+             xmlns:Controls="clr-namespace:ILSpyVisualizer.Controls" mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -17,10 +17,10 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!--Vertex style-->
-            <Style TargetType="{x:Type Controls:VertexControl}">
+            <Style TargetType="{x:Type GraphControls:VertexControl}">
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Controls:VertexControl}">
+                        <ControlTemplate TargetType="{x:Type GraphControls:VertexControl}">
 
                             <ContentPresenter Content="{TemplateBinding Vertex}" 
                                       ContentTemplate="{StaticResource TypeDataTemplate}"/>
@@ -32,10 +32,10 @@
 
             <!--Edge style-->
             <Converters:EdgeRouteToPathConverter x:Key="routeToPathConverter" />             
-            <Style TargetType="{x:Type Controls:EdgeControl}">
+            <Style TargetType="{x:Type GraphControls:EdgeControl}">
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type Controls:EdgeControl}">
+                        <ControlTemplate TargetType="{x:Type GraphControls:EdgeControl}">
                             <Path Stroke="{TemplateBinding Foreground}"
                           StrokeThickness="2"
                           MinWidth="1"
@@ -47,17 +47,17 @@
                                         <PathGeometry.Figures>
                                             <MultiBinding Converter="{StaticResource routeToPathConverter}">
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
-                                                 Path="Source.(Controls:GraphCanvas.X)" />
+                                                 Path="Source.(GraphControls:GraphCanvas.X)" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
-                                                 Path="Source.(Controls:GraphCanvas.Y)" />
+                                                 Path="Source.(GraphControls:GraphCanvas.Y)" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Source.ActualWidth" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Source.ActualHeight" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
-                                                 Path="Target.(Controls:GraphCanvas.X)" />
+                                                 Path="Target.(GraphControls:GraphCanvas.X)" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
-                                                 Path="Target.(Controls:GraphCanvas.Y)" />
+                                                 Path="Target.(GraphControls:GraphCanvas.Y)" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Target.ActualWidth" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
@@ -72,7 +72,7 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-                <Setter Property="Controls:GraphElementBehaviour.HighlightTrigger"
+                <Setter Property="GraphControls:GraphElementBehaviour.HighlightTrigger"
                 Value="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" />
                 <Setter Property="MinWidth"
                 Value="1" />
@@ -85,21 +85,21 @@
                 <Setter Property="Opacity"
                 Value="0.5" />
                 <Style.Triggers>
-                    <Trigger Property="Controls:GraphElementBehaviour.IsHighlighted"
+                    <Trigger Property="GraphControls:GraphElementBehaviour.IsHighlighted"
                      Value="True">
                         <Setter Property="Foreground"
                         Value="Black" />
                     </Trigger>
-                    <Trigger Property="Controls:GraphElementBehaviour.IsSemiHighlighted"
+                    <Trigger Property="GraphControls:GraphElementBehaviour.IsSemiHighlighted"
                      Value="True">
                         <Setter Property="Foreground"
                         Value="Yellow" />
                     </Trigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
-                            <Condition Property="Controls:GraphElementBehaviour.IsSemiHighlighted"
+                            <Condition Property="GraphControls:GraphElementBehaviour.IsSemiHighlighted"
                                Value="True" />
-                            <Condition Property="Controls:GraphElementBehaviour.SemiHighlightInfo"
+                            <Condition Property="GraphControls:GraphElementBehaviour.SemiHighlightInfo"
                                Value="InEdge" />
                         </MultiTrigger.Conditions>
                         <Setter Property="Foreground"
@@ -107,9 +107,9 @@
                     </MultiTrigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
-                            <Condition Property="Controls:GraphElementBehaviour.IsSemiHighlighted"
+                            <Condition Property="GraphControls:GraphElementBehaviour.IsSemiHighlighted"
                                Value="True" />
-                            <Condition Property="Controls:GraphElementBehaviour.SemiHighlightInfo"
+                            <Condition Property="GraphControls:GraphElementBehaviour.SemiHighlightInfo"
                                Value="OutEdge" />
                         </MultiTrigger.Conditions>
                         <Setter Property="Foreground"
@@ -120,12 +120,14 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid x:Name="grdMain">
-        <Popup PlacementTarget="{Binding ElementName=grdMain}"
-               Placement="Relative" 
-               HorizontalOffset="15"
-               VerticalOffset="15"               
-               DataContext="{Binding TypeForDetails}"
-               StaysOpen="False"
+        <!--Members popup-->
+        <Border x:Name="detailsPopupTarget"
+                VerticalAlignment="Top" 
+                HorizontalAlignment="Right"
+                Margin="15, 23"/>
+        <Controls:PopupNonTopmost PlacementTarget="{Binding ElementName=detailsPopupTarget}"
+               Placement="Left"  
+               StaysOpen="{Binding IsMembersPopupPinned}"
                x:Name="detailsPopup"
                AllowsTransparency="True">
             <Grid Margin="0, 0, 6, 6">
@@ -138,17 +140,40 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-                    
-                        <TextBlock Text="{Binding Name}"
-                                   ToolTip="{Binding FullName}"
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <TextBlock Text="{Binding TypeForDetails.Name}"
+                                   ToolTip="{Binding TypeForDetails.FullName}"
                                    FontSize="16"
                                    Foreground="#555555"
                                    Margin="0, 0, 0, 4"/>
+                        <Button Width="22"
+                                Height="22"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                Grid.Column="1"
+                                Command="{Binding PinCommand}">
+                            <Button.Style>
+                                <Style TargetType="{x:Type ButtonBase}" 
+                                       BasedOn="{StaticResource ImageButtonStyle}">
+                                    <Setter Property="Background" Value="{StaticResource PinDrawing}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsMembersPopupPinned}" Value="True">
+                                            <Setter Property="Background" Value="{StaticResource BlueCrossDrawing}" />     
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                         
                         <ScrollViewer VerticalScrollBarVisibility="Auto"                                  
-                                      Grid.Row="1">
+                                      Grid.Row="1"
+                                      Grid.ColumnSpan="2">
                             <ItemsControl x:Name="icMembers"
-                                          ItemsSource="{Binding Members}"
+                                          ItemsSource="{Binding TypeForDetails.Members}"
                                           Grid.Row="1" />
                         </ScrollViewer>
                     </Grid>
@@ -163,8 +188,9 @@
                     </Border.Effect>
                 </Border>
             </Grid>
-        </Popup>
+        </Controls:PopupNonTopmost>
 
+        <!--Main content-->
         <zoom:ZoomControl x:Name="zoomControl"
                           Grid.Row="1"
                           ZoomBoxOpacity="0.5"
@@ -177,17 +203,19 @@
                                              HighlightAlgorithmType="Simple" />
         </zoom:ZoomControl>
 
+        <!--Assemblies-->
         <Border VerticalAlignment="Bottom"
                 HorizontalAlignment="Right"
                 Background="White"
                 CornerRadius="8"
                 Margin="0, 0, 12, 8">
             <ItemsControl ItemsSource="{Binding Assemblies}"/>
-        </Border>
-
+        </Border>        
+        
         <StackPanel VerticalAlignment="Bottom"
                     HorizontalAlignment="Left"
                     Margin="10">
+            <!--Help-->
             <Border Background="{StaticResource QuestionMarkDrawing}"
                     Width="20"
                     Height="20"                    
@@ -206,7 +234,8 @@
                     </TextBlock>
                 </Border.ToolTip>
             </Border>
-            
+
+            <!--Current type name-->
             <Border Background="White"
                     CornerRadius="8">
                 <TextBlock Text="{Binding Type.Name}"

@@ -46,14 +46,20 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		{
 			ViewModel.GraphChanged += GraphChangedHandler;
 			ViewModel.ShowDetailsRequest += ShowDetailsRequestHandler;
+			ViewModel.HideDetailsRequest += HideDetailsRequestHandler;
 			ViewModel.FillGraphRequest += FillGraphRequestHandler;
 			ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;
 		}
 
 		private void ShowDetailsRequestHandler()
 		{
-			detailsPopup.MaxHeight = ActualHeight - 30;
+			detailsPopup.MaxHeight = ActualHeight - 38;
 			detailsPopup.IsOpen = true;
+		}
+
+		private void HideDetailsRequestHandler()
+		{
+			detailsPopup.IsOpen = false;
 		}
 
 		private void FillGraphRequestHandler()

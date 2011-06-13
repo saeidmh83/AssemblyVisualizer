@@ -125,6 +125,7 @@
     <Compile Include="AssemblyBrowser\ViewModels\MethodViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\PropertyViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\TypeViewModel.cs" />
+    <Compile Include="Controls\PopupNonTopmost.cs" />
     <Compile Include="Infrastructure\DelegateCommand.cs" />
     <Compile Include="Infrastructure\UserCommand.cs" />
     <Compile Include="Infrastructure\ViewModelBase.cs" />

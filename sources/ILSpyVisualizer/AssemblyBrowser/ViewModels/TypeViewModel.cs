@@ -9,11 +9,16 @@ using System.Linq;
 using System.Windows.Input;
 using ICSharpCode.ILSpy;
 using ILSpyVisualizer.AssemblyBrowser.Screens;
+using System.Windows.Media;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
 	class TypeViewModel : ViewModelBase
 	{
+		private static readonly Brush InternalBackground = new SolidColorBrush(Color.FromRgb(222, 222, 222));
+		private static readonly Brush DefaultBackground = Brushes.White;
+		private static readonly Brush GraphRootBackground = Brushes.Yellow;
+
 		private readonly TypeDefinition _typeDefinition;
 		private readonly AssemblyViewModel _assembly;
 		private readonly IList<TypeViewModel> _derivedTypes = new List<TypeViewModel>();
@@ -30,7 +35,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private readonly string _fullName;
 		private readonly string _baseTypeName;
 		private readonly string _baseTypeFullName;
-		private string _extendedInfo;
+		private readonly string _extendedInfo;
+		private Brush _background;
 
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
 
@@ -83,6 +89,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			NavigateCommand = new DelegateCommand(NavigateCommandHandler);
 			NavigateToBaseCommand = new DelegateCommand(NavigateToBaseCommandHandler);
 			ShowMembersCommand = new DelegateCommand(ShowMembersCommandHandler);
+
+			RefreshBackground();
 		}
 
 		public ICommand VisualizeCommand { get; private set; }
@@ -163,6 +171,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				_isCurrent = value;
 				OnPropertyChanged("IsCurrent");
+				RefreshBackground();
 			}
 		}
 
@@ -175,6 +184,18 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				OnPropertyChanged("IsMarked");
 			}
 		}
+
+		public Brush Background
+		{
+			get { return _background; }
+			private set
+			{
+				_background = value;
+				OnPropertyChanged("Background");
+			}
+		}
+
+		public Brush AssignedBackground { get; set; }
 
 		public string ExtendedInfo
 		{
@@ -227,6 +248,25 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		{
 			_derivedTypes.Add(typeViewModel);
 			typeViewModel.BaseType = this;
+		}
+
+		public void RefreshBackground()
+		{
+			var brush = DefaultBackground; 
+			if (IsInternal)
+			{
+				brush = InternalBackground;
+			}
+			if (AssignedBackground != null)
+			{
+				brush = AssignedBackground;
+			}
+			if (IsCurrent)
+			{
+				brush = GraphRootBackground;
+			}
+
+			Background = brush;
 		}
 
 		public void CountDescendants()

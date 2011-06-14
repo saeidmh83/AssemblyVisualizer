@@ -10,8 +10,10 @@ using System.Windows.Input;
 
 namespace ILSpyVisualizer.Infrastructure
 {
-	class UserCommand
+	class UserCommand : ViewModelBase
 	{
+		private string _text;
+
 		public UserCommand(string text, ICommand command)
 		{
 			Text = text;
@@ -22,7 +24,15 @@ namespace ILSpyVisualizer.Infrastructure
 		{
 		}
 
-		public string Text { get; private set; }
+		public string Text
+		{
+			get { return _text; }
+			set
+			{
+				_text = value;
+				OnPropertyChanged("Text");
+			}
+		}
 		public ICommand Command { get; set; }
 	}
 }

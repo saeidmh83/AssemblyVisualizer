@@ -46,7 +46,7 @@
             
             <Border x:Name="brdMain"
                     Style="{StaticResource BorderStyle}"                            
-                    Background="White">
+                    Background="{Binding Background}">
                 <Grid>
 
                     <TextBlock Text="{Binding Name}"
@@ -107,13 +107,7 @@
         <DataTemplate.Triggers>            
             <Trigger SourceName="brdMain" Property="IsMouseOver" Value="True">
                 <Setter TargetName="pnlButtons" Property="Visibility" Value="Visible"/>                
-            </Trigger>
-            <DataTrigger Binding="{Binding IsInternal}" Value="True">
-                <Setter TargetName="brdMain" Property="Background" Value="#DEDEDE"/>
-            </DataTrigger>
-            <DataTrigger Binding="{Binding IsCurrent}" Value="True">
-                <Setter TargetName="brdMain" Property="Background" Value="Yellow"/>                
-            </DataTrigger>
+            </Trigger>            
             <DataTrigger Binding="{Binding IsMarked}" Value="True">
                 <Setter TargetName="brdMark" Property="Visibility" Value="Visible"/>
             </DataTrigger>
@@ -130,42 +124,9 @@
             <TextBlock Text="{Binding Name}"
                        ToolTip="{Binding FullName}"
                        FontSize="13"
-                       Foreground="#555555"
+                       Foreground="{Binding Foreground}"
                        FontWeight="DemiBold" />
-            <Button x:Name="btnRemove"
-                    Command="{Binding RemoveCommand}"
-                    Grid.Column="1"                                        
-                    MinWidth="16"
-                    VerticalAlignment="Center"
-                    Opacity="0.3"
-                    Margin="0, 3, 0, 0">
-                <Button.Template>
-                    <ControlTemplate>
-                        <Border Background="Transparent">
-                            <Path Stretch="Fill" 
-                                  StrokeThickness="0.5" 
-                                  Stroke="#FF333333" 
-                                  Fill="#FF969696" 
-                                  Data="F1 M 0,1.3333L 1.33333,0L 4,2.6666L 6.6666,0 8,1.3333L 5.3333,4L 8,6.6666L 6.6666,8L 4,5.3333L 1.3333,8L 0,6.6666L 2.6666,4L 0,1.3333 Z " 
-                                  HorizontalAlignment="Stretch" 
-                                  VerticalAlignment="Stretch"
-                                  Height="10"
-                                  Width="10"
-                                  Margin="5, 0"/>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
-
-        </Grid>
-        <DataTemplate.Triggers>
-            <Trigger SourceName="btnRemove" Property="IsMouseOver" Value="True">
-                <Setter TargetName="btnRemove" Property="Opacity" Value="1"/>
-            </Trigger>
-            <DataTrigger Binding="{Binding ShowRemoveCommand}" Value="False">
-                <Setter TargetName="btnRemove" Property="Visibility" Value="Collapsed"/>
-            </DataTrigger>
-        </DataTemplate.Triggers>
+        </Grid>        
     </DataTemplate>
 
    

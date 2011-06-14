@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Media;
 using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
 using System.Windows.Threading;
@@ -18,6 +19,26 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 	class AssemblyBrowserWindowViewModel : ViewModelBase
 	{
 		#region // Nested types
+
+		class BrushPair
+		{
+			private static readonly BrushConverter BrushConverter = new BrushConverter();
+			
+			public BrushPair(string caption, string background)
+				:this(BrushConverter.ConvertFromString(caption) as Brush,
+					  BrushConverter.ConvertFromString(background) as Brush)
+			{
+			}
+
+			private BrushPair(Brush caption, Brush background)
+			{
+				Caption = caption;
+				Background = background;
+			}
+
+			public Brush Caption { get; private set; }
+			public Brush Background { get; private set; }
+		}
 
 		class NavigationItem
 		{
@@ -56,12 +77,15 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		#region // Private fields
 
+		private readonly IList<BrushPair> _brushes;
+
 		private readonly Dispatcher _dispatcher;
 		private readonly ObservableCollection<AssemblyViewModel> _assemblies;
 		private IEnumerable<TypeDefinition> _allTypeDefinitions;
 		private IEnumerable<TypeViewModel> _types;
 		private Screen _screen;
 		private readonly SearchScreen _searchScreen;
+		private bool _isColorized;
 
 		private readonly Stack<NavigationItem> _previousNavigationItems = new Stack<NavigationItem>();
 		private readonly Stack<NavigationItem> _nextNavigationItems = new Stack<NavigationItem>();
@@ -88,6 +112,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			ShowInnerSearchCommand = new DelegateCommand(ShowInnerSearchCommandHandler);
 
 			RefreshNavigationCommands();
+
+			_brushes = new List<BrushPair>
+			           	{
+							new BrushPair("#2D6531", "#D2FFB5"), // Green
+							new BrushPair("#113DC2", "#BFE0FF"), // Blue
+							new BrushPair("#9B2119", "#FFB7A5"), // Red
+							new BrushPair("#746BFF", "#B8B5FF"), // Purple
+							new BrushPair("#AF00A7", "#FFA0F2"), // Violet
+							new BrushPair("#C18E00", "#FFEAA8")  // Yellow
+			           	};
 		}
 
 		#endregion
@@ -122,6 +156,16 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 						.ToList();
 				}
 				return _allTypeDefinitions;
+			}
+		}
+
+		public bool IsColorized
+		{	
+			get { return _isColorized; }
+			set
+			{
+				_isColorized = value;
+				RefreshColorization();
 			}
 		}
 
@@ -328,6 +372,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		{
 			UpdateInternalTypeCollections();
 			_searchScreen.NotifyAssembliesChanged();
+			RefreshColorization();
+			CleanUpNavigationHistory();
 		}
 
 		private void UpdateInternalTypeCollections()
@@ -373,6 +419,63 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			OnPropertyChanged("CanNavigateForward");
 			OnPropertyChanged("NavigateBackHint");
 			OnPropertyChanged("NavigateForwardHint");
+		}
+
+		private void RefreshColorization()
+		{
+			if (IsColorized)
+			{
+				int currentIndex = 0;
+				foreach (var assembly in Assemblies)
+				{
+					assembly.Colorize(
+						_brushes[currentIndex].Caption, _brushes[currentIndex].Background);
+					currentIndex++;
+					if (currentIndex == _brushes.Count)
+					{
+						currentIndex = 0;
+					}
+				}
+			}
+			else
+			{
+				foreach (var assembly in Assemblies)
+				{
+					assembly.Decolorize();
+				}
+			}
+		}
+
+		private void CleanUpNavigationHistory()
+		{
+			CleanUpNavigationStack(_previousNavigationItems);
+			CleanUpNavigationStack(_nextNavigationItems);
+
+			RefreshNavigationCommands();
+		}
+
+		private void CleanUpNavigationStack(Stack<NavigationItem> navigationStack)
+		{
+			var stack = new Stack<NavigationItem>();
+
+			while (navigationStack.Count > 0)
+			{
+				stack.Push(navigationStack.Pop());
+			}
+			while (stack.Count > 0)
+			{
+				var item = stack.Pop();
+				if (item.IsScreen)
+				{
+					navigationStack.Push(item);
+					continue;
+				}
+				var sameType = Types.SingleOrDefault(t => t.TypeDefinition == item.Type.TypeDefinition);
+				if (sameType != null)
+				{
+					navigationStack.Push(new NavigationItem(sameType));
+				}
+			}
 		}
 
 		#endregion

@@ -16,6 +16,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 {
 	class GraphScreen : Screen
 	{
+		private const string ColorizeCaption = "Colorize";
+		private const string DecolorizeCaption = "Decolorize";
+
 		private TypeGraph _graph;
 		private TypeViewModel _type;
 		private TypeViewModel _typeForDetails;
@@ -24,6 +27,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private Visibility _searchVisibility = Visibility.Collapsed;
 		private string _searchTerm;
 		private IEnumerable<TypeViewModel> _types;
+		private readonly UserCommand _toggleColorizeUserCommand;
 
 		public GraphScreen(AssemblyBrowserWindowViewModel windowViewModel) : base(windowViewModel)
 		{
@@ -31,10 +35,15 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			HideSearchCommand = new DelegateCommand(HideSearchCommandHandler);
 			ShowSearchCommand = new DelegateCommand(ShowSearchCommandHandler);
 
+			_toggleColorizeUserCommand = new UserCommand(WindowViewModel.IsColorized
+			                                             	? DecolorizeCaption
+			                                             	: ColorizeCaption, ToggleColorizeCommandHandler);
+
 			Commands.Add(new UserCommand("Fill Graph", OnFillGraphRequest));
 			Commands.Add(new UserCommand("Original Size", OnOriginalSizeRequest));
 			Commands.Add(WindowViewModel.ShowSearchUserCommand);
 			Commands.Add(new UserCommand("Search in Graph", ShowSearchCommand));
+			Commands.Add(_toggleColorizeUserCommand);
 		}
 
 		public ICommand PinCommand { get; private set; }
@@ -218,6 +227,14 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		{
 			SearchVisibility = Visibility.Visible;
 			OnFocusSearchRequest();
+		}
+
+		private void ToggleColorizeCommandHandler()
+		{
+			WindowViewModel.IsColorized = !WindowViewModel.IsColorized;
+			_toggleColorizeUserCommand.Text = WindowViewModel.IsColorized
+			                                  	? DecolorizeCaption
+			                                  	: ColorizeCaption;
 		}
 
 		private void OnGraphChanged()

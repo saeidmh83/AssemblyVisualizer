@@ -25,9 +25,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private bool _showMembers;
 		private bool _isCurrent;
 		private bool _isMarked;
+		private readonly bool _isBaseTypeAvailable = true;
 		private readonly string _name;
 		private readonly string _fullName;
-		private string _baseTypeName;
+		private readonly string _baseTypeName;
+		private readonly string _baseTypeFullName;
 		private string _extendedInfo;
 
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
@@ -39,10 +41,24 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			_windowViewModel = windowViewModel;
 
 			_name = MainWindow.Instance.CurrentLanguage.FormatTypeName(typeDefinition);
-			_fullName = string.Format("{0}.{1}", _typeDefinition.Namespace, _name);
+			_fullName = GetFullName(_typeDefinition.Namespace, _name);
 			_extendedInfo = IsInternal
 			                	? string.Format("{0}\nInternal", FullName)
 			                	: FullName;
+
+			if (HasBaseType)
+			{
+				var baseType = _typeDefinition.BaseType.Resolve();
+				
+				_baseTypeName = baseType != null ? MainWindow.Instance.CurrentLanguage
+					.FormatTypeName(baseType) : _typeDefinition.BaseType.Name;
+				_baseTypeFullName = GetFullName(_typeDefinition.BaseType.Namespace, BaseTypeName);
+				if (baseType == null)
+				{
+					_baseTypeFullName = _baseTypeFullName + "\nNot available";
+					_isBaseTypeAvailable = false;
+				}
+			}
 
 			var properties = typeDefinition.Properties
 				.Where(p => p.GetMethod != null && p.GetMethod.IsPublic
@@ -130,6 +146,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			}
 		}
 
+		public bool IsBaseTypeAvailable
+		{
+			get { return _isBaseTypeAvailable; }
+		}
+
 		public bool HasDescendants
 		{
 			get { return _descendantsCount > 0; }
@@ -173,21 +194,13 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		{
 			get
 			{
-				if (!HasBaseType)
-				{
-					return string.Empty;
-				}
-				if (string.IsNullOrEmpty(_baseTypeName))
-				{
-					_baseTypeName = MainWindow.Instance.CurrentLanguage.FormatTypeName(_typeDefinition.BaseType.Resolve());
-				}
 				return _baseTypeName;
 			}
 		}
 
 		public string BaseTypeFullName
 		{
-			get { return string.Format("{0}.{1}", _typeDefinition.BaseType.Namespace, BaseTypeName); }
+			get { return _baseTypeFullName; }
 		}
 
 		public bool ShowMembers
@@ -237,6 +250,10 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private void NavigateToBaseCommandHandler()
 		{
+			if (!IsBaseTypeAvailable)
+			{
+				return;
+			}
 			MainWindow.Instance.JumpToReference(_typeDefinition.BaseType);
 		}
 
@@ -248,6 +265,15 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				return;
 			}
 			graphScreen.ShowDetails(this);
+		}
+
+		private static string GetFullName(string typeNamespace, string typeName)
+		{
+			if (string.IsNullOrEmpty(typeNamespace))
+			{
+				return typeName;
+			}
+			return string.Format("{0}.{1}", typeNamespace, typeName);
 		}
 	}
 }

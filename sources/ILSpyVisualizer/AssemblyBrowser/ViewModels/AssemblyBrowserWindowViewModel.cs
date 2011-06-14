@@ -341,7 +341,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				.Where(t => t.BaseType != null))
 			{
 				var baseType = typeDefinition.BaseType.Resolve();
-				if (typesDictionary.ContainsKey(baseType))
+				if (baseType != null && typesDictionary.ContainsKey(baseType))
 				{
 					typesDictionary[baseType].AddDerivedType(
 						typesDictionary[typeDefinition]);

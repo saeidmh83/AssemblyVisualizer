@@ -97,20 +97,6 @@
          
         <Grid Grid.ColumnSpan="2"
               Margin="132, 24, 20, 24">
-            <TextBox x:Name="txtSearch"                     
-                     Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}" 
-                     FontSize="20"
-                     PreviewKeyDown="SearchPreviewKeyDown">
-                <TextBox.Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsSearchPerformed}" Value="False">
-                                <Setter Property="BorderBrush" Value="#4db74a"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
             <TextBlock Text="Start typing to filter search results"
                        FontSize="14"
                        FontStyle="Oblique"
@@ -128,6 +114,21 @@
                     </Style>
                 </TextBlock.Style>
             </TextBlock>
+            <TextBox x:Name="txtSearch"                     
+                     Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}" 
+                     FontSize="20"
+                     PreviewKeyDown="SearchPreviewKeyDown"
+                     Background="Transparent">
+                <TextBox.Style>
+                    <Style TargetType="{x:Type TextBox}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSearchPerformed}" Value="False">
+                                <Setter Property="BorderBrush" Value="#4db74a"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>            
         </Grid>
 
         <!--Search filters-->
@@ -150,7 +151,7 @@
             <ItemsControl.Template>
                 <ControlTemplate>
                     <ScrollViewer CanContentScroll="True"
-                                      VerticalScrollBarVisibility="Visible">
+                                  VerticalScrollBarVisibility="Auto">
                         <VirtualizingStackPanel Orientation="Vertical"
                                                     VirtualizingStackPanel.IsVirtualizing="True"
                                                     VirtualizingStackPanel.VirtualizationMode="Recycling"
@@ -188,8 +189,9 @@
                                     <TextBlock x:Name="txtBaseType">
                                         <Run Text=" : "/>
                                         <TextBlock ToolTip="{Binding BaseTypeFullName}">
-                                            <Hyperlink TextDecorations="None"
-                                                       Foreground="Black"
+                                            <Hyperlink x:Name="hplNavigateToBase"
+                                                       TextDecorations="None"
+                                                       Foreground="Black"                                                       
                                                        Command="{Binding NavigateToBaseCommand}">
                                                 <TextBlock Text="{Binding BaseTypeName}"/>
                                             </Hyperlink>
@@ -273,6 +275,9 @@
                         <DataTrigger Binding="{Binding HasDescendants}" Value="False">
                             <Setter TargetName="pnlDescendants" Property="Visibility" Value="Collapsed"/>
                             <Setter TargetName="txtNoDescendants" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsBaseTypeAvailable}" Value="False">
+                            <Setter TargetName="hplNavigateToBase" Property="Cursor" Value="Arrow"/>
                         </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>

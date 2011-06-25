@@ -253,7 +253,7 @@
                                                >
                                         <Hyperlink Command="{Binding NavigateCommand}"
                                                    Style="{StaticResource HyperlinkStyle}">
-                                            <TextBlock Text="Navigate"/>
+                                            <TextBlock Text="Jump"/>
                                         </Hyperlink>
                                     </TextBlock>
                                 </StackPanel>                                

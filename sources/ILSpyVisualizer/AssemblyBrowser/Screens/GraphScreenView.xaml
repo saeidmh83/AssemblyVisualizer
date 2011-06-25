@@ -194,7 +194,8 @@
         <zoom:ZoomControl x:Name="zoomControl"
                           Grid.Row="1"
                           ZoomBoxOpacity="0.5"
-                          HideZoom="Collapsed">
+                          HideZoom="Collapsed"
+                          RequireCtrlForZoom="False">
             <AssemblyBrowser:TypeGraphLayout x:Name="graphLayout"                                             
                                              Margin="10"
                                              Graph="{Binding Graph}"
@@ -257,7 +258,7 @@
                 <Border.ToolTip>
                     <TextBlock Margin="4">
                         <Run FontWeight="Bold"
-                             Text="CTRL + Wheel: "/>
+                             Text="Wheel: "/>
                         <Run Text="Zoom in / out"/>
                         <LineBreak/>
                         <Run FontWeight="Bold"

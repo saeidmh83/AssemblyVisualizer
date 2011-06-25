@@ -72,7 +72,7 @@
                                     MinHeight="0"
                                     Background="{StaticResource RightArrowBlueDrawing}"
                                     Style="{StaticResource ImageButtonStyle}"
-                                    ToolTip="Navigate"/>
+                                    ToolTip="Jump"/>
 
                             <Button VerticalAlignment="Center"                                                                      
                                     Command="{Binding VisualizeCommand}" 

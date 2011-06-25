@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
-using WPFExtensions.Controls;
+using ILSpyVisualizer.Controls.ZoomControl;
 
 namespace ILSpyVisualizer.AssemblyBrowser.Screens
 {

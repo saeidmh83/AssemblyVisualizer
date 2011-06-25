@@ -3,12 +3,13 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:zoom="clr-namespace:WPFExtensions.Controls;assembly=WPFExtensions" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"              
              xmlns:AssemblyBrowser="clr-namespace:ILSpyVisualizer.AssemblyBrowser" 
              xmlns:GraphControls="clr-namespace:GraphSharp.Controls;assembly=GraphSharp.Controls" 
              xmlns:Converters="clr-namespace:GraphSharp.Converters;assembly=GraphSharp.Controls" 
-             xmlns:Controls="clr-namespace:ILSpyVisualizer.Controls" mc:Ignorable="d" 
+             xmlns:Controls="clr-namespace:ILSpyVisualizer.Controls" 
+             xmlns:ZoomControl="clr-namespace:ILSpyVisualizer.Controls.ZoomControl" 
+             mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -191,7 +192,7 @@
         </Controls:PopupNonTopmost>        
         
         <!--Main content-->
-        <zoom:ZoomControl x:Name="zoomControl"
+        <ZoomControl:ZoomControl x:Name="zoomControl"
                           Grid.Row="1"
                           ZoomBoxOpacity="0.5"
                           HideZoom="Collapsed"
@@ -202,7 +203,7 @@
                                              LayoutAlgorithmType="LinLog"
                                              OverlapRemovalAlgorithmType="FSA"
                                              HighlightAlgorithmType="Simple" />
-        </zoom:ZoomControl>
+        </ZoomControl:ZoomControl>
 
         <!--Search-->
         <Border x:Name="brdSearch"

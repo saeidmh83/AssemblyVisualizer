@@ -15,6 +15,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Dictionaries\DataTemplatesDictionary.xaml"/>
+                <ResourceDictionary Source="..\Dictionaries\ControlStylesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <!--Vertex style-->
@@ -189,8 +190,8 @@
                     </Border.Effect>
                 </Border>
             </Grid>
-        </Controls:PopupNonTopmost>        
-        
+        </Controls:PopupNonTopmost>
+      
         <!--Main content-->
         <ZoomControl:ZoomControl x:Name="zoomControl"
                           Grid.Row="1"
@@ -202,8 +203,34 @@
                                              Graph="{Binding Graph}"
                                              LayoutAlgorithmType="LinLog"
                                              OverlapRemovalAlgorithmType="FSA"
-                                             HighlightAlgorithmType="Simple" />
+                                             HighlightAlgorithmType="Simple"                                             
+                                             LayoutFinished="LayoutFinishedHandler"/>
         </ZoomControl:ZoomControl>
+
+        <!--Commands-->
+        <ItemsControl ItemsSource="{Binding Commands}"
+                      Margin="4"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Top">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="White"
+                        CornerRadius="8">
+                        <TextBlock Margin="8, 4">
+                        <Hyperlink Command="{Binding Command}"
+                                   Style="{StaticResource HyperlinkStyle}">
+                            <TextBlock Text="{Binding Text}"/>
+                        </Hyperlink>
+                    </TextBlock>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
         <!--Search-->
         <Border x:Name="brdSearch"
@@ -214,7 +241,8 @@
                 VerticalAlignment="Top"
                 HorizontalAlignment="Center"
                 Margin="0, 40, 0, 0"
-                Visibility="{Binding SearchVisibility}">
+                Visibility="Collapsed"
+                Opacity="0">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -234,7 +262,7 @@
                         Height="22"
                         Width="22"
                         Command="{Binding HideSearchCommand}"/>
-            </Grid>
+            </Grid>             
         </Border>
 
         <!--Assemblies-->

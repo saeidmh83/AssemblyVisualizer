@@ -215,6 +215,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 
 		#region // Private methods
 
+		public override void ShowInnerSearch()
+		{
+			OnSearchFocusRequested();
+		}
+
 		private bool SatisfiesSearchTerm(TypeViewModel typeViewModel)
 		{
 			return typeViewModel

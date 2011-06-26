@@ -143,6 +143,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			}
 		}
 
+		public SearchScreen SearchScreen
+		{
+			get { return _searchScreen; }
+		}
+
 		public IEnumerable<TypeDefinition> AllTypeDefinitions
 		{
 			get

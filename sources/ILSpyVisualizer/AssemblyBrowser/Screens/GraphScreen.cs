@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using ILSpyVisualizer.AssemblyBrowser.ViewModels;
@@ -24,7 +25,6 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private TypeViewModel _typeForDetails;
 		private TypeViewModel _currentType;
 		private bool _isMembersPopupPinned;
-		private Visibility _searchVisibility = Visibility.Collapsed;
 		private string _searchTerm;
 		private IEnumerable<TypeViewModel> _types;
 		private readonly UserCommand _toggleColorizeUserCommand;
@@ -39,23 +39,30 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			                                             	? DecolorizeCaption
 			                                             	: ColorizeCaption, ToggleColorizeCommandHandler);
 
-			Commands.Add(new UserCommand("Fill Graph", OnFillGraphRequest));
-			Commands.Add(new UserCommand("Original Size", OnOriginalSizeRequest));
-			Commands.Add(WindowViewModel.ShowSearchUserCommand);
-			Commands.Add(new UserCommand("Search in Graph", ShowSearchCommand));
-			Commands.Add(_toggleColorizeUserCommand);
+			Commands = new ObservableCollection<UserCommand>
+			           	{
+			           		new UserCommand("Fill Graph", OnFillGraphRequest),
+			           		new UserCommand("Original Size", OnOriginalSizeRequest),
+			           		WindowViewModel.ShowSearchUserCommand,
+			           		new UserCommand("Search in Graph", ShowSearchCommand),
+			           		_toggleColorizeUserCommand
+			           	};
 		}
 
 		public ICommand PinCommand { get; private set; }
 		public ICommand HideSearchCommand { get; private set; }
 		public ICommand ShowSearchCommand { get; private set; }
-		
+
+		public ObservableCollection<UserCommand> Commands { get; private set; }
+
 		public event Action GraphChanged;
 		public event Action ShowDetailsRequest;
 		public event Action HideDetailsRequest;
 		public event Action FillGraphRequest;
 		public event Action OriginalSizeRequest;
 		public event Action FocusSearchRequest;
+		public event Action ShowInnerSearchRequest;
+		public event Action HideInnerSearchRequest;
 
 		public override bool AllowAssemblyDrop
 		{
@@ -89,16 +96,6 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			{
 				_graph = value;
 				OnPropertyChanged("Graph");
-			}
-		}
-
-		public Visibility SearchVisibility
-		{
-			get { return _searchVisibility; }
-			set
-			{
-				_searchVisibility = value;
-				OnPropertyChanged("SearchVisibility");
 			}
 		}
 
@@ -219,13 +216,13 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 
 		private void HideSearchCommandHandler()
 		{
-			SearchVisibility = Visibility.Collapsed;
+			OnHideInnerSearchRequest();
 			SearchTerm = string.Empty;
 		}
 
 		private void ShowSearchCommandHandler()
 		{
-			SearchVisibility = Visibility.Visible;
+			OnShowInnerSearchRequest();
 			OnFocusSearchRequest();
 		}
 
@@ -290,6 +287,26 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private void OnFocusSearchRequest()
 		{
 			var handler = FocusSearchRequest;
+
+			if (handler != null)
+			{
+				handler();
+			}
+		}
+
+		private void OnShowInnerSearchRequest()
+		{
+			var handler = ShowInnerSearchRequest;
+
+			if (handler != null)
+			{
+				handler();
+			}
+		}
+
+		private void OnHideInnerSearchRequest()
+		{
+			var handler = HideInnerSearchRequest;
 
 			if (handler != null)
 			{

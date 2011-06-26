@@ -21,6 +21,17 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 	class TypeGraphLayout : GraphLayout<TypeViewModel, Edge<TypeViewModel>, TypeGraph>
 	{
-		
+		public event Action LayoutFinished;
+
+		protected override void OnLayoutFinished()
+		{
+			base.OnLayoutFinished();
+
+			var handler = LayoutFinished;
+			if (handler != null)
+			{
+				handler();
+			}
+		}
 	}
 }

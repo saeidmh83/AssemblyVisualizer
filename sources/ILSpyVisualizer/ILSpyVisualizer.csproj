@@ -92,8 +92,8 @@
     <Compile Include="AssemblyBrowser\AssemblyBrowserWindow.xaml.cs">
       <DependentUpon>AssemblyBrowserWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AssemblyBrowser\UserControls\CachingScreenPresenter.xaml.cs">
-      <DependentUpon>CachingScreenPresenter.xaml</DependentUpon>
+    <Compile Include="AssemblyBrowser\UserControls\ScreenPresenter.xaml.cs">
+      <DependentUpon>ScreenPresenter.xaml</DependentUpon>
     </Compile>
     <Compile Include="AssemblyBrowser\UserControls\CommandsGroupView.xaml.cs">
       <DependentUpon>CommandsGroupView.xaml</DependentUpon>
@@ -155,7 +155,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AssemblyBrowser\UserControls\CachingScreenPresenter.xaml">
+    <Page Include="AssemblyBrowser\UserControls\ScreenPresenter.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

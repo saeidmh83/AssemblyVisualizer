@@ -25,6 +25,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 	/// </summary>
 	internal partial class GraphScreenView : UserControl
 	{
+		public event Action LayoutFinished;
+
 		public GraphScreenView()
 		{
 			InitializeComponent();
@@ -50,6 +52,27 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			ViewModel.FillGraphRequest += FillGraphRequestHandler;
 			ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;
 			ViewModel.FocusSearchRequest += FocusSearchRequestHandler;
+			ViewModel.ShowInnerSearchRequest += ShowInnerSearchRequestHandler;
+			ViewModel.HideInnerSearchRequest += HideInnerSearchRequestHandler;
+		}
+
+		private void ShowInnerSearchRequestHandler()
+		{
+			var animation = new DoubleAnimation(1, TimeSpan.FromMilliseconds(200));
+			brdSearch.Visibility = Visibility.Visible;
+			brdSearch.BeginAnimation(OpacityProperty, animation);
+		}
+
+		private void HideInnerSearchRequestHandler()
+		{
+			var animation = new DoubleAnimation(0, TimeSpan.FromMilliseconds(200));
+			animation.Completed += HideSearchAnimationCompletedHandler;
+			brdSearch.BeginAnimation(OpacityProperty, animation);
+		}
+
+		private void HideSearchAnimationCompletedHandler(object sender, EventArgs e)
+		{
+			brdSearch.Visibility = Visibility.Collapsed;
 		}
 
 		private void FocusSearchRequestHandler()
@@ -85,6 +108,20 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			{
 				e.Handled = true;
 				ViewModel.HideSearchCommand.Execute(null);
+			}
+		}
+
+		private void LayoutFinishedHandler()
+		{
+			OnLayoutFinished();
+		}
+
+		private void OnLayoutFinished()
+		{
+			var handler = LayoutFinished;
+			if (handler != null)
+			{
+				handler();
 			}
 		}
 	}

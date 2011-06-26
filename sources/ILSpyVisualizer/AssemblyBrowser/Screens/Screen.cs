@@ -17,8 +17,6 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		public Screen(AssemblyBrowserWindowViewModel windowViewModel)
 		{
 			WindowViewModel = windowViewModel;
-
-			Commands = new ObservableCollection<UserCommand>();
 		}
 
 		public virtual bool AllowAssemblyDrop
@@ -30,8 +28,6 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		{
 			get { return WindowViewModel.Assemblies; }
 		}
-
-		public ObservableCollection<UserCommand> Commands { get; private set; }
 
 		protected AssemblyBrowserWindowViewModel WindowViewModel { get; private set; }
 

@@ -95,10 +95,10 @@
                                                FontWeight="Bold" />
                                     <RadioButton Content="1:1"
                                                  GroupName="rbgZoomMode"
-                                                 IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Mode,Converter={StaticResource equalityConverter},ConverterParameter={x:Static ZoomControl:ZoomControlModes.Original}}" />
+                                                 IsChecked="{Binding Mode, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource equalityConverter}, ConverterParameter={x:Static ZoomControl:ZoomControlModes.Original}, Mode=OneWay}" />
                                     <RadioButton Content="Fill"
                                                  GroupName="rbgZoomMode"
-                                                 IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent},Path=Mode,Converter={StaticResource equalityConverter},ConverterParameter={x:Static ZoomControl:ZoomControlModes.Fill}}" />
+                                                 IsChecked="{Binding Mode, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource equalityConverter}, ConverterParameter={x:Static ZoomControl:ZoomControlModes.Fill}, Mode=OneWay}" />
                                 </StackPanel>
                             </Border>
                             

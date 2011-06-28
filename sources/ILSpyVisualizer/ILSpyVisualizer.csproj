@@ -98,9 +98,6 @@
     <Compile Include="AssemblyBrowser\UserControls\CommandsGroupView.xaml.cs">
       <DependentUpon>CommandsGroupView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AssemblyBrowser\UserControls\CommandsView.xaml.cs">
-      <DependentUpon>CommandsView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="AssemblyBrowser\Screens\GraphScreen.cs" />
     <Compile Include="AssemblyBrowser\Screens\GraphScreenView.xaml.cs">
       <DependentUpon>GraphScreenView.xaml</DependentUpon>
@@ -160,10 +157,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AssemblyBrowser\UserControls\CommandsGroupView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="AssemblyBrowser\UserControls\CommandsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

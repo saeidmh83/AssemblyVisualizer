@@ -4,7 +4,7 @@ obtained using ILSpy.
 Website: http://denismarkelov.blogspot.com/p/ilspy-visualizer.html
 
 Copyright 2011 Denis Markelov
-Licensed under the Apache License, Version 2.0
+Licensed under the Microsoft Public License
 
 Included open-source libraries:
   GraphSharp: Ms-PL
@@ -17,6 +17,6 @@ Components:
     Usage: 'Browse Assembly' context menu item for assemblies
 
 How to start to use a plugin:
-  Download the latest build from the Downloads section, it contains 5 libraries,
+  Download the latest build from the Downloads section, it contains 3 libraries,
   which should be placed into the ILSpy folder.
   Another option is to download source code and build it manually.

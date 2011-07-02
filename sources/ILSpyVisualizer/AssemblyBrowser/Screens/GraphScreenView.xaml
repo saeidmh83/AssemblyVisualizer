@@ -4,11 +4,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"              
-             xmlns:AssemblyBrowser="clr-namespace:ILSpyVisualizer.AssemblyBrowser" 
-             xmlns:GraphControls="clr-namespace:GraphSharp.Controls;assembly=GraphSharp.Controls" 
-             xmlns:Converters="clr-namespace:GraphSharp.Converters;assembly=GraphSharp.Controls" 
+             xmlns:AssemblyBrowser="clr-namespace:ILSpyVisualizer.AssemblyBrowser"
              xmlns:Controls="clr-namespace:ILSpyVisualizer.Controls" 
              xmlns:ZoomControl="clr-namespace:ILSpyVisualizer.Controls.ZoomControl" 
+             xmlns:Graph="clr-namespace:ILSpyVisualizer.Controls.Graph" 
+             xmlns:Converters="clr-namespace:ILSpyVisualizer.Controls.Graph.Converters" 
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
@@ -19,10 +19,10 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!--Vertex style-->
-            <Style TargetType="{x:Type GraphControls:VertexControl}">
+            <Style TargetType="{x:Type Graph:VertexControl}">
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type GraphControls:VertexControl}">
+                        <ControlTemplate TargetType="{x:Type Graph:VertexControl}">
 
                             <ContentPresenter Content="{TemplateBinding Vertex}" 
                                       ContentTemplate="{StaticResource TypeDataTemplate}"/>
@@ -34,10 +34,10 @@
 
             <!--Edge style-->
             <Converters:EdgeRouteToPathConverter x:Key="routeToPathConverter" />             
-            <Style TargetType="{x:Type GraphControls:EdgeControl}">
+            <Style TargetType="{x:Type Graph:EdgeControl}">
                 <Setter Property="Template">
                     <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type GraphControls:EdgeControl}">
+                        <ControlTemplate TargetType="{x:Type Graph:EdgeControl}">
                             <Path Stroke="{TemplateBinding Foreground}"
                                   StrokeThickness="2"
                                   MinWidth="1"
@@ -49,17 +49,17 @@
                                         <PathGeometry.Figures>
                                             <MultiBinding Converter="{StaticResource routeToPathConverter}">
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
-                                                 Path="Source.(GraphControls:GraphCanvas.X)" />
+                                                 Path="Source.(Graph:GraphCanvas.X)" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
-                                                 Path="Source.(GraphControls:GraphCanvas.Y)" />
+                                                 Path="Source.(Graph:GraphCanvas.Y)" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Source.ActualWidth" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Source.ActualHeight" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
-                                                 Path="Target.(GraphControls:GraphCanvas.X)" />
+                                                 Path="Target.(Graph:GraphCanvas.X)" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
-                                                 Path="Target.(GraphControls:GraphCanvas.Y)" />
+                                                 Path="Target.(Graph:GraphCanvas.Y)" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Target.ActualWidth" />
                                                 <Binding RelativeSource="{RelativeSource TemplatedParent}"
@@ -74,7 +74,7 @@
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
-                <Setter Property="GraphControls:GraphElementBehaviour.HighlightTrigger"
+                <Setter Property="Graph:GraphElementBehaviour.HighlightTrigger"
                 Value="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" />
                 <Setter Property="MinWidth"
                 Value="1" />
@@ -87,21 +87,21 @@
                 <Setter Property="Opacity"
                 Value="0.5" />
                 <Style.Triggers>
-                    <Trigger Property="GraphControls:GraphElementBehaviour.IsHighlighted"
+                    <Trigger Property="Graph:GraphElementBehaviour.IsHighlighted"
                      Value="True">
                         <Setter Property="Foreground"
                         Value="Black" />
                     </Trigger>
-                    <Trigger Property="GraphControls:GraphElementBehaviour.IsSemiHighlighted"
+                    <Trigger Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
                      Value="True">
                         <Setter Property="Foreground"
                         Value="Yellow" />
                     </Trigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
-                            <Condition Property="GraphControls:GraphElementBehaviour.IsSemiHighlighted"
+                            <Condition Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
                                Value="True" />
-                            <Condition Property="GraphControls:GraphElementBehaviour.SemiHighlightInfo"
+                            <Condition Property="Graph:GraphElementBehaviour.SemiHighlightInfo"
                                Value="InEdge" />
                         </MultiTrigger.Conditions>
                         <Setter Property="Foreground"
@@ -109,9 +109,9 @@
                     </MultiTrigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
-                            <Condition Property="GraphControls:GraphElementBehaviour.IsSemiHighlighted"
+                            <Condition Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
                                Value="True" />
-                            <Condition Property="GraphControls:GraphElementBehaviour.SemiHighlightInfo"
+                            <Condition Property="Graph:GraphElementBehaviour.SemiHighlightInfo"
                                Value="OutEdge" />
                         </MultiTrigger.Conditions>
                         <Setter Property="Foreground"

@@ -38,10 +38,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\GraphSharp.dll</HintPath>
     </Reference>
-    <Reference Include="GraphSharp.Controls, Version=1.0.3438.42543, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\GraphSharp.Controls.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=4.1.0.7411, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\ICSharpCode.AvalonEdit.dll</HintPath>
@@ -74,6 +70,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -118,6 +115,36 @@
     <Compile Include="AssemblyBrowser\ViewModels\MethodViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\PropertyViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\TypeViewModel.cs" />
+    <Compile Include="Behaviors\DragBehavior.cs" />
+    <Compile Include="Controls\Graph\AlgorithmConstraints.cs" />
+    <Compile Include="Controls\Graph\AnimationContext.cs" />
+    <Compile Include="Controls\Graph\Animations\SimpleMoveAnimation.cs" />
+    <Compile Include="Controls\Graph\CompoundVertexControl.cs" />
+    <Compile Include="Controls\Graph\ContextualGraphLayout.cs" />
+    <Compile Include="Controls\Graph\Converters\CoordinatesToPointConverter.cs" />
+    <Compile Include="Controls\Graph\Converters\EdgeRouteToPathConverter.cs" />
+    <Compile Include="Controls\Graph\Converters\GraphConverterHelper.cs" />
+    <Compile Include="Controls\Graph\Converters\PointArrayToString.cs" />
+    <Compile Include="Controls\Graph\EdgeControl.cs" />
+    <Compile Include="Controls\Graph\GraphCanvas.cs" />
+    <Compile Include="Controls\Graph\GraphElementControl.cs" />
+    <Compile Include="Controls\Graph\GraphLayout.cs" />
+    <Compile Include="Controls\Graph\GraphLayout.DependencyProperties.cs" />
+    <Compile Include="Controls\Graph\GraphLayout.GraphElements.cs" />
+    <Compile Include="Controls\Graph\GraphLayout.HighlightController.cs" />
+    <Compile Include="Controls\Graph\Helpers\ObjectPool.cs" />
+    <Compile Include="Controls\Graph\IAnimation.cs" />
+    <Compile Include="Controls\Graph\IAnimationContext.cs" />
+    <Compile Include="Controls\Graph\ICompoundVertexControl.cs" />
+    <Compile Include="Controls\Graph\ITransition.cs" />
+    <Compile Include="Controls\Graph\LayoutMode.cs" />
+    <Compile Include="Controls\Graph\PositionChangedEventArgs.cs" />
+    <Compile Include="Controls\Graph\PositionChangedEventHandler.cs" />
+    <Compile Include="Controls\Graph\Transitions\FadeInTransition.cs" />
+    <Compile Include="Controls\Graph\Transitions\FadeOutTransition.cs" />
+    <Compile Include="Controls\Graph\Transitions\FadeTransition.cs" />
+    <Compile Include="Controls\Graph\Transitions\TransitionBase.cs" />
+    <Compile Include="Controls\Graph\VertexControl.cs" />
     <Compile Include="Controls\PopupNonTopmost.cs" />
     <Compile Include="Controls\ZoomControl\ContentSizeChangedDelegate.cs" />
     <Compile Include="Controls\ZoomControl\Converters\DoubleToLog10Converter.cs" />
@@ -173,6 +200,7 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

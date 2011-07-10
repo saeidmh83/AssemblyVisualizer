@@ -20,7 +20,6 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private static readonly Brush GraphRootBackground = Brushes.Yellow;
 
 		private readonly TypeDefinition _typeDefinition;
-		private readonly AssemblyViewModel _assembly;
 		private readonly IList<TypeViewModel> _derivedTypes = new List<TypeViewModel>();
 
 		private int _descendantsCount;
@@ -40,10 +39,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
 
-		public TypeViewModel(TypeDefinition typeDefinition, AssemblyViewModel assembly, AssemblyBrowserWindowViewModel windowViewModel)
+		public TypeViewModel(TypeDefinition typeDefinition, AssemblyBrowserWindowViewModel windowViewModel)
 		{
 			_typeDefinition = typeDefinition;
-			_assembly = assembly;
 			_windowViewModel = windowViewModel;
 
 			_name = MainWindow.Instance.CurrentLanguage.FormatTypeName(typeDefinition);

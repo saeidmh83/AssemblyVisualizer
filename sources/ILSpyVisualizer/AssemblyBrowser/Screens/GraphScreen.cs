@@ -186,6 +186,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 				}
 				graph.AddEdge(new Edge<TypeViewModel>(viewModel, viewModel.BaseType));
 			}
+			graph.Root = typeViewModel;
 			return graph;
 		}
 

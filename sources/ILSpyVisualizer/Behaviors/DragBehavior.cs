@@ -111,7 +111,7 @@ namespace ILSpyVisualizer.Behaviors
 					contentElement.MouseLeftButtonDown += OnDragStarted;
 					contentElement.MouseLeftButtonUp += OnDragFinished;
 				}
-				Debug.WriteLine( "DragBehaviour registered.", "WPFExt" );
+				//Debug.WriteLine( "DragBehaviour registered.", "WPFExt" );
 			}
 			else
 			{
@@ -128,7 +128,7 @@ namespace ILSpyVisualizer.Behaviors
 					contentElement.MouseLeftButtonDown -= OnDragStarted;
 					contentElement.MouseLeftButtonUp -= OnDragFinished;
 				}
-				Debug.WriteLine( "DragBehaviour unregistered.", "WPFExt" );
+				//Debug.WriteLine( "DragBehaviour unregistered.", "WPFExt" );
 			}
 		}
 		#endregion
@@ -145,7 +145,7 @@ namespace ILSpyVisualizer.Behaviors
 			SetOriginalX( obj, pos.X );
 			SetOriginalY( obj, pos.Y );
 
-			Debug.WriteLine( "Drag started on object: " + obj, "WPFExt" );
+			//Debug.WriteLine( "Drag started on object: " + obj, "WPFExt" );
 
 			//capture the mouse
 			var element = obj as FrameworkElement;
@@ -172,7 +172,7 @@ namespace ILSpyVisualizer.Behaviors
 			obj.ClearValue( OriginalXPropertyKey );
 			obj.ClearValue( OriginalYPropertyKey );
 
-			Debug.WriteLine( "Drag finished on object: " + obj, "WPFExt" );
+			//Debug.WriteLine( "Drag finished on object: " + obj, "WPFExt" );
 
 			//we finished the drag, release the mouse
 			var element = sender as FrameworkElement;

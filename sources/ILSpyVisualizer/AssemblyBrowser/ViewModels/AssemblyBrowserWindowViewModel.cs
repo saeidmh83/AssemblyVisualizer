@@ -122,6 +122,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 							new BrushPair("#AF00A7", "#FFA0F2"), // Violet
 							new BrushPair("#C18E00", "#FFEAA8")  // Yellow
 			           	};
+
+			IsColorized = true;
 		}
 
 		#endregion
@@ -232,7 +234,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 						var assemblyTypes = currentAssembly.AssemblyDefinition.Modules
 							.SelectMany(m => m.Types)
-							.Select(t => new TypeViewModel(t, currentAssembly, this))
+							.Select(t => new TypeViewModel(t, this))
 							.ToList();
 						
 						currentAssembly.Types = assemblyTypes;

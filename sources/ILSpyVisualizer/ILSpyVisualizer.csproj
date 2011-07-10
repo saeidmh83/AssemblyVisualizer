@@ -89,6 +89,7 @@
     <Compile Include="AssemblyBrowser\AssemblyBrowserWindow.xaml.cs">
       <DependentUpon>AssemblyBrowserWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AssemblyBrowser\GraphLayoutManager.cs" />
     <Compile Include="AssemblyBrowser\UserControls\ScreenPresenter.xaml.cs">
       <DependentUpon>ScreenPresenter.xaml</DependentUpon>
     </Compile>
@@ -144,6 +145,7 @@
     <Compile Include="Controls\Graph\Transitions\FadeOutTransition.cs" />
     <Compile Include="Controls\Graph\Transitions\FadeTransition.cs" />
     <Compile Include="Controls\Graph\Transitions\TransitionBase.cs" />
+    <Compile Include="Controls\Graph\TypeGraphLayoutAlgorithm.cs" />
     <Compile Include="Controls\Graph\VertexControl.cs" />
     <Compile Include="Controls\PopupNonTopmost.cs" />
     <Compile Include="Controls\ZoomControl\ContentSizeChangedDelegate.cs" />

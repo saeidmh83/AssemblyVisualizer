@@ -3,6 +3,10 @@
 // (for details please see \docs\Ms-PL)
 
 using System;
+using System.Collections.Generic;
+using System.Windows;
+using GraphSharp.Algorithms.Layout;
+using GraphSharp.Algorithms.Layout.Simple.FDP;
 using ILSpyVisualizer.AssemblyBrowser.ViewModels;
 using ILSpyVisualizer.Controls.Graph;
 using QuickGraph;
@@ -14,11 +18,22 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		public TypeGraph(bool allowParallelEdges) : base(allowParallelEdges)
 		{
 		}
+
+		public TypeViewModel Root { get; set; }
 	}
 
 	class TypeGraphLayout : GraphLayout<TypeViewModel, Edge<TypeViewModel>, TypeGraph>
 	{
 		public event Action LayoutFinished;
+
+		protected override ILayoutAlgorithm<TypeViewModel, Edge<TypeViewModel>, TypeGraph> CreateLayoutAlgorithm
+			(bool continueLayout, ILayoutContext<TypeViewModel, Edge<TypeViewModel>, TypeGraph> layoutContext)
+		{
+			return new TypeGraphLayoutAlgorithm(
+								layoutContext.Graph,
+								layoutContext.Positions,
+								LayoutParameters as LinLogLayoutParameters);
+		}
 
 		protected override void OnLayoutFinished()
 		{

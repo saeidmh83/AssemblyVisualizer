@@ -205,9 +205,16 @@ namespace ILSpyVisualizer.Controls.Graph
             return new OverlapRemovalContext<TVertex>(rectangles);
         }
 
-        protected virtual void Layout(bool continueLayout)
+		protected virtual ILayoutAlgorithm<TVertex, TEdge, TGraph> CreateLayoutAlgorithm(
+			bool continueLayout, ILayoutContext<TVertex, TEdge, TGraph> layoutContext)
+		{
+			return LayoutAlgorithmFactory.CreateAlgorithm(
+				LayoutAlgorithmType, layoutContext, LayoutParameters);
+		}
+
+    	protected virtual void Layout(bool continueLayout)
         {
-            if (Graph == null || Graph.VertexCount == 0 || !LayoutAlgorithmFactory.IsValidAlgorithm(LayoutAlgorithmType) || !CanLayout)
+            if (Graph == null || Graph.VertexCount == 0 || !CanLayout)
                 return; //no graph to layout, or wrong layout algorithm
 
             UpdateLayout();
@@ -224,16 +231,14 @@ namespace ILSpyVisualizer.Controls.Graph
                 return;
             }
 
-            //get the actual positions if we want to continue the layout
-            IDictionary<TVertex, Point> oldPositions = GetOldVertexPositions(continueLayout);
-            IDictionary<TVertex, Size> oldSizes = GetLatestVertexSizes();
+			//get the actual positions if we want to continue the layout
+			IDictionary<TVertex, Point> oldPositions = GetOldVertexPositions(continueLayout);
+			IDictionary<TVertex, Size> oldSizes = GetLatestVertexSizes();
 
-            //create the context
-            var layoutContext = CreateLayoutContext(oldPositions, oldSizes);
+			//create the context
+			var layoutContext = CreateLayoutContext(oldPositions, oldSizes);
 
-            //create the layout algorithm using the factory
-            LayoutAlgorithm = LayoutAlgorithmFactory.CreateAlgorithm(LayoutAlgorithmType, layoutContext,
-                                                                      LayoutParameters);
+    		LayoutAlgorithm = CreateLayoutAlgorithm(continueLayout, layoutContext);
 
             if (AsyncCompute)
             {

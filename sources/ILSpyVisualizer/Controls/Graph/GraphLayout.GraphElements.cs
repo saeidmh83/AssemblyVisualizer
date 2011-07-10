@@ -8,8 +8,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using GraphSharp;
-using QuickGraph;
+using ILSpyVisualizer.Controls.Graph.GraphSharp;
+using ILSpyVisualizer.Controls.Graph.QuickGraph;
 
 namespace ILSpyVisualizer.Controls.Graph
 {
@@ -330,7 +330,7 @@ namespace ILSpyVisualizer.Controls.Graph
             edgeControl.Source = _vertexControls[edge.Source];
             edgeControl.Target = _vertexControls[edge.Target];
 
-            if (ActualLayoutMode == GraphSharp.Algorithms.Layout.LayoutMode.Simple)
+            if (ActualLayoutMode == GraphSharp.Layout.LayoutMode.Simple)
                 Children.Insert(0, edgeControl);
             else
                 Children.Add(edgeControl);

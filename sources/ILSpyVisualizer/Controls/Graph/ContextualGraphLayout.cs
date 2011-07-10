@@ -3,10 +3,9 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Collections.Generic;
-using GraphSharp.Algorithms.Layout;
-using QuickGraph;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
+using ILSpyVisualizer.Controls.Graph.QuickGraph;
 using System.Windows;
-using GraphSharp.Algorithms.Layout.Contextual;
 
 namespace ILSpyVisualizer.Controls.Graph
 {

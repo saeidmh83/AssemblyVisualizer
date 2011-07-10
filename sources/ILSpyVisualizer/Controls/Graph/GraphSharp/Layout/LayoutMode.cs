@@ -1,8 +1,8 @@
-﻿// Adopted, originally created as part of GraphSharp project
+﻿// Adopted, originally created as part of GraphSharp library
 // This code is distributed under Microsoft Public License 
 // (for details please see \docs\Ms-PL)
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
 {
 	public enum LayoutMode
 	{
@@ -12,7 +12,7 @@ namespace ILSpyVisualizer.Controls.Graph
 		Automatic,
 
 		/// <summary>
-		/// There should not be any compound vertices.
+		/// Simple layout mode without compound vertices.
 		/// </summary>
 		Simple,
 

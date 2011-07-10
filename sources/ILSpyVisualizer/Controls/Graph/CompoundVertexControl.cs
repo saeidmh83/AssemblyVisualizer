@@ -4,7 +4,7 @@
 
 using System.Collections.ObjectModel;
 using System.Windows;
-using GraphSharp.Algorithms.Layout.Compound;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
 
 namespace ILSpyVisualizer.Controls.Graph
 {

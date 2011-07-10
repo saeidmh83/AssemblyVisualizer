@@ -4,8 +4,8 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using GraphSharp.Algorithms.Highlight;
-using QuickGraph;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.Highlight;
+using ILSpyVisualizer.Controls.Graph.QuickGraph;
 
 namespace ILSpyVisualizer.Controls.Graph
 {

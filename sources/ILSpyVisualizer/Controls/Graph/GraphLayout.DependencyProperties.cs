@@ -4,11 +4,11 @@
 
 using System;
 using System.Windows;
-using GraphSharp.Algorithms.EdgeRouting;
-using GraphSharp.Algorithms.Highlight;
-using GraphSharp.Algorithms.Layout;
-using GraphSharp.Algorithms.OverlapRemoval;
-using QuickGraph;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.EdgeRouting;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.Highlight;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval;
+using ILSpyVisualizer.Controls.Graph.QuickGraph;
 
 namespace ILSpyVisualizer.Controls.Graph
 {

@@ -34,10 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GraphSharp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\GraphSharp.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=4.1.0.7411, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\ICSharpCode.AvalonEdit.dll</HintPath>
@@ -62,10 +58,6 @@
     <Reference Include="Mono.Cecil, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="QuickGraph, Version=3.2.40122.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\QuickGraph.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -133,14 +125,127 @@
     <Compile Include="Controls\Graph\GraphLayout.DependencyProperties.cs" />
     <Compile Include="Controls\Graph\GraphLayout.GraphElements.cs" />
     <Compile Include="Controls\Graph\GraphLayout.HighlightController.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\AlgorithmBase.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\EdgeRouting\IEdgeRoutingAlgorithm.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\EdgeRouting\IEdgeRoutingAlgorithmFactory.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\EdgeRouting\IEdgeRoutingParameters.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\EdgeRouting\StandardEdgeRoutingAlgorithmFactory.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\GraphHelper.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Highlight\HighlightAlgorithmBase.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Highlight\HighlightContext.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Highlight\HighlightParameterBase.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Highlight\IHighlightAlgorithm.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Highlight\IHighlightAlgorithmFactory.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Highlight\IHighlightContext.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Highlight\IHighlightController.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Highlight\IHighlightParameters.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Highlight\SimpleHighlightAlgorithm.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Highlight\StandardHighlightAlgorithmFactory.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\IAlgorithm.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\IAlgorithmParameters.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\ICompoundGraph.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\CompoundLayoutContext.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\CompoundVertexInnerLayoutType.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\ContextualLayoutAlgorithmFactory.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\ContextualLayoutContext.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\ICompoundLayoutAlgorithm.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\ICompoundLayoutContext.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\IContextualLayoutAlgorithmFactory.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\ILayoutAlgorithm.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\ILayoutAlgorithmFactory.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\ILayoutContext.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\ILayoutInfoIterationEventArgs.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\ILayoutIterationEventArgs.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\ILayoutParameters.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\IParameterizedLayoutAlgorithm.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\LayoutAlgorithmBase.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\LayoutContext.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\LayoutIterationEventArgs.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\LayoutMode.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\LayoutParametersBase.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\LayoutState.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\LinLogLayoutAlgorithm.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\LinLogLayoutAlgorithm.QuadTree.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\LinLogLayoutParameters.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\ParameterizedLayoutAlgorithmBase.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\Layout\StandardLayoutAlgorithmFactory.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\OverlapRemoval\FSAAlgorithm.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\OverlapRemoval\IOverlapRemovalAlgorithm.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\OverlapRemoval\IOverlapRemovalAlgorithmFactory.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\OverlapRemoval\IOverlapRemovalContext.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\OverlapRemoval\IOverlapRemovalParameters.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\OverlapRemoval\OverlapRemovalAlgorithmBase.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\OverlapRemoval\OverlapRemovalContext.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\OverlapRemoval\OverlapRemovalHelper.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\OverlapRemoval\OverlapRemovalParameters.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\OverlapRemoval\RectangleWrapper.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\OverlapRemoval\StandardOverlapRemovalAlgorithmFactory.cs" />
+    <Compile Include="Controls\Graph\GraphSharp\WeightedEdge.cs" />
     <Compile Include="Controls\Graph\Helpers\ObjectPool.cs" />
     <Compile Include="Controls\Graph\IAnimation.cs" />
     <Compile Include="Controls\Graph\IAnimationContext.cs" />
     <Compile Include="Controls\Graph\ICompoundVertexControl.cs" />
     <Compile Include="Controls\Graph\ITransition.cs" />
-    <Compile Include="Controls\Graph\LayoutMode.cs" />
     <Compile Include="Controls\Graph\PositionChangedEventArgs.cs" />
     <Compile Include="Controls\Graph\PositionChangedEventHandler.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\BidirectionalGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\ComputationState.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Edge.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\EdgeEventArgs.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\EdgeFactory.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\EdgeList.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\EdgePredicate.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\GraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IAlgorithm.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IAlgorithmContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IBidirectionalGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IBidirectionalGraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IBidirectionalIncidenceGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IBidirectionalIncidenceGraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IComputation.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IComputationContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IEdge.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IEdgeContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IEdgeList.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IEdgeListAndIncidenceGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IEdgeListContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IEdgeListGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IEdgeListGraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IEdgeSet.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IEdgeSetContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IGraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IImplicitGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IImplicitGraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IImplicitVertexSet.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IImplicitVertexSetContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IIncidenceGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IIncidenceGraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IMutableBidirectionalGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IMutableBidirectionalGraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IMutableEdgeListGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IMutableEdgeListGraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IMutableGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IMutableGraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IMutableIncidenceGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IMutableIncidenceGraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IMutableVertexAndEdgeListGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IMutableVertexAndEdgeSet.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IMutableVertexAndEdgeSetContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IMutableVertexListGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IMutableVertexListGraphContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IMutableVertexSet.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IMutableVertexSetContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IVertexAndEdgeListGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IVertexEdgeDictionary.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IVertexEdgeDictionaryContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IVertexListGraph.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\IVertexSet.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\Contracts\IVertexSetContract.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\VertexEdgeDictionary.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\VertexEventArgs.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\VertexList.cs" />
+    <Compile Include="Controls\Graph\QuickGraph\VertexPredicate.cs" />
     <Compile Include="Controls\Graph\Transitions\FadeInTransition.cs" />
     <Compile Include="Controls\Graph\Transitions\FadeOutTransition.cs" />
     <Compile Include="Controls\Graph\Transitions\FadeTransition.cs" />

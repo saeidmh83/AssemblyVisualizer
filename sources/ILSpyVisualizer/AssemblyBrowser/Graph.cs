@@ -5,11 +5,10 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using GraphSharp.Algorithms.Layout;
-using GraphSharp.Algorithms.Layout.Simple.FDP;
 using ILSpyVisualizer.AssemblyBrowser.ViewModels;
 using ILSpyVisualizer.Controls.Graph;
-using QuickGraph;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
+using ILSpyVisualizer.Controls.Graph.QuickGraph;
 
 namespace ILSpyVisualizer.AssemblyBrowser
 {

@@ -8,8 +8,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using ILSpyVisualizer.AssemblyBrowser.ViewModels;
+using ILSpyVisualizer.Controls.Graph.QuickGraph;
 using ILSpyVisualizer.Infrastructure;
-using QuickGraph;
 using System.Windows.Input;
 using System.Windows;
 

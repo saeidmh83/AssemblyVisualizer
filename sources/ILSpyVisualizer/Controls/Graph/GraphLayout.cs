@@ -9,13 +9,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows;
 using System.Linq;
-using GraphSharp;
-using GraphSharp.Algorithms.EdgeRouting;
-using GraphSharp.Algorithms.Highlight;
-using GraphSharp.Algorithms.Layout;
-using GraphSharp.Algorithms.OverlapRemoval;
-using QuickGraph;
-using GraphSharp.Algorithms.Layout.Compound;
+using ILSpyVisualizer.Controls.Graph.GraphSharp;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.EdgeRouting;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.Highlight;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
+using ILSpyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval;
+using ILSpyVisualizer.Controls.Graph.QuickGraph;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
 
@@ -98,21 +97,21 @@ namespace ILSpyVisualizer.Controls.Graph
 
         #region Layout
 
-        protected GraphSharp.Algorithms.Layout.LayoutMode ActualLayoutMode
+        protected LayoutMode ActualLayoutMode
         {
             get
             {
                 if (LayoutMode == LayoutMode.Compound ||
                      LayoutMode == LayoutMode.Automatic && Graph != null && Graph is ICompoundGraph<TVertex, TEdge>)
-                    return GraphSharp.Algorithms.Layout.LayoutMode.Compound;
+                    return LayoutMode.Compound;
 
-                return GraphSharp.Algorithms.Layout.LayoutMode.Simple;
+                return LayoutMode.Simple;
             }
         }
 
         protected bool IsCompoundMode
         {
-            get { return ActualLayoutMode == GraphSharp.Algorithms.Layout.LayoutMode.Compound; }
+            get { return ActualLayoutMode == LayoutMode.Compound; }
         }
 
         protected virtual bool CanLayout
@@ -158,7 +157,7 @@ namespace ILSpyVisualizer.Controls.Graph
             if (!CanLayout)
                 return null;
 
-            if (ActualLayoutMode == GraphSharp.Algorithms.Layout.LayoutMode.Simple)
+            if (ActualLayoutMode == LayoutMode.Simple)
                 return new LayoutContext<TVertex, TEdge, TGraph>(Graph, positions, sizes, ActualLayoutMode);
             else
             {
@@ -313,7 +312,7 @@ namespace ILSpyVisualizer.Controls.Graph
 
         private IDictionary<TVertex, Point> GetOldVertexPositions(bool continueLayout)
         {
-            if (ActualLayoutMode == GraphSharp.Algorithms.Layout.LayoutMode.Simple)
+            if (ActualLayoutMode == LayoutMode.Simple)
             {
                 return continueLayout ? GetLatestVertexPositions() : null;
             }
@@ -328,7 +327,7 @@ namespace ILSpyVisualizer.Controls.Graph
             IDictionary<TVertex, Point> vertexPositions = new Dictionary<TVertex, Point>(_vertexControls.Count);
 
             //go through the vertex presenters and get the actual layoutpositions
-            if (ActualLayoutMode == GraphSharp.Algorithms.Layout.LayoutMode.Simple)
+            if (ActualLayoutMode == LayoutMode.Simple)
             {
                 foreach (var vc in _vertexControls)
                 {

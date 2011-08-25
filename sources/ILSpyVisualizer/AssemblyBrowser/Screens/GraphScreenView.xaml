@@ -199,8 +199,9 @@
                           HideZoom="Collapsed"
                           RequireCtrlForZoom="False">
             <AssemblyBrowser:TypeGraphLayout x:Name="graphLayout"                                             
-                                             Margin="10"
-                                             Graph="{Binding Graph}"                                             
+                                             Margin="10"                                             
+                                             Graph="{Binding Graph}"    
+                                             LayoutAlgorithmType="LinLog"
                                              OverlapRemovalAlgorithmType="FSA"
                                              HighlightAlgorithmType="Simple"                                             
                                              LayoutFinished="LayoutFinishedHandler"/>

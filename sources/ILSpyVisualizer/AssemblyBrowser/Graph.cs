@@ -16,23 +16,12 @@ namespace ILSpyVisualizer.AssemblyBrowser
 	{
 		public TypeGraph(bool allowParallelEdges) : base(allowParallelEdges)
 		{
-		}
-
-		public TypeViewModel Root { get; set; }
+		}		
 	}
 
 	class TypeGraphLayout : GraphLayout<TypeViewModel, Edge<TypeViewModel>, TypeGraph>
 	{
-		public event Action LayoutFinished;
-
-		protected override ILayoutAlgorithm<TypeViewModel, Edge<TypeViewModel>, TypeGraph> CreateLayoutAlgorithm
-			(bool continueLayout, ILayoutContext<TypeViewModel, Edge<TypeViewModel>, TypeGraph> layoutContext)
-		{
-			return new TypeGraphLayoutAlgorithm(
-								layoutContext.Graph,
-								layoutContext.Positions,
-								LayoutParameters as LinLogLayoutParameters);
-		}
+		public event Action LayoutFinished;		
 
 		protected override void OnLayoutFinished()
 		{
@@ -44,40 +33,5 @@ namespace ILSpyVisualizer.AssemblyBrowser
 				handler();
 			}
 		}
-	}
-
-	class TypeGraphLayoutAlgorithm : LinLogLayoutAlgorithm<TypeViewModel, Edge<TypeViewModel>, TypeGraph>
-	{
-		public TypeGraphLayoutAlgorithm(TypeGraph visitedGraph, IDictionary<TypeViewModel, Point> positions,
-									  LinLogLayoutParameters parameters)
-			: base(visitedGraph, positions, parameters)
-		{
-
-		}
-
-		protected override void InternalCompute()
-		{
-			var type = VisitedGraph.Root;
-			var savedLayout = GraphLayoutManager.LoadLayout(type);
-			if (savedLayout == null)
-			{
-				base.InternalCompute();
-				GraphLayoutManager.SaveLayout(type, VertexPositions);
-			}
-			else
-			{
-				LoadSavedLayout(savedLayout);
-			}
-		}
-
-		private void LoadSavedLayout(IDictionary<TypeViewModel, Point> results)
-		{
-			VertexPositions.Clear();
-
-			foreach (var result in results)
-			{
-				VertexPositions.Add(result);
-			}
-		}
-	}
+	}	
 }

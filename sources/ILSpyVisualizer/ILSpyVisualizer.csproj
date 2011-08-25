@@ -85,7 +85,6 @@
     <Compile Include="AssemblyBrowser\AssemblyBrowserWindow.xaml.cs">
       <DependentUpon>AssemblyBrowserWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AssemblyBrowser\GraphLayoutManager.cs" />
     <Compile Include="AssemblyBrowser\UserControls\ScreenPresenter.xaml.cs">
       <DependentUpon>ScreenPresenter.xaml</DependentUpon>
     </Compile>

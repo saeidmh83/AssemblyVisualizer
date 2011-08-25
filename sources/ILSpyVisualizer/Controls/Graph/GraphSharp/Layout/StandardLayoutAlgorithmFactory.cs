@@ -100,7 +100,8 @@ namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
                         return null;
                 }
             }*/
-            return null;
+            return new LinLogLayoutAlgorithm<TVertex, TEdge, TGraph>(context.Graph, context.Positions,
+                                                                                 parameters as LinLogLayoutParameters);            
         }
 
         public ILayoutParameters CreateParameters(string algorithmType, ILayoutParameters oldParameters)
@@ -130,9 +131,7 @@ namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
                 default:
                     return null;
             }
-        }
-
-        
+        }        
 
         public bool IsValidAlgorithm(string algorithmType)
         {

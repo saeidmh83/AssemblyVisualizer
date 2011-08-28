@@ -1,0 +1,34 @@
+﻿<Window x:Class="ILSpyVisualizer.AncestryBrowser.AncestryBrowserWindow"
+        x:ClassModifier="internal"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:AncestryBrowser="clr-namespace:ILSpyVisualizer.AncestryBrowser"
+	Title="{Binding Name}" Height="300" Width="300">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Common/DataTemplatesDictionary.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type AncestryBrowser:TypeViewModel}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding Name}"/>
+                    <ItemsControl ItemsSource="{Binding Members}"
+                                  Grid.Row="1"/>
+                    <ContentControl Content="{Binding BaseType}"
+                                    Grid.Row="2"/>
+                </Grid>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ContentControl Content="{Binding Type}"/>
+        </ScrollViewer>
+    </Grid>
+</Window>

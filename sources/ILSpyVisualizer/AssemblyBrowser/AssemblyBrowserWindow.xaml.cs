@@ -24,7 +24,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 	/// <summary>
 	/// Interaction logic for AssemblyBrowserWindow.xaml
 	/// </summary>
-	internal partial class AssemblyBrowserWindow : Window
+	partial class AssemblyBrowserWindow : Window
 	{
 		public AssemblyBrowserWindow(IEnumerable<AssemblyDefinition> assemblyDefinitions)
 		{

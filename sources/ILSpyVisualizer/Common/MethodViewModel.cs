@@ -7,7 +7,7 @@ using ICSharpCode.ILSpy.TreeNodes;
 using Mono.Cecil;
 using ICSharpCode.ILSpy;
 
-namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
+namespace ILSpyVisualizer.Common
 {
 	class MethodViewModel : MemberViewModel
 	{

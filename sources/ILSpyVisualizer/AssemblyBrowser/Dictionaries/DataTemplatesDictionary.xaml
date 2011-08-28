@@ -4,35 +4,17 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ImagesDictionary.xaml"/>
         <ResourceDictionary Source="ControlStylesDictionary.xaml"/>
+        <ResourceDictionary Source="../../Common/DataTemplatesDictionary.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-
         
     <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
         <Setter Property="CornerRadius" Value="10"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-    </Style>    
-
-    <!--Member-->
-    <DataTemplate DataType="{x:Type ViewModels:MemberViewModel}">
-        <Grid Margin="0, 2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition />
-            </Grid.ColumnDefinitions>
-            <Image Source="{Binding Icon}"
-                       Margin="0, 0, 6, 0"                    
-                       Stretch="Uniform"
-                       Width="16"
-                       Height="16"                       
-                       />
-            <TextBlock Text="{Binding Text}"
-                           Grid.Column="1" />
-        </Grid>
-    </DataTemplate>
+    </Style>  
 
     <!--Type-->
     <DataTemplate DataType="{x:Type ViewModels:TypeViewModel}"

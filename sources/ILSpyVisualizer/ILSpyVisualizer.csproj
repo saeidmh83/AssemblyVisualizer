@@ -80,7 +80,6 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analyzer\AnalyzeInWindowContextMenuEntry.cs" />
     <Compile Include="AssemblyBrowser\AddAssemblyContextMenuEntry.cs" />
     <Compile Include="AssemblyBrowser\AssemblyBrowserWindow.xaml.cs">
       <DependentUpon>AssemblyBrowserWindow.xaml</DependentUpon>
@@ -104,13 +103,21 @@
     <Compile Include="AssemblyBrowser\ViewModels\AssemblyViewModel.cs" />
     <Compile Include="AssemblyBrowser\BrowseAssemblyContextMenuEntry.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\CommandsGroupViewModel.cs" />
-    <Compile Include="AssemblyBrowser\ViewModels\EventViewModel.cs" />
+    <Compile Include="AncestryBrowser\TypeViewModel.cs" />
+    <Compile Include="Common\EventViewModel.cs" />
     <Compile Include="AssemblyBrowser\Graph.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\GroupedUserCommand.cs" />
-    <Compile Include="AssemblyBrowser\ViewModels\MemberViewModel.cs" />
-    <Compile Include="AssemblyBrowser\ViewModels\MethodViewModel.cs" />
-    <Compile Include="AssemblyBrowser\ViewModels\PropertyViewModel.cs" />
+    <Compile Include="Common\FieldViewModel.cs" />
+    <Compile Include="Common\MemberViewModel.cs" />
+    <Compile Include="Common\MethodViewModel.cs" />
+    <Compile Include="Common\PropertyViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\TypeViewModel.cs" />
+    <Compile Include="AncestryBrowser\AncestryBrowserWindow.xaml.cs">
+      <DependentUpon>AncestryBrowserWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AncestryBrowser\AncestryBrowserWindowViewModel.cs" />
+    <Compile Include="AncestryBrowser\BrowseAncestryContextMenuEntry.cs" />
     <Compile Include="Behaviors\DragBehavior.cs" />
     <Compile Include="Controls\Graph\AlgorithmConstraints.cs" />
     <Compile Include="Controls\Graph\AnimationContext.cs" />
@@ -301,6 +308,13 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AssemblyBrowser\Screens\SearchScreenView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="AncestryBrowser\AncestryBrowserWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\DataTemplatesDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

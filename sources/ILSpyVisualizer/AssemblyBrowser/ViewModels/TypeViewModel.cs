@@ -9,6 +9,7 @@ using System.Linq;
 using System.Windows.Input;
 using ICSharpCode.ILSpy;
 using ILSpyVisualizer.AssemblyBrowser.Screens;
+using ILSpyVisualizer.Common;
 using System.Windows.Media;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels

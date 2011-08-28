@@ -5,7 +5,7 @@
 using System.Windows.Media;
 using ILSpyVisualizer.Infrastructure;
 
-namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
+namespace ILSpyVisualizer.Common
 {
 	abstract class MemberViewModel : ViewModelBase
 	{

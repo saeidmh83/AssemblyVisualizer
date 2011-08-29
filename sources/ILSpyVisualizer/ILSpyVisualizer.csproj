@@ -87,9 +87,6 @@
     <Compile Include="AssemblyBrowser\UserControls\ScreenPresenter.xaml.cs">
       <DependentUpon>ScreenPresenter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="AssemblyBrowser\UserControls\CommandsGroupView.xaml.cs">
-      <DependentUpon>CommandsGroupView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="AssemblyBrowser\Screens\GraphScreen.cs" />
     <Compile Include="AssemblyBrowser\Screens\GraphScreenView.xaml.cs">
       <DependentUpon>GraphScreenView.xaml</DependentUpon>
@@ -102,11 +99,14 @@
     <Compile Include="AssemblyBrowser\ViewModels\AssemblyBrowserWindowViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\AssemblyViewModel.cs" />
     <Compile Include="AssemblyBrowser\BrowseAssemblyContextMenuEntry.cs" />
-    <Compile Include="AssemblyBrowser\ViewModels\CommandsGroupViewModel.cs" />
+    <Compile Include="Common\CommandsGroup\CommandsGroupViewModel.cs" />
     <Compile Include="AncestryBrowser\TypeViewModel.cs" />
+    <Compile Include="Common\CommandsGroup\CommandsGroupView.xaml.cs">
+      <DependentUpon>CommandsGroupView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Common\EventViewModel.cs" />
     <Compile Include="AssemblyBrowser\Graph.cs" />
-    <Compile Include="AssemblyBrowser\ViewModels\GroupedUserCommand.cs" />
+    <Compile Include="Common\CommandsGroup\GroupedUserCommand.cs" />
     <Compile Include="Common\FieldViewModel.cs" />
     <Compile Include="Common\MemberViewModel.cs" />
     <Compile Include="Common\MethodViewModel.cs" />
@@ -283,7 +283,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AssemblyBrowser\Dictionaries\ControlStylesDictionary.xaml">
+    <Page Include="Common\CommandsGroup\CommandsGroupView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Common\ControlStylesDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -296,10 +300,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AssemblyBrowser\UserControls\ScreenPresenter.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="AssemblyBrowser\UserControls\CommandsGroupView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

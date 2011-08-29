@@ -31,5 +31,22 @@ namespace ILSpyVisualizer.Common
 					.GetText(_methodDefinition, MainWindow.Instance.CurrentLanguage) as string;
 			}
 		}
+
+        public override bool IsVirtual
+        {
+            get
+            {
+                return _methodDefinition.IsVirtual;
+            }
+        }
+
+        public override bool IsOverridden
+        {
+            get
+            {
+                // Add proper implementation
+                return base.IsOverridden;
+            }
+        }
 	}
 }

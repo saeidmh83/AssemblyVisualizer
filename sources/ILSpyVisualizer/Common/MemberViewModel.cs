@@ -11,5 +11,19 @@ namespace ILSpyVisualizer.Common
 	{
 		public abstract ImageSource Icon { get; }
 		public abstract string Text { get; }
+        public virtual bool IsVirtual
+        {
+            get
+            {
+                return false;
+            }
+        }
+        public virtual bool IsOverridden
+        {
+            get
+            {
+                return false;
+            }
+        }
 	}
 }

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using ILSpyVisualizer.Infrastructure;
 
-namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
+namespace ILSpyVisualizer.Common.CommandsGroup
 {
 	class CommandsGroupViewModel : ViewModelBase
 	{

@@ -17,7 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ILSpyVisualizer.Infrastructure;
 
-namespace ILSpyVisualizer.AssemblyBrowser.UserControls
+namespace ILSpyVisualizer.Common.CommandsGroup
 {
 	/// <summary>
 	/// Interaction logic for CommandsGroupView.xaml

@@ -6,7 +6,7 @@ using System;
 using ILSpyVisualizer.Infrastructure;
 using System.Windows.Input;
 
-namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
+namespace ILSpyVisualizer.Common.CommandsGroup
 {
 	class GroupedUserCommand : ViewModelBase
 	{

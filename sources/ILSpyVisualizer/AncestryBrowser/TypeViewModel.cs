@@ -15,6 +15,7 @@ namespace ILSpyVisualizer.AncestryBrowser
     class TypeViewModel : ViewModelBase
     {
         private TypeDefinition _typeDefinition;
+        private bool _isExpanded;
 
         public TypeViewModel(TypeDefinition typeDefinition)
         {
@@ -53,6 +54,19 @@ namespace ILSpyVisualizer.AncestryBrowser
             get
             {
                 return _typeDefinition.Name;
+            }
+        }
+
+        public bool IsExpanded
+        {
+            get
+            {
+                return _isExpanded;
+            }
+            set
+            {
+                _isExpanded = value;
+                OnPropertyChanged("IsExpanded");
             }
         }
     }

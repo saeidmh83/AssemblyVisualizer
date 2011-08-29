@@ -38,7 +38,7 @@ namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
 		/// </summary>
 		IDictionary<TEdge, TEdgeInfo> EdgeInfos { get; }
 
-		new event LayoutIterationEndedEventHandler<TVertex, TEdge, TVertexInfo, TEdgeInfo> IterationEnded;
+		//new event LayoutIterationEndedEventHandler<TVertex, TEdge, TVertexInfo, TEdgeInfo> IterationEnded;
 	}
 
 	public interface ILayoutAlgorithm<TVertex, TEdge, TGraph> : IAlgorithm<TGraph>

@@ -13,7 +13,7 @@ using ICSharpCode.TreeView;
 
 namespace ILSpyVisualizer.AncestryBrowser
 {
-	//[ExportContextMenuEntry(Header = "Browse Ancestry")]
+	[ExportContextMenuEntry(Header = "Browse Ancestry")]
 	sealed class BrowseAncestryContextMenuEntry : IContextMenuEntry
 	{
 		public bool IsVisible(SharpTreeNode[] selectedNodes)

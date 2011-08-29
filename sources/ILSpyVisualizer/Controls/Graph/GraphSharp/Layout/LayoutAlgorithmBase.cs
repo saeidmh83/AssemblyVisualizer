@@ -36,7 +36,7 @@ namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
 			get { return edgeInfos; }
 		}
 
-		public new event LayoutIterationEndedEventHandler<TVertex, TEdge, TVertexInfo, TEdgeInfo> IterationEnded;
+		//public new event LayoutIterationEndedEventHandler<TVertex, TEdge, TVertexInfo, TEdgeInfo> IterationEnded;
 
 		public override object GetVertexInfo( TVertex vertex )
 		{

@@ -48,5 +48,10 @@ namespace ILSpyVisualizer.Common
                 return base.IsOverridden;
             }
         }
+
+        public override MemberReference MemberReference
+        {
+            get { return _methodDefinition; }
+        }
 	}
 }

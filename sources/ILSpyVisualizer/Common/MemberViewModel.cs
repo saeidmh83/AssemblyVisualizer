@@ -4,6 +4,7 @@
 
 using System.Windows.Media;
 using ILSpyVisualizer.Infrastructure;
+using Mono.Cecil;
 
 namespace ILSpyVisualizer.Common
 {
@@ -24,6 +25,10 @@ namespace ILSpyVisualizer.Common
             {
                 return false;
             }
+        }
+        public abstract MemberReference MemberReference
+        {
+            get;
         }
 	}
 }

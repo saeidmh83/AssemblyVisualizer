@@ -30,5 +30,10 @@ namespace ILSpyVisualizer.Common
                 return _fieldDefinition.Name;
             }
         }
+
+        public override MemberReference MemberReference
+        {
+            get { return _fieldDefinition; }
+        }
     }
 }

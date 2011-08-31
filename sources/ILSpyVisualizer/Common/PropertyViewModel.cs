@@ -31,5 +31,10 @@ namespace ILSpyVisualizer.Common
 					.GetText(_propertyDefinition, MainWindow.Instance.CurrentLanguage) as string;
 			}
 		}
+
+        public override MemberReference MemberReference
+        {
+            get { return _propertyDefinition; }
+        }
 	}
 }

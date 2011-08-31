@@ -11,8 +11,10 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-
+using System.Linq;
 using Mono.Cecil;
+using ICSharpCode.ILSpy;
+using ILSpyVisualizer.Common;
 
 namespace ILSpyVisualizer.AncestryBrowser
 {	
@@ -36,5 +38,15 @@ namespace ILSpyVisualizer.AncestryBrowser
 				DataContext = value;
 			}
 		}
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var listBox = sender as ListBox;
+            var memberViewModel = listBox.SelectedValue as MemberViewModel;
+            if (memberViewModel != null)
+            {
+                MainWindow.Instance.JumpToReference(memberViewModel.MemberReference);
+            }
+        }
 	}
 }

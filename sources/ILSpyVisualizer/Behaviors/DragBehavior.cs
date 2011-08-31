@@ -207,9 +207,18 @@ namespace ILSpyVisualizer.Behaviors
             if ( double.IsNaN( GetY( obj ) ) )
                 SetY( obj, 0 );
 
+            var newX = GetX( obj ) + horizontalChange;
+            var newY = GetY( obj ) + verticalChange;
+
 			//move the object
-			SetX( obj, GetX( obj ) + horizontalChange );
-			SetY( obj, GetY( obj ) + verticalChange );
+            if (newX > 0)
+            {
+			    SetX( obj, newX );
+            }
+            if (newY > 0)
+            {
+                SetY(obj, newY);
+            }
 
 		    e.Handled = true;
 		}

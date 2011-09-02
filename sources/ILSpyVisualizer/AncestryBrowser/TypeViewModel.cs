@@ -9,6 +9,7 @@ using System.Text;
 using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
 using ILSpyVisualizer.Common;
+using ICSharpCode.ILSpy;
 
 namespace ILSpyVisualizer.AncestryBrowser
 {
@@ -53,7 +54,7 @@ namespace ILSpyVisualizer.AncestryBrowser
         {
             get
             {
-                return _typeDefinition.Name;
+                return MainWindow.Instance.CurrentLanguage.FormatTypeName(_typeDefinition);
             }
         }
 

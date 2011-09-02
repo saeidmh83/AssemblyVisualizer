@@ -41,7 +41,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			MembersCount
 		}
 
-		private const string HomePageUri = @"http://denismarkelov.blogspot.com/p/ilspy-visualizer.html";
+		private const string HomePageUri = @"http://ilspyvisualizer.denismarkelov.com";
 
 		private string _searchTerm = string.Empty;
 		private bool _isSearchPerformed = true;

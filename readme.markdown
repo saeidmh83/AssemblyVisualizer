@@ -5,47 +5,29 @@
 Its intention is to visualize data that can be 
 obtained using ILSpy.
 
-
-Website: http://ilspyvisualizer.denismarkelov.com
-
-
-Copyright 2011 Denis Markelov
-
+Website: http://ilspyvisualizer.denismarkelov.com    
+Copyright 2011 Denis Markelov    
 Licensed under the Microsoft Public License
-
-
 
 ## Included open-source libraries
 
-
-* GraphSharp: Ms-PL
-  
-* QuickGraph: Ms-PL
-  
+* GraphSharp: Ms-PL  
+* QuickGraph: Ms-PL  
 * WPFExtensions: Ms-PL
 
-
-
-## Components
-  
+## Components  
 
 ### Assembly browser
-
     
-Intention: type hierarchies visualization
-    
-Usage: 'Browse Assembly' context menu item for assemblies
+Type hierarchies visualizer, starting from the superclass.    
+Usage: 'Browse Assembly' context menu item for assemblies.
 
 ### Ancestry browser
     
-Intention: visualization of type hierarchy from selected one to the inheritance root
-Usage: 'Browser Ancestry' context menu item for types
+Type hierarchy visualizer from selected type to the inheritance root.    
+Usage: 'Browser Ancestry' context menu item for types.
 
+## How to start to use a plugin  
 
-
-## How to start to use a plugin
-  
-
-Download the latest build from the Downloads section,
-  put assembly into ILSpy folder.
+Download the latest build from the Downloads section, put assembly into ILSpy folder.
   

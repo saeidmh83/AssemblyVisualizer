@@ -13,7 +13,7 @@
         </Style.Triggers>
     </Style>
 
-    <!--Image button-->
+    <!--Image button with shadow in MouseOver-->
     <Style x:Key="ImageButtonStyle" TargetType="{x:Type ButtonBase}">
         <Setter Property="Margin" Value="0"/>
         <Setter Property="Template">
@@ -35,6 +35,27 @@
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="brdImage" Property="Opacity" Value="0.3"/>                                
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LooklessButtonStyle" TargetType="{x:Type ButtonBase}">
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ButtonBase}">
+                    <Border x:Name="brdImage"
+                            Width="{TemplateBinding Width}" 
+                            Height="{TemplateBinding Height}"
+                            Background="{TemplateBinding Background}">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>                        
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.3"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

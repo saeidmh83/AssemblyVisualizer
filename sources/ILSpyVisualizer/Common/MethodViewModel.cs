@@ -15,7 +15,7 @@ namespace ILSpyVisualizer.Common
 
 		public MethodViewModel(MethodDefinition methodDefinition)
 		{
-			_methodDefinition = methodDefinition;
+			_methodDefinition = methodDefinition;           
 		}
 
 		public override ImageSource Icon
@@ -52,6 +52,31 @@ namespace ILSpyVisualizer.Common
         public override MemberReference MemberReference
         {
             get { return _methodDefinition; }
+        }
+
+        public override bool IsPublic
+        {
+            get { return _methodDefinition.IsPublic; }
+        }
+
+        public override bool IsProtected
+        {
+            get { return _methodDefinition.IsFamily; }
+        }
+
+        public override bool IsInternal
+        {
+            get { return _methodDefinition.IsAssembly; }
+        }
+
+        public override bool IsPrivate
+        {
+            get { return _methodDefinition.IsPrivate; }
+        }
+
+        public override bool IsProtectedInternal
+        {
+            get { return _methodDefinition.IsFamilyOrAssembly; }
         }
 	}
 }

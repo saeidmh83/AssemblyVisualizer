@@ -17,38 +17,41 @@ namespace ILSpyVisualizer.AncestryBrowser
     {
         private TypeDefinition _typeDefinition;
         private bool _isExpanded;
+        private IEnumerable<MemberViewModel> _members;
 
         public TypeViewModel(TypeDefinition typeDefinition)
         {
+            _isExpanded = true;
             _typeDefinition = typeDefinition;
             if (_typeDefinition.BaseType != null)
             {
                 BaseType = new TypeViewModel(_typeDefinition.BaseType.Resolve());
-            }
-
-            var fields = _typeDefinition.Fields                
-                .Select(f => new FieldViewModel(f))
-                .OfType<MemberViewModel>();
-
-            var properties = _typeDefinition.Properties                
-                .Select(p => new PropertyViewModel(p))
-                .OfType<MemberViewModel>();
-
-            var events = _typeDefinition.Events                
-                .Select(e => new EventViewModel(e))
-                .OfType<MemberViewModel>();
-
-            var methods = _typeDefinition.Methods
-                .Where(m => !m.IsGetter && !m.IsSetter && !m.IsAddOn && !m.IsRemoveOn)
-                .Select(m => new MethodViewModel(m))
-                .OfType<MemberViewModel>();
-
-            Members = fields.Concat(properties).Concat(events).Concat(methods);
+            }   
         }
 
-        public IEnumerable<MemberViewModel> Members { get; set; }
-
+        public IEnumerable<MemberViewModel> Members 
+        {
+            get { return _members; }
+            set 
+            {
+                _members = value;
+                OnPropertyChanged("Members");
+            }
+        }
+        public TypeDefinition TypeDefinition { get { return _typeDefinition; } }
         public TypeViewModel BaseType { get; set; }
+
+        public IEnumerable<TypeViewModel> Ancestry
+        {
+            get 
+            {
+                if (BaseType == null)
+                {
+                    return new [] { this };
+                }
+                return new[] { this }.Concat(BaseType.Ancestry);
+            }
+        }
 
         public string Name 
         {
@@ -69,6 +72,67 @@ namespace ILSpyVisualizer.AncestryBrowser
                 _isExpanded = value;
                 OnPropertyChanged("IsExpanded");
             }
+        }
+
+        public void UpdateMembers(MemberOptions options)
+        {
+            IEnumerable<MemberViewModel> members = new MemberViewModel[0];
+
+            if (options.ShowFields)
+            {
+                var fields = _typeDefinition.Fields
+                    .Select(f => new FieldViewModel(f))
+                    .OfType<MemberViewModel>();
+                members = members.Concat(fields);
+            }
+
+            if (options.ShowProperties)
+            {
+                var properties = _typeDefinition.Properties
+                    .Select(p => new PropertyViewModel(p))
+                    .OfType<MemberViewModel>();
+                members = members.Concat(properties);
+            }
+
+            if (options.ShowEvents)
+            {
+                var events = _typeDefinition.Events
+                    .Select(e => new EventViewModel(e))
+                    .OfType<MemberViewModel>();
+                members = members.Concat(events);
+            }
+
+            if (options.ShowMethods)
+            {
+                var methods = _typeDefinition.Methods
+                    .Where(m => !m.IsGetter && !m.IsSetter && !m.IsAddOn && !m.IsRemoveOn)
+                    .Select(m => new MethodViewModel(m))
+                    .OfType<MemberViewModel>();
+                members = members.Concat(methods);
+            }
+
+            if (!options.ShowPrivate)
+            {
+                members = members.Where(m => !m.IsPrivate);
+            }
+            if (!options.ShowInternal)
+            {
+                members = members.Where(m => !m.IsInternal);
+            }
+            if (!options.ShowProtected)
+            {
+                members = members.Where(m => !m.IsProtected);
+            }
+            if (!options.ShowProtectedInternal)
+            {
+                members = members.Where(m => !m.IsProtectedInternal);
+            }
+            if (!options.ShowPublic)
+            {
+                members = members.Where(m => !m.IsPublic);
+            }
+
+            Members = members;
         }
     }
 }

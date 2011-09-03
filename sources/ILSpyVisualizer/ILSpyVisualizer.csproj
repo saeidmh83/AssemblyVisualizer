@@ -80,6 +80,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AncestryBrowser\AssemblyViewModel.cs" />
+    <Compile Include="AncestryBrowser\MemberOptions.cs" />
     <Compile Include="AssemblyBrowser\AddAssemblyContextMenuEntry.cs" />
     <Compile Include="AssemblyBrowser\AssemblyBrowserWindow.xaml.cs">
       <DependentUpon>AssemblyBrowserWindow.xaml</DependentUpon>
@@ -99,6 +101,7 @@
     <Compile Include="AssemblyBrowser\ViewModels\AssemblyBrowserWindowViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\AssemblyViewModel.cs" />
     <Compile Include="AssemblyBrowser\BrowseAssemblyContextMenuEntry.cs" />
+    <Compile Include="Common\BrushProvider.cs" />
     <Compile Include="Common\CommandsGroup\CommandsGroupViewModel.cs" />
     <Compile Include="AncestryBrowser\TypeViewModel.cs" />
     <Compile Include="Common\CommandsGroup\CommandsGroupView.xaml.cs">
@@ -295,7 +298,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="AssemblyBrowser\Dictionaries\ImagesDictionary.xaml">
+    <Page Include="Common\ImagesDictionary.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -3,77 +3,39 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:AncestryBrowser="clr-namespace:ILSpyVisualizer.AncestryBrowser"
-	Title="{Binding Name}" Height="800" Width="800">
+	Title="{Binding Name}" Height="800" Width="615">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Common\DataTemplatesDictionary.xaml" />
+                <ResourceDictionary Source="..\Common\ImagesDictionary.xaml"/>
+                <ResourceDictionary Source="..\Common\ControlStylesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type AncestryBrowser:TypeViewModel}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                <Grid>                    
                     <TextBlock Text="{Binding Name}"
                                FontSize="16"
                                FontWeight="Bold"
                                Margin="25, 0, 0, 0"/>
                     <Expander IsExpanded="{Binding IsExpanded}">
-                        <ListBox ItemsSource="{Binding Members}"
-                                 BorderThickness="0"
-                                 SelectionChanged="ListBox_SelectionChanged">
-                            <ListBox.ItemContainerStyle>
-                                <Style TargetType="{x:Type ListBoxItem}">
-                                    <Setter Property="Margin" Value="1,2,1,1"/>
-                                    <Setter Property="HorizontalAlignment" Value="Stretch" />
-                                    <Setter Property="Background" Value="White" />
-                                    <Setter Property="Template">
-                                        <Setter.Value>
-                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                                                <Grid>
-                                                    <Border Background="{TemplateBinding Background}" />
-                                                    <Border Background="#BEFFFFFF" >
-                                                        <Grid>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition />
-                                                                <RowDefinition />
-                                                            </Grid.RowDefinitions>
-                                                            <Border Margin="2,1,2,0" Grid.Row="0" Background="#57FFFFFF" />
-                                                        </Grid>
-                                                    </Border>
-                                                    <ContentPresenter Margin="8,0" />
-                                                </Grid>
-                                                <ControlTemplate.Triggers>
-                                                    <MultiTrigger>
-                                                        <MultiTrigger.Conditions>
-                                                            <Condition Property="IsMouseOver" Value="True" />
-                                                            <Condition Property="IsSelected" Value="False"/>
-                                                        </MultiTrigger.Conditions>
-                                                        <Setter Property="Background" Value="#3399FF" />
-                                                    </MultiTrigger>
-                                                    <Trigger Property="IsSelected" Value="True">
-                                                        <Setter Property="Background" Value="#2266AA" />
-                                                    </Trigger>
-                                                </ControlTemplate.Triggers>
-                                            </ControlTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </ListBox.ItemContainerStyle>
-                        </ListBox>
-                    </Expander>
-                    <Border Grid.Row="2"
-                            BorderThickness="0, 1, 0, 0"
-                            BorderBrush="#888888">
-                        <Border 
-                            BorderThickness="0, 1, 0, 0"
-                            BorderBrush="Black">
-                            <ContentControl Content="{Binding BaseType}"/>
-                        </Border>
-                    </Border>
+                        <ItemsControl ItemsSource="{Binding Members}"
+                                      Margin="4, 3">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate> 
+                                    <Button Style="{StaticResource LooklessButtonStyle}"
+                                            Command="{Binding JumpCommand}"
+                                            Cursor="Hand"
+                                            Background="Transparent"
+                                            HorizontalAlignment="Left">
+                                        <ContentControl Content="{Binding}"
+                                                        Grid.Column="1"
+                                                        ToolTip="{Binding Text}"/> 
+                                    </Button> 
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>                            
+                        </ItemsControl>
+                    </Expander>                    
                 </Grid>
             </DataTemplate>
         </ResourceDictionary>
@@ -81,11 +43,85 @@
     <Grid UseLayoutRounding="True"
           TextOptions.TextFormattingMode="Display">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <ContentControl Content="{Binding Type}"/>
+        
+        <Grid TextElement.FontSize="14"
+              TextElement.Foreground="Gray"
+              Margin="20, 10, 10, 10">
+            <Grid.Resources>
+                <Style TargetType="{x:Type CheckBox}">
+                    <Setter Property="FontSize" Value="12"/>
+                    <Setter Property="Margin" Value="0, 1"/>
+                </Style>
+            </Grid.Resources>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                
+            </Grid.RowDefinitions>
+
+            <StackPanel Margin="0, 4">
+                <TextBlock Text="Member types"/>
+                <CheckBox Content="Fields"
+                          IsChecked="{Binding ShowFields}"/>
+                <CheckBox Content="Events"
+                          IsChecked="{Binding ShowEvents}"/>
+                <CheckBox Content="Properties"
+                          IsChecked="{Binding ShowProperties}"/>
+                <CheckBox Content="Methods"
+                          IsChecked="{Binding ShowMethods}"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Row="1"
+                        Margin="0, 4">
+                <TextBlock Text="Visibility"/>
+                <CheckBox Content="Private"
+                          IsChecked="{Binding ShowPrivate}"/>                
+                <CheckBox Content="Internal"
+                          IsChecked="{Binding ShowInternal}"/>
+                <CheckBox Content="Protected"
+                          IsChecked="{Binding ShowProtected}"/>
+                <CheckBox Content="Protected/Internal"
+                          IsChecked="{Binding ShowProtectedInternal}"/>
+                <CheckBox Content="Public"
+                          IsChecked="{Binding ShowPublic}"/>
+            </StackPanel>
+        </Grid>
+        
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      Grid.Column="1">
+            <ItemsControl ItemsSource="{Binding Assemblies}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>                        
+                        <Grid Margin="0, 2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>                                
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Name}" 
+                                       VerticalAlignment="Center"
+                                       FontSize="18"
+                                       Foreground="{Binding CaptionBrush}"
+                                       Margin="0, 4">
+                                <TextBlock.LayoutTransform>
+                                    <RotateTransform CenterX="0.5"
+                                                     CenterY="0.5"
+                                                     Angle="270"/>                                    
+                                </TextBlock.LayoutTransform>
+                            </TextBlock>
+                            <Border Grid.Column="1"
+                                    Opacity="0.4"
+                                    Background="{Binding BackgroundBrush}"
+                                    CornerRadius="8"/>
+                            <ItemsControl ItemsSource="{Binding Types}"
+                                          Grid.Column="1"/>                            
+                        </Grid>
+                       
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
         
         

@@ -12,32 +12,13 @@ using Mono.Cecil;
 using System.Windows.Threading;
 using System.Windows.Input;
 using ILSpyVisualizer.AssemblyBrowser.Screens;
+using ILSpyVisualizer.Common;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
 	class AssemblyBrowserWindowViewModel : ViewModelBase
 	{
-		#region // Nested types
-
-		class BrushPair
-		{
-			private static readonly BrushConverter BrushConverter = new BrushConverter();
-			
-			public BrushPair(string caption, string background)
-				:this(BrushConverter.ConvertFromString(caption) as Brush,
-					  BrushConverter.ConvertFromString(background) as Brush)
-			{
-			}
-
-			private BrushPair(Brush caption, Brush background)
-			{
-				Caption = caption;
-				Background = background;
-			}
-
-			public Brush Caption { get; private set; }
-			public Brush Background { get; private set; }
-		}
+		#region // Nested types		
 
 		class NavigationItem
 		{
@@ -74,9 +55,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		#endregion
 
-		#region // Private fields
-
-		private readonly IList<BrushPair> _brushes;
+		#region // Private fields		
 
 		private readonly Dispatcher _dispatcher;
 		private readonly ObservableCollection<AssemblyViewModel> _assemblies;
@@ -110,17 +89,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			NavigateForwardCommand = new DelegateCommand(NavigateForwardCommandHandler);
 			ShowInnerSearchCommand = new DelegateCommand(ShowInnerSearchCommandHandler);
 
-			RefreshNavigationCommands();
-
-			_brushes = new List<BrushPair>
-			           	{
-							new BrushPair("#2D6531", "#D2FFB5"), // Green
-							new BrushPair("#113DC2", "#BFE0FF"), // Blue
-							new BrushPair("#9B2119", "#FFB7A5"), // Red
-							new BrushPair("#746BFF", "#B8B5FF"), // Purple
-							new BrushPair("#AF00A7", "#FFA0F2"), // Violet
-							new BrushPair("#C18E00", "#FFEAA8")  // Yellow
-			           	};
+			RefreshNavigationCommands();			
 
 			IsColorized = true;
 		}
@@ -435,9 +404,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				foreach (var assembly in Assemblies)
 				{
 					assembly.Colorize(
-						_brushes[currentIndex].Caption, _brushes[currentIndex].Background);
+                        BrushProvider.BrushPairs[currentIndex].Caption, BrushProvider.BrushPairs[currentIndex].Background);
 					currentIndex++;
-					if (currentIndex == _brushes.Count)
+                    if (currentIndex == BrushProvider.BrushPairs.Count)
 					{
 						currentIndex = 0;
 					}

@@ -35,5 +35,30 @@ namespace ILSpyVisualizer.Common
         {
             get { return _fieldDefinition; }
         }
+
+        public override bool IsPublic
+        {
+            get { return _fieldDefinition.IsPublic; }
+        }
+
+        public override bool IsProtected
+        {
+            get { return _fieldDefinition.IsFamily; }
+        }
+
+        public override bool IsInternal
+        {
+            get { return _fieldDefinition.IsAssembly; }
+        }
+
+        public override bool IsPrivate
+        {
+            get { return _fieldDefinition.IsPrivate; }
+        }
+
+        public override bool IsProtectedInternal
+        {
+            get { return _fieldDefinition.IsFamilyOrAssembly; }
+        }
     }
 }

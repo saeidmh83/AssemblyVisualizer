@@ -61,6 +61,14 @@ namespace ILSpyVisualizer.AncestryBrowser
             }
         }
 
+        public string FullName
+        {
+            get
+            {
+                return GetFullName(_typeDefinition.Namespace, Name);
+            }
+        }
+
         public bool IsExpanded
         {
             get
@@ -131,8 +139,21 @@ namespace ILSpyVisualizer.AncestryBrowser
             {
                 members = members.Where(m => !m.IsPublic);
             }
+            if (!string.IsNullOrWhiteSpace(options.SearchTerm))
+            { 
+                members = members.Where(m => m.MemberReference.Name.StartsWith(options.SearchTerm.Trim(), StringComparison.InvariantCultureIgnoreCase));
+            }
 
             Members = members;
+        }
+
+        private static string GetFullName(string typeNamespace, string typeName)
+        {
+            if (string.IsNullOrEmpty(typeNamespace))
+            {
+                return typeName;
+            }
+            return string.Format("{0}.{1}", typeNamespace, typeName);
         }
     }
 }

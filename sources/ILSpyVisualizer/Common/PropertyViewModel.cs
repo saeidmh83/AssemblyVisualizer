@@ -39,27 +39,57 @@ namespace ILSpyVisualizer.Common
 
         public override bool IsPublic
         {
-            get { return _propertyDefinition.GetMethod.IsPublic; }
+            get
+            {
+                return _propertyDefinition.GetMethod != null
+                     && _propertyDefinition.GetMethod.IsPublic
+                     || _propertyDefinition.SetMethod != null
+                     && _propertyDefinition.SetMethod.IsPublic;
+            }
         }
 
         public override bool IsProtected
         {
-            get { return _propertyDefinition.GetMethod.IsFamily; }
+            get
+            {
+                return _propertyDefinition.GetMethod != null
+                     && _propertyDefinition.GetMethod.IsFamily
+                     || _propertyDefinition.SetMethod != null
+                     && _propertyDefinition.SetMethod.IsFamily;
+            }
         }
 
         public override bool IsInternal
         {
-            get { return _propertyDefinition.GetMethod.IsAssembly; }
+            get
+            {
+                return _propertyDefinition.GetMethod != null
+                       && _propertyDefinition.GetMethod.IsAssembly
+                       || _propertyDefinition.SetMethod != null
+                       && _propertyDefinition.SetMethod.IsAssembly;
+            }
         }
 
         public override bool IsPrivate
         {
-            get { return _propertyDefinition.GetMethod.IsPrivate; }
+            get
+            {
+                return _propertyDefinition.GetMethod != null
+                       && _propertyDefinition.GetMethod.IsPrivate
+                       || _propertyDefinition.SetMethod != null
+                       && _propertyDefinition.SetMethod.IsPrivate;
+            }
         }
 
         public override bool IsProtectedInternal
         {
-            get { return _propertyDefinition.GetMethod.IsFamilyOrAssembly; }
+            get
+            {
+                return _propertyDefinition.GetMethod != null
+                     && _propertyDefinition.GetMethod.IsFamilyOrAssembly
+                     || _propertyDefinition.SetMethod != null
+                     && _propertyDefinition.SetMethod.IsFamilyOrAssembly;
+            }
         }
 	}
 }

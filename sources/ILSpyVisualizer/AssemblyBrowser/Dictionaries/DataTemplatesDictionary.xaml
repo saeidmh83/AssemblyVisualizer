@@ -68,6 +68,17 @@
                                     Visibility="{Binding CanVisualize, Converter={StaticResource BooleanToVisibilityConverter}}"
                                     ToolTip="Visualize"/>
 
+                            <Button VerticalAlignment="Center"                                                                      
+                                    Command="{Binding BrowseAncestryCommand}" 
+                                    Margin="4, 0"
+                                    Width="16"
+                                    Height="16"
+                                    MinWidth="0"
+                                    MinHeight="0"
+                                    Background="{StaticResource DownArrowDrawing}"
+                                    Style="{StaticResource ImageButtonStyle}"                                    
+                                    ToolTip="Browse Ancestry"/>
+                            
                             <Button Command="{Binding ShowMembersCommand}"                   
                                     Width="16"
                                     Height="16"

@@ -18,7 +18,7 @@ namespace ILSpyVisualizer.AncestryBrowser
         private TypeViewModel _typeViewModel;
         private IEnumerable<AssemblyViewModel> _assemblies;
         private IEnumerable<TypeViewModel> _ancestry;   
-        private MemberOptions _options;
+        private MemberOptions _options;        
 		
 		public AncestryBrowserWindowViewModel(TypeDefinition typeDefinition)
 		{
@@ -185,6 +185,28 @@ namespace ILSpyVisualizer.AncestryBrowser
                 _options.ShowProtectedInternal = value;
                 UpdateMembers();
             }
+        }
+
+        public string SearchTerm
+        {
+            get
+            {
+                return _options.SearchTerm;
+            }
+            set
+            {
+                _options.SearchTerm = value;
+                OnPropertyChanged("IsSearchTermEmpty");
+                UpdateMembers();
+            }
+        }
+
+        public bool IsSearchTermEmpty
+        {
+            get
+            {
+                return string.IsNullOrEmpty(SearchTerm);
+            }            
         }
 
         #endregion

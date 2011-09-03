@@ -11,6 +11,7 @@ using ICSharpCode.ILSpy;
 using ILSpyVisualizer.AssemblyBrowser.Screens;
 using ILSpyVisualizer.Common;
 using System.Windows.Media;
+using ILSpyVisualizer.AncestryBrowser;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
@@ -88,6 +89,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			NavigateCommand = new DelegateCommand(NavigateCommandHandler);
 			NavigateToBaseCommand = new DelegateCommand(NavigateToBaseCommandHandler);
 			ShowMembersCommand = new DelegateCommand(ShowMembersCommandHandler);
+            BrowseAncestryCommand = new DelegateCommand(BrowseAncestryCommandHandler);
 
 			RefreshBackground();
 		}
@@ -96,6 +98,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		public ICommand NavigateCommand { get; private set; }
 		public ICommand NavigateToBaseCommand { get; private set; }
 		public ICommand ShowMembersCommand { get; private set; }
+        public ICommand BrowseAncestryCommand { get; private set; }
 
 		public TypeDefinition TypeDefinition
 		{
@@ -305,6 +308,15 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			}
 			graphScreen.ShowDetails(this);
 		}
+
+        private void BrowseAncestryCommandHandler()
+        {
+            var window = new AncestryBrowserWindow(_typeDefinition)
+            {
+                Owner = MainWindow.Instance
+            };
+            window.Show();
+        }
 
 		private static string GetFullName(string typeNamespace, string typeName)
 		{

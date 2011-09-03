@@ -13,12 +13,14 @@
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type AncestryBrowser:TypeViewModel}">
-                <Grid>                    
-                    <TextBlock Text="{Binding Name}"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               Margin="25, 0, 0, 0"/>
+                <Grid> 
                     <Expander IsExpanded="{Binding IsExpanded}">
+                        <Expander.Header>
+                            <TextBlock Text="{Binding Name}"
+                               FontSize="16"
+                               FontWeight="Bold"                               
+                               ToolTip="{Binding FullName}"/>
+                        </Expander.Header>
                         <ItemsControl ItemsSource="{Binding Members}"
                                       Margin="4, 3">
                             <ItemsControl.ItemTemplate>
@@ -35,7 +37,7 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>                            
                         </ItemsControl>
-                    </Expander>                    
+                    </Expander>           
                 </Grid>
             </DataTemplate>
         </ResourceDictionary>
@@ -63,7 +65,8 @@
             </Grid.RowDefinitions>
 
             <StackPanel Margin="0, 4">
-                <TextBlock Text="Member types"/>
+                <TextBlock Text="Member types"
+                           Margin="0, 0, 0, 3"/>
                 <CheckBox Content="Fields"
                           IsChecked="{Binding ShowFields}"/>
                 <CheckBox Content="Events"
@@ -76,7 +79,8 @@
             
             <StackPanel Grid.Row="1"
                         Margin="0, 4">
-                <TextBlock Text="Visibility"/>
+                <TextBlock Text="Visibility"
+                           Margin="0, 0, 0, 3"/>
                 <CheckBox Content="Private"
                           IsChecked="{Binding ShowPrivate}"/>                
                 <CheckBox Content="Internal"
@@ -90,8 +94,38 @@
             </StackPanel>
         </Grid>
         
-        <ScrollViewer VerticalScrollBarVisibility="Auto"
-                      Grid.Column="1">
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Start typing to filter members"
+                       FontSize="14"
+                       FontStyle="Oblique"
+                       FontFamily="Arial"
+                       Foreground="#777777"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Left"
+                       Margin="18, 10, 10, 12">
+                <TextBlock.Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSearchTermEmpty}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+            <TextBox Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                     HorizontalAlignment="Stretch"
+                     Margin="10"
+                     FontSize="20"
+                     Background="Transparent"/>
+            
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                       Grid.Row="1">
             <ItemsControl ItemsSource="{Binding Assemblies}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>                        
@@ -123,7 +157,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        
-        
+
+        </Grid>
     </Grid>
 </Window>

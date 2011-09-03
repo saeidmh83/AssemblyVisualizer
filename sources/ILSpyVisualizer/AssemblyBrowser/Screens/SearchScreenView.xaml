@@ -102,6 +102,7 @@
             <TextBlock Text="Start typing to filter search results"
                        FontSize="14"
                        FontStyle="Oblique"
+                       FontFamily="Arial"
                        Foreground="#777777"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Left"
@@ -155,9 +156,9 @@
                     <ScrollViewer CanContentScroll="True"
                                   VerticalScrollBarVisibility="Auto">
                         <VirtualizingStackPanel Orientation="Vertical"
-                                                    VirtualizingStackPanel.IsVirtualizing="True"
-                                                    VirtualizingStackPanel.VirtualizationMode="Recycling"
-                                                    IsItemsHost="True"/>
+                                                VirtualizingStackPanel.IsVirtualizing="True"
+                                                VirtualizingStackPanel.VirtualizationMode="Recycling"
+                                                IsItemsHost="True"/>
                     </ScrollViewer>
                 </ControlTemplate>
             </ItemsControl.Template>
@@ -181,7 +182,7 @@
                                            HorizontalAlignment="Left"
                                            TextWrapping="Wrap">
                                     <TextBlock ToolTip="{Binding ExtendedInfo}">
-                                        <Hyperlink Command="{Binding NavigateCommand}"
+                                        <Hyperlink Command="{Binding BrowseAncestryCommand}"
                                                    TextDecorations="None"
                                                    Foreground="Black">
                                             <TextBlock Text="{Binding Name}"                                                
@@ -242,17 +243,15 @@
                                             Grid.RowSpan="2"
                                             VerticalAlignment="Center">
                                     <TextBlock VerticalAlignment="Center"
-                                               Margin="8, 6, 10, 5"
-                                                                                      
+                                               Margin="8, 6, 10, 5"                             
                                                Visibility="{Binding CanVisualize, Converter={StaticResource BooleanToVisibilityConverter}}">
                                         <Hyperlink Command="{Binding VisualizeCommand}"
                                                    Style="{StaticResource HyperlinkStyle}">
                                             <TextBlock Text="Visualize"/>
                                         </Hyperlink>
-                                    </TextBlock>
+                                    </TextBlock>                                    
                                     <TextBlock VerticalAlignment="Center"
-                                               Margin="8, 5, 10, 6"                                               
-                                               >
+                                               Margin="8, 5, 10, 6">
                                         <Hyperlink Command="{Binding NavigateCommand}"
                                                    Style="{StaticResource HyperlinkStyle}">
                                             <TextBlock Text="Jump"/>

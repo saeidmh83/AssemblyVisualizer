@@ -15,6 +15,10 @@ Components:
   Assembly browser
     Intention: type hierarchies visualization
     Usage: 'Browse Assembly' context menu item for assemblies
+  Ancestry browser
+    Intention: visualization of type hierarchy from selected
+      one to the inheritance root
+    Usage: 'Browser Ancestry' context menu item for types
 
 How to start to use a plugin:
   Download the latest build from the Downloads section,

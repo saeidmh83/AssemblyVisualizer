@@ -16,6 +16,11 @@ namespace ILSpyVisualizer.AncestryBrowser
         {
             _assemblyDefinition = assemblyDefinition;
             _types = types;
+
+            foreach (var type in _types)
+            {
+                type.Assembly = this;
+            }
         }
 
         public string Name { get { return _assemblyDefinition.Name.Name; } }

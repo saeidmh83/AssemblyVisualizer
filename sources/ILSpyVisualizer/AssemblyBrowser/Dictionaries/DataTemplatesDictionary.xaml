@@ -7,14 +7,7 @@
         <ResourceDictionary Source="..\..\Common\DataTemplatesDictionary.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 
-    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        
-    <Style x:Key="BorderStyle" TargetType="{x:Type Border}">
-        <Setter Property="CornerRadius" Value="10"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="BorderBrush" Value="Black"/>
-        <Setter Property="SnapsToDevicePixels" Value="True"/>
-    </Style>  
+    <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>      
 
     <!--Type-->
     <DataTemplate DataType="{x:Type ViewModels:TypeViewModel}"

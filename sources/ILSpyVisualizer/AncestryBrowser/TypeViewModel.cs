@@ -40,6 +40,7 @@ namespace ILSpyVisualizer.AncestryBrowser
         }
         public TypeDefinition TypeDefinition { get { return _typeDefinition; } }
         public TypeViewModel BaseType { get; set; }
+        public AssemblyViewModel Assembly { get; set; }
 
         public IEnumerable<TypeViewModel> Ancestry
         {
@@ -52,6 +53,8 @@ namespace ILSpyVisualizer.AncestryBrowser
                 return new[] { this }.Concat(BaseType.Ancestry);
             }
         }
+
+        public bool IsLast { get; set; }
 
         public string Name 
         {

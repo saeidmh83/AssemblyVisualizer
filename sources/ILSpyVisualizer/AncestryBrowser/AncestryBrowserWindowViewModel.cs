@@ -9,6 +9,8 @@ using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
 using System.Collections.Generic;
 using ILSpyVisualizer.Common;
+using System.Windows.Media;
+using System.Windows.Input;
 
 namespace ILSpyVisualizer.AncestryBrowser
 {	
@@ -18,11 +20,14 @@ namespace ILSpyVisualizer.AncestryBrowser
         private TypeViewModel _typeViewModel;
         private IEnumerable<AssemblyViewModel> _assemblies;
         private IEnumerable<TypeViewModel> _ancestry;   
-        private MemberOptions _options;        
+        private MemberOptions _options; 
+        private bool _isAllCollapsed;
 		
 		public AncestryBrowserWindowViewModel(TypeDefinition typeDefinition)
 		{
 			_typeDefinition = typeDefinition;
+
+            ExpandCollapseAllCommand = new DelegateCommand(ExpandCollapseAllCommandHandler);
 
             _options = new MemberOptions
             {
@@ -37,6 +42,7 @@ namespace ILSpyVisualizer.AncestryBrowser
             _typeViewModel = new TypeViewModel(_typeDefinition);
 
             _ancestry = _typeViewModel.Ancestry.ToList();
+            _ancestry.Last().IsLast = true;
             _assemblies = _ancestry
                 .GroupBy(t => t.TypeDefinition.Module.Assembly)
                 .Select(g => new AssemblyViewModel(g.Key, g))
@@ -45,7 +51,11 @@ namespace ILSpyVisualizer.AncestryBrowser
             int currentIndex = 0;
             foreach (var assembly in _assemblies)
             {
-                assembly.BackgroundBrush = BrushProvider.BrushPairs[currentIndex].Background;
+                var brush = BrushProvider.BrushPairs[currentIndex].Background as SolidColorBrush;
+                brush = new SolidColorBrush(
+                    new Color { A = 72, R = brush.Color.R, G = brush.Color.G, B = brush.Color.B});
+
+                assembly.BackgroundBrush = brush;
                 assembly.CaptionBrush = BrushProvider.BrushPairs[currentIndex].Caption;
                 currentIndex++;
                 if (currentIndex == BrushProvider.BrushPairs.Count)
@@ -58,6 +68,16 @@ namespace ILSpyVisualizer.AncestryBrowser
 		}
 
         #region // Public properties
+
+        public ICommand ExpandCollapseAllCommand { get; private set; }
+
+        public string ExpandCollapseAllButtonText
+        {
+            get
+            {
+                return _isAllCollapsed ? "Expand all" : "Collapse all";
+            }
+        }
 
         public string Name
 		{
@@ -217,6 +237,17 @@ namespace ILSpyVisualizer.AncestryBrowser
             {
                 type.UpdateMembers(_options);
             }
+        }
+
+        private void ExpandCollapseAllCommandHandler()
+        {
+            foreach (var type in _ancestry)
+            {
+                type.IsExpanded = _isAllCollapsed;
+            }
+
+            _isAllCollapsed = !_isAllCollapsed;
+            OnPropertyChanged("ExpandCollapseAllButtonText");
         }
 	}
 }

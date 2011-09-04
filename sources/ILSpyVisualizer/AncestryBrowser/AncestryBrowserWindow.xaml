@@ -12,33 +12,61 @@
                 <ResourceDictionary Source="..\Common\ControlStylesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+            <Style x:Key="AncestryTypeBorderStyle" TargetType="{x:Type Border}"
+                   BasedOn="{StaticResource BorderStyle}">                
+                <Setter Property="Margin" Value="0, 0, 6, 15"/>
+            </Style>
+
             <DataTemplate DataType="{x:Type AncestryBrowser:TypeViewModel}">
-                <Grid> 
-                    <Expander IsExpanded="{Binding IsExpanded}">
-                        <Expander.Header>
-                            <TextBlock Text="{Binding Name}"
-                               FontSize="16"
-                               FontWeight="Bold"                               
-                               ToolTip="{Binding FullName}"/>
-                        </Expander.Header>
-                        <ItemsControl ItemsSource="{Binding Members}"
-                                      Margin="4, 3">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate> 
-                                    <Button Style="{StaticResource LooklessButtonStyle}"
-                                            Command="{Binding JumpCommand}"
-                                            Cursor="Hand"
-                                            Background="Transparent"
-                                            HorizontalAlignment="Left">
-                                        <ContentControl Content="{Binding}"
-                                                        Grid.Column="1"
-                                                        ToolTip="{Binding Text}"/> 
-                                    </Button> 
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>                            
-                        </ItemsControl>
-                    </Expander>           
+                <Grid>
+                    <Border Style="{StaticResource AncestryTypeBorderStyle}">
+                        <Border.Effect>
+                            <DropShadowEffect/>
+                        </Border.Effect>
+                    </Border>
+                    <Border Style="{StaticResource AncestryTypeBorderStyle}"
+                            Background="{Binding Assembly.BackgroundBrush}">
+                        <Grid>
+                            <Expander IsExpanded="{Binding IsExpanded}">
+                                <Expander.Header>
+                                    <TextBlock Text="{Binding Name}"
+                                   FontSize="16"
+                                   FontWeight="Bold"                               
+                                   ToolTip="{Binding FullName}"/>
+                                </Expander.Header>
+                                <ItemsControl ItemsSource="{Binding Members}"
+                                          Margin="4, 3">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Button Style="{StaticResource LooklessButtonStyle}"
+                                                Command="{Binding JumpCommand}"
+                                                Cursor="Hand"
+                                                Background="Transparent"
+                                                HorizontalAlignment="Left">
+                                                <ContentControl Content="{Binding}"
+                                                            Grid.Column="1"
+                                                            ToolTip="{Binding Text}"/>
+                                            </Button>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Expander>
+                            <Border x:Name="brdConnectionArrow"
+                                Background="{StaticResource DownBlueArrowDrawing}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                Margin="0, 0, 0, -17"
+                                Width="25"
+                                Height="23" />
+                        </Grid>
+                    </Border>
                 </Grid>
+                
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding IsLast}" Value="True">
+                        <Setter TargetName="brdConnectionArrow" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
             </DataTemplate>
         </ResourceDictionary>
     </Window.Resources>
@@ -100,63 +128,75 @@
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <TextBlock Text="Start typing to filter members"
-                       FontSize="14"
-                       FontStyle="Oblique"
-                       FontFamily="Arial"
-                       Foreground="#777777"
-                       VerticalAlignment="Center"
-                       HorizontalAlignment="Left"
-                       Margin="18, 10, 10, 12">
-                <TextBlock.Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsSearchTermEmpty}" Value="False">
-                                <Setter Property="Visibility" Value="Collapsed"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBlock.Style>
-            </TextBlock>
-            <TextBox Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
-                     HorizontalAlignment="Stretch"
-                     Margin="10"
-                     FontSize="20"
-                     Background="Transparent"/>
-            
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Start typing to filter members"
+                           FontSize="14"
+                           FontStyle="Oblique"
+                           FontFamily="Arial"
+                           Foreground="#777777"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left"
+                           Margin="18, 10, 10, 12">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSearchTermEmpty}" Value="False">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                <TextBox Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalAlignment="Stretch"
+                         Margin="10"
+                         FontSize="20"
+                         Background="Transparent"/>
+
+                <TextBlock VerticalAlignment="Center"
+                           Margin="0, 8, 13, 8"
+                           Grid.Column="1">
+                    <Hyperlink Command="{Binding ExpandCollapseAllCommand}"
+                               Style="{StaticResource HyperlinkStyle}">
+                        <TextBlock Text="{Binding ExpandCollapseAllButtonText}"/>
+                    </Hyperlink>
+                </TextBlock>
+            </Grid>
+
             <ScrollViewer VerticalScrollBarVisibility="Auto"
-                       Grid.Row="1">
-            <ItemsControl ItemsSource="{Binding Assemblies}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>                        
-                        <Grid Margin="0, 2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>                                
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="{Binding Name}" 
-                                       VerticalAlignment="Center"
-                                       FontSize="18"
-                                       Foreground="{Binding CaptionBrush}"
-                                       Margin="0, 4">
-                                <TextBlock.LayoutTransform>
-                                    <RotateTransform CenterX="0.5"
-                                                     CenterY="0.5"
-                                                     Angle="270"/>                                    
-                                </TextBlock.LayoutTransform>
-                            </TextBlock>
-                            <Border Grid.Column="1"
-                                    Opacity="0.4"
-                                    Background="{Binding BackgroundBrush}"
-                                    CornerRadius="8"/>
-                            <ItemsControl ItemsSource="{Binding Types}"
-                                          Grid.Column="1"/>                            
-                        </Grid>
-                       
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                          Grid.Row="1"
+                          Margin="0, 0, 4, 0">
+                <ItemsControl ItemsSource="{Binding Assemblies}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>                        
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>                                
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Name}" 
+                                           VerticalAlignment="Center"
+                                           FontSize="18"
+                                           Foreground="{Binding CaptionBrush}"
+                                           Margin="0, 4">
+                                    <TextBlock.LayoutTransform>
+                                        <RotateTransform CenterX="0.5"
+                                                         CenterY="0.5"
+                                                         Angle="270"/>                                    
+                                    </TextBlock.LayoutTransform>
+                                </TextBlock>                            
+                                <ItemsControl ItemsSource="{Binding Types}"
+                                              Grid.Column="1"/>                            
+                            </Grid>
+                           
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
 
         </Grid>
     </Grid>

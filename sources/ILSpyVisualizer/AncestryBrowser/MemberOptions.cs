@@ -17,5 +17,6 @@ namespace ILSpyVisualizer.AncestryBrowser
         public bool ShowPrivate { get; set; }
         public bool ShowProtectedInternal { get; set; }
         public string SearchTerm { get; set; }
+        public MemberKind MemberKind { get; set; }
     }
 }

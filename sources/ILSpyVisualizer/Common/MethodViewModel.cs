@@ -9,7 +9,7 @@ using ICSharpCode.ILSpy;
 
 namespace ILSpyVisualizer.Common
 {
-	class MethodViewModel : MemberViewModel
+	class MethodViewModel : MemberViewModel, ICanBeVirtual
 	{
 		private readonly MethodDefinition _methodDefinition;
 
@@ -32,7 +32,7 @@ namespace ILSpyVisualizer.Common
 			}
 		}
 
-        public override bool IsVirtual
+        public bool IsVirtual
         {
             get
             {
@@ -40,12 +40,11 @@ namespace ILSpyVisualizer.Common
             }
         }
 
-        public override bool IsOverridden
+        public bool IsOverride
         {
             get
             {
-                // Add proper implementation
-                return base.IsOverridden;
+                return _methodDefinition.IsVirtual && !_methodDefinition.IsNewSlot;                
             }
         }
 
@@ -77,6 +76,6 @@ namespace ILSpyVisualizer.Common
         public override bool IsProtectedInternal
         {
             get { return _methodDefinition.IsFamilyOrAssembly; }
-        }
+        }        
 	}
 }

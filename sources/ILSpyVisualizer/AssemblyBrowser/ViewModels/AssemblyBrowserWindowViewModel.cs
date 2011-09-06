@@ -18,7 +18,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
 	class AssemblyBrowserWindowViewModel : ViewModelBase
 	{
-		#region // Nested types		
+		#region // Nested types
 
 		class NavigationItem
 		{
@@ -55,7 +55,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		#endregion
 
-		#region // Private fields		
+		#region // Private fields
 
 		private readonly Dispatcher _dispatcher;
 		private readonly ObservableCollection<AssemblyViewModel> _assemblies;

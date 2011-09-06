@@ -12,6 +12,24 @@ namespace ILSpyVisualizer.Common
 {
 	abstract class MemberViewModel : ViewModelBase
 	{
+        private string _toolTip;
+
+        public bool IsMarked { get; set; }
+        public virtual string ToolTip
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_toolTip))
+                {
+                    return Text;
+                }
+                return _toolTip;
+            }
+            set 
+            {
+                _toolTip = value;
+            }
+        }        
 		public abstract ImageSource Icon { get; }
 		public abstract string Text { get; }
         public ICommand JumpCommand { get; private set; }
@@ -19,23 +37,7 @@ namespace ILSpyVisualizer.Common
         public MemberViewModel()
         {
             JumpCommand = new DelegateCommand(JumpCommandHandler);
-        }
-
-        public virtual bool IsVirtual
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        public virtual bool IsOverridden
-        {
-            get
-            {
-                return false;
-            }
-        }
+        }            
 
         public abstract MemberReference MemberReference { get; }
 

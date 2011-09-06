@@ -11,9 +11,16 @@ using System.Collections.Generic;
 using ILSpyVisualizer.Common;
 using System.Windows.Media;
 using System.Windows.Input;
+using ILSpyVisualizer.Common.CommandsGroup;
 
 namespace ILSpyVisualizer.AncestryBrowser
-{	
+{
+    enum MemberKind
+    { 
+        All,
+        Virtual
+    }
+
 	class AncestryBrowserWindowViewModel : ViewModelBase
 	{
 		private TypeDefinition _typeDefinition;
@@ -64,12 +71,22 @@ namespace ILSpyVisualizer.AncestryBrowser
                 }
             }
 
+            KindGroup = new CommandsGroupViewModel(
+                    "Members",
+                    new List<GroupedUserCommand>
+			         	{
+			            	new GroupedUserCommand("All", ShowAllMemberKinds, true),
+			            	new GroupedUserCommand("Virtual", ShowVirtualMembers)							
+			            });
+
             UpdateMembers();
+            FillToolTips();
 		}
 
         #region // Public properties
 
         public ICommand ExpandCollapseAllCommand { get; private set; }
+        public CommandsGroupViewModel KindGroup { get; private set; }
 
         public string ExpandCollapseAllButtonText
         {
@@ -231,11 +248,31 @@ namespace ILSpyVisualizer.AncestryBrowser
 
         #endregion
 
+        private void ShowAllMemberKinds()
+        {
+            _options.MemberKind = MemberKind.All;
+            UpdateMembers();
+        }
+
+        private void ShowVirtualMembers()
+        {
+            _options.MemberKind = MemberKind.Virtual;
+            UpdateMembers();
+        }
+
         private void UpdateMembers()
         {
             foreach (var type in _ancestry)
             {
                 type.UpdateMembers(_options);
+            }
+        }
+
+        private void FillToolTips()
+        {
+            foreach (var type in _ancestry)
+            {
+                type.FillToolTips();
             }
         }
 

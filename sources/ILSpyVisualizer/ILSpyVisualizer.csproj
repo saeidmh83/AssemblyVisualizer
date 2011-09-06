@@ -111,6 +111,7 @@
     <Compile Include="AssemblyBrowser\Graph.cs" />
     <Compile Include="Common\CommandsGroup\GroupedUserCommand.cs" />
     <Compile Include="Common\FieldViewModel.cs" />
+    <Compile Include="Common\ICanBeVirtual.cs" />
     <Compile Include="Common\MemberViewModel.cs" />
     <Compile Include="Common\MethodViewModel.cs" />
     <Compile Include="Common\PropertyViewModel.cs" />

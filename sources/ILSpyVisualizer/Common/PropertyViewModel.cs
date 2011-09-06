@@ -9,7 +9,7 @@ using Mono.Cecil;
 
 namespace ILSpyVisualizer.Common
 {
-	class PropertyViewModel : MemberViewModel
+	class PropertyViewModel : MemberViewModel, ICanBeVirtual
 	{
 		private readonly PropertyDefinition _propertyDefinition;
 
@@ -31,6 +31,28 @@ namespace ILSpyVisualizer.Common
 					.GetText(_propertyDefinition, MainWindow.Instance.CurrentLanguage) as string;
 			}
 		}
+
+        public bool IsVirtual
+        {
+            get
+            {
+                return _propertyDefinition.GetMethod != null && _propertyDefinition.GetMethod.IsVirtual
+                       || _propertyDefinition.SetMethod != null && _propertyDefinition.SetMethod.IsVirtual;
+            }
+        }
+
+        public bool IsOverride
+        {
+            get
+            {
+                return _propertyDefinition.GetMethod != null 
+                       && _propertyDefinition.GetMethod.IsVirtual 
+                       && !_propertyDefinition.GetMethod.IsNewSlot
+                       || _propertyDefinition.SetMethod != null 
+                       && _propertyDefinition.SetMethod.IsVirtual 
+                       && !_propertyDefinition.SetMethod.IsNewSlot;
+            }
+        }
 
         public override MemberReference MemberReference
         {

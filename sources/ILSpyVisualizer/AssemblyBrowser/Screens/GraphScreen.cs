@@ -12,18 +12,15 @@ using ILSpyVisualizer.Controls.Graph.QuickGraph;
 using ILSpyVisualizer.Infrastructure;
 using System.Windows.Input;
 using System.Windows;
+using ILSpyVisualizer.Properties;
 
 namespace ILSpyVisualizer.AssemblyBrowser.Screens
 {
 	class GraphScreen : Screen
-	{
-		private const string ColorizeCaption = "Colorize";
-		private const string DecolorizeCaption = "Decolorize";
-
+	{	
 		private TypeGraph _graph;
 		private TypeViewModel _type;
-		private TypeViewModel _typeForDetails;
-		private TypeViewModel _currentType;
+		private TypeViewModel _typeForDetails;		
 		private bool _isMembersPopupPinned;
 		private string _searchTerm;
 		private IEnumerable<TypeViewModel> _types;
@@ -36,15 +33,15 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			ShowSearchCommand = new DelegateCommand(ShowSearchCommandHandler);
 
 			_toggleColorizeUserCommand = new UserCommand(WindowViewModel.IsColorized
-			                                             	? DecolorizeCaption
-			                                             	: ColorizeCaption, ToggleColorizeCommandHandler);
+			                                             	? Resources.Decolorize
+			                                             	: Resources.Colorize, ToggleColorizeCommandHandler);
 
 			Commands = new ObservableCollection<UserCommand>
 			           	{
-			           		new UserCommand("Fill Graph", OnFillGraphRequest),
-			           		new UserCommand("Original Size", OnOriginalSizeRequest),
-			           		WindowViewModel.ShowSearchUserCommand,
-			           		new UserCommand("Search in Graph", ShowSearchCommand),
+			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
+			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),
+			           		                    WindowViewModel.ShowSearchUserCommand,
+			           		new UserCommand(Resources.SearchInGraph, ShowSearchCommand),
 			           		_toggleColorizeUserCommand
 			           	};
 		}
@@ -74,6 +71,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			get { return _type; }
 			set
 			{
+                if (_type != null)
+                {
+                    _type.IsCurrent = false;
+                }                
+                value.IsCurrent = true;
 				_type = value;
 				OnPropertyChanged("Type");
 			}
@@ -118,20 +120,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 				_isMembersPopupPinned = value;
 				OnPropertyChanged("IsMembersPopupPinned");
 			}
-		}
-
-		private TypeViewModel CurrentType
-		{
-			set
-			{
-				if (_currentType != null)
-				{
-					_currentType.IsCurrent = false;
-				}
-				_currentType = value;
-				value.IsCurrent = true;
-			}
-		}
+		}		
 
 		private IEnumerable<TypeViewModel> Types
 		{
@@ -139,7 +128,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			{
 				if (_types == null)
 				{
-					_types = _currentType.FlattenedHierarchy;
+					_types = _type.FlattenedHierarchy;
 				}
 				return _types;
 			}
@@ -157,8 +146,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		}
 
 		public void Show(TypeViewModel type)
-		{
-			CurrentType = type;
+		{			
 			_types = null;
 			Type = type;
 			Graph = CreateGraph(type);
@@ -230,8 +218,8 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		{
 			WindowViewModel.IsColorized = !WindowViewModel.IsColorized;
 			_toggleColorizeUserCommand.Text = WindowViewModel.IsColorized
-			                                  	? DecolorizeCaption
-			                                  	: ColorizeCaption;
+			                                  	? Resources.Decolorize
+			                                  	: Resources.Colorize;
 		}
 
 		private void OnGraphChanged()

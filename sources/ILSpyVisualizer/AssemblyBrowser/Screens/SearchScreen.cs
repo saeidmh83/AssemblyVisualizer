@@ -14,6 +14,7 @@ using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
 using System.Windows.Input;
 using ILSpyVisualizer.Common.CommandsGroup;
+using ILSpyVisualizer.Properties;
 
 namespace ILSpyVisualizer.AssemblyBrowser.Screens
 {
@@ -74,31 +75,31 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private void InitializeSearchControl()
 		{
 			var sortingGroup = new CommandsGroupViewModel(
-					"Sort by",
+					Resources.SortBy,
 				    new List<GroupedUserCommand>
 				    	{
-				    		new GroupedUserCommand("Name", SortByName),
-				    		new GroupedUserCommand("Descendants count", SortByDescendantsCount, true),
-							new GroupedUserCommand("Members count", SortByMembersCount)
+				    		new GroupedUserCommand(Resources.Name, SortByName),
+				    		new GroupedUserCommand(Resources.DescendantsCount, SortByDescendantsCount, true),
+							new GroupedUserCommand(Resources.MembersCount, SortByMembersCount)
 				    	});
 
 			var filteringByTypeGroup = new CommandsGroupViewModel(
-					"Types",
+					Resources.Types,
 					new List<GroupedUserCommand>
 			         	{
-			            	new GroupedUserCommand("All", ShowAllTypes, true),
-			            	new GroupedUserCommand("Interfaces", ShowInterfaces),
-							new GroupedUserCommand("Value types", ShowValueTypes),
-							new GroupedUserCommand("Enums", ShowEnums)
+			            	new GroupedUserCommand(Resources.All, ShowAllTypes, true),
+			            	new GroupedUserCommand(Resources.Interfaces, ShowInterfaces),
+							new GroupedUserCommand(Resources.ValueTypes, ShowValueTypes),
+							new GroupedUserCommand(Resources.Enums, ShowEnums)
 			            });
 
 			var filteringByVisibilityGroup = new CommandsGroupViewModel(
-					"Visibility",
+					Resources.Visibility,
 					new List<GroupedUserCommand>
 			         	{
-			            	new GroupedUserCommand("Any", ShowAnyVisibility, true),
-			            	new GroupedUserCommand("Public", ShowPublicTypes),
-							new GroupedUserCommand("Internal", ShowInternalTypes)
+			            	new GroupedUserCommand(Resources.Any, ShowAnyVisibility, true),
+			            	new GroupedUserCommand(Resources.Public, ShowPublicTypes),
+							new GroupedUserCommand(Resources.Internal, ShowInternalTypes)
 			            });
 
 			SearchControlGroups = new ObservableCollection<CommandsGroupViewModel>

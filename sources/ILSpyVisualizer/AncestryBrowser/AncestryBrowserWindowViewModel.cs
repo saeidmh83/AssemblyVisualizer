@@ -12,6 +12,7 @@ using ILSpyVisualizer.Common;
 using System.Windows.Media;
 using System.Windows.Input;
 using ILSpyVisualizer.Common.CommandsGroup;
+using ILSpyVisualizer.Properties;
 
 namespace ILSpyVisualizer.AncestryBrowser
 {
@@ -72,11 +73,11 @@ namespace ILSpyVisualizer.AncestryBrowser
             }
 
             KindGroup = new CommandsGroupViewModel(
-                    "Members",
+                    Resources.Members,
                     new List<GroupedUserCommand>
 			         	{
-			            	new GroupedUserCommand("All", ShowAllMemberKinds, true),
-			            	new GroupedUserCommand("Virtual", ShowVirtualMembers)							
+			            	new GroupedUserCommand(Resources.All, ShowAllMemberKinds, true),
+			            	new GroupedUserCommand(Resources.Virtual, ShowVirtualMembers)							
 			            });
 
             UpdateMembers();
@@ -92,7 +93,7 @@ namespace ILSpyVisualizer.AncestryBrowser
         {
             get
             {
-                return _isAllCollapsed ? "Expand all" : "Collapse all";
+                return _isAllCollapsed ? Resources.ExpandAll : Resources.CollapseAll;
             }
         }
 

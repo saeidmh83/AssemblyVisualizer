@@ -12,6 +12,7 @@ using ILSpyVisualizer.AssemblyBrowser.Screens;
 using ILSpyVisualizer.Common;
 using System.Windows.Media;
 using ILSpyVisualizer.AncestryBrowser;
+using ILSpyVisualizer.Properties;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
@@ -49,7 +50,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			_name = MainWindow.Instance.CurrentLanguage.FormatTypeName(typeDefinition);
 			_fullName = GetFullName(_typeDefinition.Namespace, _name);
 			_extendedInfo = IsInternal
-			                	? string.Format("{0}\nInternal", FullName)
+			                	? string.Format("{0}\n{1}", FullName, Resources.Internal)
 			                	: FullName;
 
 			if (HasBaseType)
@@ -61,7 +62,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				_baseTypeFullName = GetFullName(_typeDefinition.BaseType.Namespace, BaseTypeName);
 				if (baseType == null)
 				{
-					_baseTypeFullName = _baseTypeFullName + "\nNot available";
+					_baseTypeFullName = _baseTypeFullName + "\n" + Resources.NotAvailable;
 					_isBaseTypeAvailable = false;
 				}
 			}

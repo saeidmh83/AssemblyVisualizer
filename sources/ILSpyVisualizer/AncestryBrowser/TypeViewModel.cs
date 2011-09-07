@@ -10,6 +10,7 @@ using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
 using ILSpyVisualizer.Common;
 using ICSharpCode.ILSpy;
+using ILSpyVisualizer.Properties;
 
 namespace ILSpyVisualizer.AncestryBrowser
 {
@@ -243,7 +244,7 @@ namespace ILSpyVisualizer.AncestryBrowser
                     if (BaseType != null)
                     {
                         var definingType = BaseType.GetTypeInAncestryWithProperty(property.Text);
-                        property.ToolTip = string.Format("{0}\nOverride from {1}", property.Text, definingType.Name);
+                        property.ToolTip = string.Format("{0}\n{1} {2}", property.Text, Resources.OverrideFrom, definingType.Name);
                     }
                 }
             }
@@ -263,7 +264,7 @@ namespace ILSpyVisualizer.AncestryBrowser
                     if (BaseType != null)
                     {
                         var definingType = BaseType.GetTypeInAncestryWithMethod(method.MemberReference as MethodDefinition);
-                        method.ToolTip = string.Format("{0}\nOverride from {1}", method.Text, definingType.Name);
+                        method.ToolTip = string.Format("{0}\n{1} {2}", method.Text, Resources.OverrideFrom, definingType.Name);
                     }
                 }
             }         

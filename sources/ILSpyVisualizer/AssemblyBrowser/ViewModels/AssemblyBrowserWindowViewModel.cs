@@ -13,6 +13,7 @@ using System.Windows.Threading;
 using System.Windows.Input;
 using ILSpyVisualizer.AssemblyBrowser.Screens;
 using ILSpyVisualizer.Common;
+using ILSpyVisualizer.Properties;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
@@ -46,7 +47,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				{
 					if (IsScreen)
 					{
-						return "Search";
+                        return Resources.Search;
 					}
 					return Type.FullName;
 				}
@@ -146,7 +147,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public string Title
 		{
-			get { return "Assembly Browser"; }
+            get { return Resources.AssemblyBrowser; }
 		}
 
 		public bool ShowNavigationArrows
@@ -170,7 +171,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				if (!CanNavigateForward)
 				{
-					return "Cannot navigate forward";
+					return Resources.CannotNavigateForward;
 				}
 				return _nextNavigationItems.Peek().Hint;
 			}
@@ -182,7 +183,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				if (!CanNavigateBack)
 				{
-					return "Cannot navigate back";
+                    return Resources.CannotNavigateBack;
 				}
 				return _previousNavigationItems.Peek().Hint;
 			}
@@ -227,7 +228,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public UserCommand ShowSearchUserCommand
 		{
-			get { return new UserCommand("Back to Search", new DelegateCommand(ShowSearch)); }
+			get { return new UserCommand(Resources.BackToSearch, new DelegateCommand(ShowSearch)); }
 		}
 
 		#endregion

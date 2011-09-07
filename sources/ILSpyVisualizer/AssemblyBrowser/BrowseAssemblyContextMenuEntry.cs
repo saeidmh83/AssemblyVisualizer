@@ -10,10 +10,11 @@ using System.Windows;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.TreeView;
+using ILSpyVisualizer.Properties;
 
 namespace ILSpyVisualizer.AssemblyBrowser
 {
-	[ExportContextMenuEntry(Header = "Browse Assembly")]
+    [ExportContextMenuEntry(Header = "Browse Assembly")]
 	sealed class BrowseAssemblyContextMenuEntry : IContextMenuEntry
 	{
 		public bool IsVisible(SharpTreeNode[] selectedNodes)

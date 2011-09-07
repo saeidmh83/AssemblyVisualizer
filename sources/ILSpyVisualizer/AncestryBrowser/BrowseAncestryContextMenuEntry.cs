@@ -10,6 +10,7 @@ using System.Windows;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.TreeView;
+using ILSpyVisualizer.Properties;
 
 namespace ILSpyVisualizer.AncestryBrowser
 {

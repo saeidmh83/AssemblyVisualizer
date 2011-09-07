@@ -176,9 +176,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private static TypeGraph CreateGraph(TypeViewModel typeViewModel)
 		{
 			var graph = new TypeGraph(true);
-			var flattededHierarchy = typeViewModel.FlattenedHierarchy;
-			graph.AddVertexRange(flattededHierarchy);
-			foreach (var viewModel in flattededHierarchy)
+			var flattenedHierarchy = typeViewModel.FlattenedHierarchy;
+			graph.AddVertexRange(flattenedHierarchy);
+			foreach (var viewModel in flattenedHierarchy)
 			{
 				if (viewModel.BaseType == null || viewModel == typeViewModel)
 				{

@@ -262,10 +262,11 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				if (graphScreen != null && value.IsScreen)
 				{
 					graphScreen.ClearSearch();
+                    graphScreen.Type.IsCurrent = false;
 				}
 
 				if (value.IsScreen)
-				{
+				{                    
 					Screen = value.Screen;
 				}
 				else

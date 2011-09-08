@@ -18,7 +18,7 @@
 
             <DataTemplate x:Key="AssemblyTemplate">
                 <Grid Background="#B6E587"
-                              Margin="5">
+                              Margin="5, 0, 5, 10">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition/>
@@ -151,8 +151,7 @@
         <!--Search results-->
         <ItemsControl ItemsSource="{Binding SearchResults}"
                       Grid.Row="1"
-                      Grid.Column="1"
-                      AlternationCount="2">
+                      Grid.Column="1">
             <ItemsControl.Template>
                 <ControlTemplate>
                     <ScrollViewer CanContentScroll="True"
@@ -167,24 +166,23 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>                                          
                     <Border x:Name="brdMain"
-                            Background="Transparent">
+                            Background="Transparent"
+                            BorderThickness="0, 0, 0, 1"
+                            BorderBrush="#888888"
+                            Margin="0, 0, 3, 0">
                         <Grid Margin="6, 5"
                               VerticalAlignment="Center">
                             <Grid.RowDefinitions>
                                 <RowDefinition/>
                                 <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <!--<ColumnDefinition Width="Auto"/>-->
-                            </Grid.ColumnDefinitions>
+                            </Grid.RowDefinitions>                            
                             <TextBlock FontSize="16"
                                        FontWeight="Bold"
                                        Margin="0, 0, 9, 8"
                                        HorizontalAlignment="Left"
                                        TextWrapping="Wrap">
                                 <TextBlock ToolTip="{Binding ExtendedInfo}">
-                                    <Hyperlink Command="{Binding BrowseAncestryCommand}"
+                                    <Hyperlink Command="{Binding NavigateCommand}"
                                                TextDecorations="None"
                                                Foreground="Black">
                                         <TextBlock Text="{Binding Name}"                                                
@@ -243,8 +241,7 @@
                             
                             <!--Commands-->
                             <StackPanel x:Name="commandsPanel"
-                                        Visibility="Hidden"
-                                        Grid.Column="1"
+                                        Visibility="Hidden"                                        
                                         Grid.RowSpan="2"
                                         VerticalAlignment="Center"
                                         HorizontalAlignment="Right"
@@ -280,30 +277,12 @@
                                         MinHeight="0"
                                         Background="{StaticResource DownArrowDrawing}"
                                         Style="{StaticResource ImageButtonStyle}"                                    
-                                        ToolTip="Browse Ancestry"/>
+                                        ToolTip="Browse Ancestry"/>                               
                                 
-                                <!--<TextBlock VerticalAlignment="Center"
-                                           Margin="8, 6, 10, 5"                             
-                                           Visibility="{Binding CanVisualize, Converter={StaticResource BooleanToVisibilityConverter}}">
-                                    <Hyperlink Command="{Binding VisualizeCommand}"
-                                               Style="{StaticResource HyperlinkStyle}">
-                                        <TextBlock Text="Visualize"/>
-                                    </Hyperlink>
-                                </TextBlock>                                    
-                                <TextBlock VerticalAlignment="Center"
-                                           Margin="8, 5, 10, 6">
-                                    <Hyperlink Command="{Binding NavigateCommand}"
-                                               Style="{StaticResource HyperlinkStyle}">
-                                        <TextBlock Text="Jump"/>
-                                    </Hyperlink>
-                                </TextBlock>-->
                             </StackPanel>                                
                         </Grid>
                     </Border>
-                    <DataTemplate.Triggers>                        
-                        <Trigger Property="ItemsControl.AlternationIndex" Value="1">
-                            <Setter TargetName="brdMain" Property="Background" Value="#E0FFC2"/>
-                        </Trigger>
+                    <DataTemplate.Triggers>  
                         <Trigger SourceName="brdMain" Property="IsMouseOver" Value="True">
                             <Setter TargetName="commandsPanel" Property="Visibility" Value="Visible"/>
                         </Trigger>

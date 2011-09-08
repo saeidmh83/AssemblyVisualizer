@@ -44,6 +44,11 @@ namespace ILSpyVisualizer.Common
         {
             get
             {
+                if (_methodDefinition.DeclaringType.FullName == "System.Object")
+                {
+                    // Method System.Object.Finalize() looks like override in IL
+                    return false;
+                }
                 return _methodDefinition.IsVirtual && !_methodDefinition.IsNewSlot;                
             }
         }

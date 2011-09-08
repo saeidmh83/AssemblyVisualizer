@@ -225,7 +225,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 		private bool SatisfiesSearchTerm(TypeViewModel typeViewModel)
 		{
 			return typeViewModel
-				.Name.StartsWith(SearchTerm, StringComparison.InvariantCultureIgnoreCase);
+				.Name.IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase) >= 0;
 
 		}
 

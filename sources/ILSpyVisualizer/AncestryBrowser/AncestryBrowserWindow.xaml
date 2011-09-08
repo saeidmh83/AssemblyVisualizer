@@ -18,26 +18,22 @@
             </ResourceDictionary.MergedDictionaries>
 
             <Style x:Key="AncestryTypeBorderStyle" TargetType="{x:Type Border}"
-                   BasedOn="{StaticResource BorderStyle}">                
+                   BasedOn="{StaticResource BorderStyle}">
                 <Setter Property="Margin" Value="0, 0, 6, 15"/>
             </Style>
 
             <DataTemplate DataType="{x:Type AncestryBrowser:TypeViewModel}">
-                <Grid>
-                    <Border Style="{StaticResource AncestryTypeBorderStyle}">
-                        <Border.Effect>
-                            <DropShadowEffect/>
-                        </Border.Effect>
-                    </Border>
-                    <Border Style="{StaticResource AncestryTypeBorderStyle}"
-                            Background="{Binding Assembly.BackgroundBrush}">
+                <Grid>                    
+                    <Border BorderThickness="0, 0, 0, 1"
+                            BorderBrush="#888888">
                         <Grid>
                             <Expander IsExpanded="{Binding IsExpanded}">
                                 <Expander.Header>
                                     <TextBlock Text="{Binding Name}"
-                                   FontSize="16"
-                                   FontWeight="Bold"                               
-                                   ToolTip="{Binding FullName}"/>
+                                               FontSize="16"
+                                               FontWeight="Bold"                               
+                                               ToolTip="{Binding FullName}"
+                                               Margin="0, 6"/>
                                 </Expander.Header>
                                 <ItemsControl ItemsSource="{Binding Members}"
                                           Margin="4, 3">
@@ -63,9 +59,9 @@
                                                     <TextBlock x:Name="txtMemberName"
                                                                Text="{Binding Text}"
                                                                Grid.Column="1" />
-                                                </Grid>                                                
+                                                </Grid>
                                             </Button>
-                                            
+
                                             <DataTemplate.Triggers>
                                                 <DataTrigger Binding="{Binding IsMarked}" Value="True">
                                                     <Setter TargetName="txtMemberName" Property="FontWeight" Value="Bold"/>
@@ -76,16 +72,16 @@
                                 </ItemsControl>
                             </Expander>
                             <Border x:Name="brdConnectionArrow"
-                                Background="{StaticResource DownBlueArrowDrawing}"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Bottom"
-                                Margin="0, 0, 0, -17"
-                                Width="25"
-                                Height="23" />
+                                    Background="{StaticResource DownBlueArrowDrawing}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Bottom"
+                                    Margin="0, 0, 0, -14"
+                                    Width="25"
+                                    Height="23" />
                         </Grid>
                     </Border>
                 </Grid>
-                
+
                 <DataTemplate.Triggers>
                     <DataTrigger Binding="{Binding IsLast}" Value="True">
                         <Setter TargetName="brdConnectionArrow" Property="Visibility" Value="Collapsed"/>
@@ -100,7 +96,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        
+
         <Grid Margin="20, 10, 10, 10">
             <Grid.Resources>
                 <Style TargetType="{x:Type CheckBox}">
@@ -128,7 +124,7 @@
                 <CheckBox Content="Methods"
                           IsChecked="{Binding ShowMethods}"/>
             </StackPanel>
-            
+
             <StackPanel Grid.Row="1"
                         Margin="0, 4">
                 <TextBlock Text="Visibility"
@@ -136,7 +132,7 @@
                            FontSize="14"
                            Foreground="Gray"/>
                 <CheckBox Content="Private"
-                          IsChecked="{Binding ShowPrivate}"/>                
+                          IsChecked="{Binding ShowPrivate}"/>
                 <CheckBox Content="Internal"
                           IsChecked="{Binding ShowInternal}"/>
                 <CheckBox Content="Protected"
@@ -153,7 +149,7 @@
                                              Header="{Binding Header}"
                                              Margin="0, 4"/>
         </Grid>
-        
+
         <Grid Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -202,34 +198,38 @@
             <ScrollViewer VerticalScrollBarVisibility="Auto"
                           Grid.Row="1"
                           Margin="0, 0, 4, 0">
-                <ItemsControl ItemsSource="{Binding Assemblies}">
+
+                <ItemsControl ItemsSource="{Binding Assemblies}"
+                              Margin="0, 0, 0, 4">
                     <ItemsControl.ItemTemplate>
-                        <DataTemplate>                        
+                        <DataTemplate>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition/>                                
+                                    <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Name}" 
                                            VerticalAlignment="Center"
                                            FontSize="18"
                                            Foreground="{Binding CaptionBrush}"
                                            Margin="0, 4">
-                                    <TextBlock.LayoutTransform>
-                                        <RotateTransform CenterX="0.5"
-                                                         CenterY="0.5"
-                                                         Angle="270"/>                                    
-                                    </TextBlock.LayoutTransform>
-                                </TextBlock>                            
-                                <ItemsControl ItemsSource="{Binding Types}"
-                                              Grid.Column="1"/>                            
+                                        <TextBlock.LayoutTransform>
+                                            <RotateTransform CenterX="0.5"
+                                                             CenterY="0.5"
+                                                             Angle="270"/>                                    
+                                        </TextBlock.LayoutTransform>
+                                </TextBlock>
+                                <Border Grid.Column="1"
+                                        BorderThickness="1, 0, 0, 0"
+                                        BorderBrush="{Binding CaptionBrush}">
+                                    <ItemsControl ItemsSource="{Binding Types}"
+                                                  Margin="6, 0, 3, 0"/>
+                                </Border>
                             </Grid>
-                           
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-
         </Grid>
     </Grid>
 </Window>

@@ -161,7 +161,7 @@ namespace ILSpyVisualizer.AncestryBrowser
             }
             if (!string.IsNullOrWhiteSpace(options.SearchTerm))
             { 
-                members = members.Where(m => m.MemberReference.Name.StartsWith(options.SearchTerm.Trim(), StringComparison.InvariantCultureIgnoreCase));
+                members = members.Where(m => m.MemberReference.Name.IndexOf(options.SearchTerm.Trim(), StringComparison.InvariantCultureIgnoreCase) >= 0);
             }
             if (options.MemberKind == MemberKind.Virtual)
             {                

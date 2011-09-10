@@ -27,36 +27,6 @@ namespace ILSpyVisualizer.Common
 			{
 				return _eventInfo.Text;
 			}
-		}
-
-        public override object MemberReference
-        {
-            get { return _eventInfo.MemberReference; }
-        }
-
-        public override bool IsPublic
-        {
-            get { return _eventInfo.IsPublic; }
-        }
-
-        public override bool IsProtected
-        {
-            get { return _eventInfo.IsProtected; }
-        }
-
-        public override bool IsInternal
-        {
-            get { return _eventInfo.IsInternal; }
-        }
-
-        public override bool IsPrivate
-        {
-            get { return _eventInfo.IsPrivate; }
-        }
-
-        public override bool IsProtectedInternal
-        {
-            get { return _eventInfo.IsProtectedOrInternal; }
-        }
+		}          
 	}
 }

@@ -286,7 +286,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private void NavigateCommandHandler()
 		{
-			Services.JumpTo(_typeInfo);
+			Services.JumpTo(_typeInfo.MemberReference);
 		}
 
 		private void NavigateToBaseCommandHandler()
@@ -295,7 +295,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				return;
 			}
-			Services.JumpTo(_typeInfo.BaseType);
+			Services.JumpTo(_typeInfo.BaseType.MemberReference);
 		}
 
 		private void ShowMembersCommandHandler()

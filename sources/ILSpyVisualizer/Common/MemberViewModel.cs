@@ -44,7 +44,6 @@ namespace ILSpyVisualizer.Common
             JumpCommand = new DelegateCommand(JumpCommandHandler);
         }            
 
-        public abstract object MemberReference { get; }
         public MemberInfo MemberInfo 
         {
             get
@@ -53,11 +52,50 @@ namespace ILSpyVisualizer.Common
             }
         }
 
-        public abstract bool IsPublic { get; }
-        public abstract bool IsProtected { get; }
-        public abstract bool IsInternal { get; }
-        public abstract bool IsPrivate { get; }
-        public abstract bool IsProtectedInternal { get; }   
+        public object MemberReference
+        {
+            get { return _memberInfo.MemberReference; }
+        } 
+
+        public bool IsPublic
+        {
+            get
+            {
+                return _memberInfo.IsPublic;
+            }
+        }
+
+        public bool IsProtected
+        {
+            get
+            {
+                return _memberInfo.IsProtected;
+            }
+        }
+
+        public bool IsInternal
+        {
+            get
+            {
+                return _memberInfo.IsInternal;
+            }
+        }
+
+        public bool IsPrivate
+        {
+            get
+            {
+                return _memberInfo.IsPrivate;
+            }
+        }
+
+        public bool IsProtectedInternal
+        {
+            get
+            {
+                return _memberInfo.IsProtectedOrInternal;
+            }
+        }
 
         private void JumpCommandHandler()
         {

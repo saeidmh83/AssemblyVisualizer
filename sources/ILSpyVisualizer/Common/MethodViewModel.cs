@@ -43,36 +43,6 @@ namespace ILSpyVisualizer.Common
             {
                 return _methodInfo.IsOverride;           
             }
-        }
-
-        public override object MemberReference
-        {
-            get { return _methodInfo.MemberReference; }
-        }
-
-        public override bool IsPublic
-        {
-            get { return _methodInfo.IsPublic; }
-        }
-
-        public override bool IsProtected
-        {
-            get { return _methodInfo.IsProtected; }
-        }
-
-        public override bool IsInternal
-        {
-            get { return _methodInfo.IsInternal; }
-        }
-
-        public override bool IsPrivate
-        {
-            get { return _methodInfo.IsPrivate; }
-        }
-
-        public override bool IsProtectedInternal
-        {
-            get { return _methodInfo.IsProtectedOrInternal; }
-        }        
+        }           
 	}
 }

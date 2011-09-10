@@ -11,7 +11,8 @@
     <RootNamespace>ILSpyVisualizer</RootNamespace>
     <AssemblyName>ILSpyVisualizer.Plugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -21,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;ILSpy</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -38,21 +39,13 @@
     <StartProgram>..\..\build\ILSpy.exe</StartProgram>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.Decompiler, Version=1.0.0.906, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\ICSharpCode.Decompiler.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.TreeView, Version=4.1.0.7275, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="ICSharpCode.TreeView">
       <HintPath>..\..\build\ICSharpCode.TreeView.dll</HintPath>
     </Reference>
-    <Reference Include="ILSpy, Version=1.0.0.821, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <ExecutableExtension>.exe</ExecutableExtension>
+    <Reference Include="ILSpy">
       <HintPath>..\..\build\ILSpy.exe</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Mono.Cecil">
       <HintPath>..\..\build\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -94,7 +87,7 @@
     </Compile>
     <Compile Include="AssemblyBrowser\ViewModels\AssemblyBrowserWindowViewModel.cs" />
     <Compile Include="AssemblyBrowser\ViewModels\AssemblyViewModel.cs" />
-    <Compile Include="AssemblyBrowser\BrowseAssemblyContextMenuEntry.cs" />
+    <Compile Include="HAL\ILSpy\BrowseAssemblyContextMenuEntry.cs" />
     <Compile Include="Common\BrushProvider.cs" />
     <Compile Include="Common\CommandsGroup\CommandsGroupViewModel.cs" />
     <Compile Include="AncestryBrowser\TypeViewModel.cs" />
@@ -267,6 +260,8 @@
     <Compile Include="Controls\ZoomControl\ZoomControl.cs" />
     <Compile Include="Controls\ZoomControl\ZoomControlModes.cs" />
     <Compile Include="Controls\ZoomControl\ZoomViewModifierMode.cs" />
+    <Compile Include="HAL\Reflector\Converter.cs" />
+    <Compile Include="HAL\Reflector\Package.cs" />
     <Compile Include="Infrastructure\DelegateCommand.cs" />
     <Compile Include="Infrastructure\UserCommand.cs" />
     <Compile Include="Infrastructure\ViewModelBase.cs" />
@@ -342,6 +337,7 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

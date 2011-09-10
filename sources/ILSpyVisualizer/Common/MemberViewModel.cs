@@ -4,9 +4,9 @@
 
 using System.Windows.Media;
 using ILSpyVisualizer.Infrastructure;
-using Mono.Cecil;
+
 using System.Windows.Input;
-using ICSharpCode.ILSpy;
+
 using ILSpyVisualizer.Model;
 using ILSpyVisualizer.HAL;
 

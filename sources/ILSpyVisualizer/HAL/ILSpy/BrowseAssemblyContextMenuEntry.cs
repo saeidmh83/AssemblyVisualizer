@@ -3,35 +3,25 @@
 // (for details please see \docs\Ms-PL)
 
 #if ILSpy
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.TreeView;
 using ILSpyVisualizer.Properties;
 using ILSpyVisualizer.Model;
+using ILSpyVisualizer.HAL;
 
-namespace ILSpyVisualizer.HAL.ILSpy
+namespace ILSpyVisualizer.AssemblyBrowser
 {
-	[ExportContextMenuEntry(Header = "Add to Browser")]
-	sealed class AddAssemblyContextMenuEntry : IContextMenuEntry
+    [ExportContextMenuEntry(Header = "Browse Assembly")]
+	sealed class BrowseAssemblyContextMenuEntry : IContextMenuEntry
 	{
 		public bool IsVisible(SharpTreeNode[] selectedNodes)
 		{
-			if (WindowManager.AssemblyBrowsers.Count != 1)
-			{
-				return false;
-			}
-
-			var window = WindowManager.AssemblyBrowsers.Single();
-			if (!window.ViewModel.Screen.AllowAssemblyDrop)
-			{
-				return false;
-			}
-
 			return selectedNodes.All(n => n is AssemblyTreeNode);
 		}
 
@@ -44,11 +34,14 @@ namespace ILSpyVisualizer.HAL.ILSpy
 		{
 			var assemblyDefinitions = selectedNodes
 				.OfType<AssemblyTreeNode>()
-				.Select(n => HAL.Converter.Assembly(n.LoadedAssembly.AssemblyDefinition))
+				.Select(n => Converter.Assembly(n.LoadedAssembly.AssemblyDefinition))
 				.ToList();
-
-			var window = WindowManager.AssemblyBrowsers.Single();
-			window.ViewModel.AddAssemblies(assemblyDefinitions);
+			
+			var window = new AssemblyBrowserWindow(assemblyDefinitions)
+			             	{
+			             		Owner = MainWindow.Instance
+			             	};
+			window.Show();
 		}
 	}
 }

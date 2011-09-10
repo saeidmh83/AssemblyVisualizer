@@ -4,16 +4,15 @@
 
 using System.Collections.Generic;
 using ILSpyVisualizer.Infrastructure;
-using Mono.Cecil;
 using System.Linq;
 using System.Windows.Input;
-using ICSharpCode.ILSpy;
 using ILSpyVisualizer.AssemblyBrowser.Screens;
 using ILSpyVisualizer.Common;
 using System.Windows.Media;
 using ILSpyVisualizer.AncestryBrowser;
 using ILSpyVisualizer.Properties;
 using ILSpyVisualizer.Model;
+using ILSpyVisualizer.HAL;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
@@ -287,7 +286,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private void NavigateCommandHandler()
 		{
-			MainWindow.Instance.JumpToReference(_typeInfo);
+			Services.JumpTo(_typeInfo);
 		}
 
 		private void NavigateToBaseCommandHandler()
@@ -296,7 +295,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				return;
 			}
-			MainWindow.Instance.JumpToReference(_typeInfo.BaseType);
+			Services.JumpTo(_typeInfo.BaseType);
 		}
 
 		private void ShowMembersCommandHandler()
@@ -311,10 +310,12 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
         private void BrowseAncestryCommandHandler()
         {
-            var window = new AncestryBrowserWindow(_typeInfo)
-            {
-                Owner = MainWindow.Instance
-            };
+            var window = new AncestryBrowserWindow(_typeInfo);
+
+            #if ILSpy
+            window.Owner = Services.MainWindow;
+            #endif
+
             window.Show();
         }
 

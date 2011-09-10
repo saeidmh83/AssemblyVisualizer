@@ -12,8 +12,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Linq;
-using Mono.Cecil;
-using ICSharpCode.ILSpy;
 using ILSpyVisualizer.Common;
 using ILSpyVisualizer.Model;
 

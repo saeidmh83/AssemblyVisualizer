@@ -12,7 +12,12 @@ namespace ILSpyVisualizer.HAL
 
         static Converter()
         {
+            #if ILSpy
             _converter = new ILSpy.Converter();
+            #endif
+            #if Reflector
+            _converter = new Reflector.Converter();
+            #endif
         }
 
         public static AssemblyInfo Assembly(object assembly)

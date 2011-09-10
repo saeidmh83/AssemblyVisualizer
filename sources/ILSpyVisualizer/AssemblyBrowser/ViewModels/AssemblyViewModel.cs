@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Linq;
 using System.Windows.Media;
 using ILSpyVisualizer.Infrastructure;
-using Mono.Cecil;
+
 using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels

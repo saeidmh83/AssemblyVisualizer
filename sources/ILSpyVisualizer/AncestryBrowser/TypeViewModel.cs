@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using ILSpyVisualizer.Infrastructure;
-using Mono.Cecil;
+
 using ILSpyVisualizer.Common;
-using ICSharpCode.ILSpy;
+
 using ILSpyVisualizer.Properties;
 using ILSpyVisualizer.Model;
 using ILSpyVisualizer.HAL;

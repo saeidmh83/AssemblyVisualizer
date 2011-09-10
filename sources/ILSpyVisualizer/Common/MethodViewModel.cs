@@ -3,9 +3,6 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Windows.Media;
-using ICSharpCode.ILSpy.TreeNodes;
-using Mono.Cecil;
-using ICSharpCode.ILSpy;
 using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.Common

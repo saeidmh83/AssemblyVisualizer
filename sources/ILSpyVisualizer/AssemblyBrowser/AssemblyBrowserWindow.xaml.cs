@@ -15,8 +15,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ILSpyVisualizer.AssemblyBrowser.ViewModels;
-using Mono.Cecil;
-using ICSharpCode.ILSpy;
 using ILSpyVisualizer.Model;
 using ILSpyVisualizer.HAL;
 
@@ -50,14 +48,18 @@ namespace ILSpyVisualizer.AssemblyBrowser
 
 		private void WindowDrop(object sender, DragEventArgs e)
 		{
+            #if ILSpy
+
 			var assemblyFilePaths = e.Data.GetData("ILSpyAssemblies") as string[];
 			foreach (var assemblyFilePath in assemblyFilePaths)
 			{
 				var loadedAssembly =
-					MainWindow.Instance.CurrentAssemblyList.OpenAssembly(assemblyFilePath);
+					Services.MainWindow.CurrentAssemblyList.OpenAssembly(assemblyFilePath);
 				
 				ViewModel.AddAssembly(Converter.Assembly(loadedAssembly.AssemblyDefinition));
 			}
+
+            #endif
 		}
 
 		private void SearchExecuted(object sender, ExecutedRoutedEventArgs e)

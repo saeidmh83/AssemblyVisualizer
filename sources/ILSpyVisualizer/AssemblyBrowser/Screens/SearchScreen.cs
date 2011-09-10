@@ -11,7 +11,7 @@ using System.Text;
 using System.Windows.Threading;
 using ILSpyVisualizer.AssemblyBrowser.ViewModels;
 using ILSpyVisualizer.Infrastructure;
-using Mono.Cecil;
+
 using System.Windows.Input;
 using ILSpyVisualizer.Common.CommandsGroup;
 using ILSpyVisualizer.Properties;

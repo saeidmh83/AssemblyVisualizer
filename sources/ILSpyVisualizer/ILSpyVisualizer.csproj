@@ -74,7 +74,9 @@
   <ItemGroup>
     <Compile Include="AncestryBrowser\AssemblyViewModel.cs" />
     <Compile Include="AncestryBrowser\MemberOptions.cs" />
-    <Compile Include="AssemblyBrowser\AddAssemblyContextMenuEntry.cs" />
+    <Compile Include="HAL\Converter.cs" />
+    <Compile Include="HAL\IConverter.cs" />
+    <Compile Include="HAL\ILSpy\AddAssemblyContextMenuEntry.cs" />
     <Compile Include="AssemblyBrowser\AssemblyBrowserWindow.xaml.cs">
       <DependentUpon>AssemblyBrowserWindow.xaml</DependentUpon>
     </Compile>
@@ -113,7 +115,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AncestryBrowser\AncestryBrowserWindowViewModel.cs" />
-    <Compile Include="AncestryBrowser\BrowseAncestryContextMenuEntry.cs" />
+    <Compile Include="HAL\ILSpy\BrowseAncestryContextMenuEntry.cs" />
     <Compile Include="Behaviors\DragBehavior.cs" />
     <Compile Include="Controls\Graph\AlgorithmConstraints.cs" />
     <Compile Include="Controls\Graph\AnimationContext.cs" />
@@ -268,6 +270,16 @@
     <Compile Include="Infrastructure\DelegateCommand.cs" />
     <Compile Include="Infrastructure\UserCommand.cs" />
     <Compile Include="Infrastructure\ViewModelBase.cs" />
+    <Compile Include="Model\AssemblyInfo.cs" />
+    <Compile Include="HAL\ILSpy\Converter.cs" />
+    <Compile Include="Model\EventInfo.cs" />
+    <Compile Include="Model\FieldInfo.cs" />
+    <Compile Include="Model\MemberInfo.cs" />
+    <Compile Include="Model\MethodInfo.cs" />
+    <Compile Include="Model\ModuleInfo.cs" />
+    <Compile Include="Model\PropertyInfo.cs" />
+    <Compile Include="HAL\Services.cs" />
+    <Compile Include="Model\TypeInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

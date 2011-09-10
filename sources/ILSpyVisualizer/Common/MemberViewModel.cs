@@ -7,12 +7,15 @@ using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
 using System.Windows.Input;
 using ICSharpCode.ILSpy;
+using ILSpyVisualizer.Model;
+using ILSpyVisualizer.HAL;
 
 namespace ILSpyVisualizer.Common
 {
 	abstract class MemberViewModel : ViewModelBase
 	{
         private string _toolTip;
+        private MemberInfo _memberInfo;
 
         public bool IsMarked { get; set; }
         public virtual string ToolTip
@@ -34,12 +37,21 @@ namespace ILSpyVisualizer.Common
 		public abstract string Text { get; }
         public ICommand JumpCommand { get; private set; }
 
-        public MemberViewModel()
+        public MemberViewModel(MemberInfo memberInfo)
         {
+            _memberInfo = memberInfo;
+
             JumpCommand = new DelegateCommand(JumpCommandHandler);
         }            
 
-        public abstract MemberReference MemberReference { get; }
+        public abstract object MemberReference { get; }
+        public MemberInfo MemberInfo 
+        {
+            get
+            {
+                return _memberInfo;
+            }
+        }
 
         public abstract bool IsPublic { get; }
         public abstract bool IsProtected { get; }
@@ -49,7 +61,7 @@ namespace ILSpyVisualizer.Common
 
         private void JumpCommandHandler()
         {
-            MainWindow.Instance.JumpToReference(MemberReference);
+            Services.JumpTo(MemberReference);
         }
 	}
 }

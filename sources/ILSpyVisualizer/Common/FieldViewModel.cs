@@ -6,59 +6,60 @@ using System.Windows.Media;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using Mono.Cecil;
+using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.Common
 {
     class FieldViewModel : MemberViewModel
     {
-        private readonly FieldDefinition _fieldDefinition;
+        private readonly FieldInfo _fieldInfo;
 
-        public FieldViewModel(FieldDefinition propertyDefinition)
+        public FieldViewModel(FieldInfo fieldInfo) : base(fieldInfo)
         {
-            _fieldDefinition = propertyDefinition;
+            _fieldInfo = fieldInfo;
         }
 
         public override ImageSource Icon
         {
-            get { return FieldTreeNode.GetIcon(_fieldDefinition); }
+            get { return _fieldInfo.Icon; }
         }
 
         public override string Text
         {
             get
             {
-                return _fieldDefinition.Name;
+                return _fieldInfo.Text;
             }
         }
 
-        public override MemberReference MemberReference
+        public override object MemberReference
         {
-            get { return _fieldDefinition; }
+            get { return _fieldInfo.MemberReference; }
         }
 
         public override bool IsPublic
         {
-            get { return _fieldDefinition.IsPublic; }
+            get { return _fieldInfo.IsPublic; }
         }
 
         public override bool IsProtected
         {
-            get { return _fieldDefinition.IsFamily; }
+            get { return _fieldInfo.IsProtected; }
         }
 
         public override bool IsInternal
         {
-            get { return _fieldDefinition.IsAssembly; }
+            get { return _fieldInfo.IsInternal; }
         }
 
         public override bool IsPrivate
         {
-            get { return _fieldDefinition.IsPrivate; }
+            get { return _fieldInfo.IsPrivate; }
         }
 
         public override bool IsProtectedInternal
         {
-            get { return _fieldDefinition.IsFamilyOrAssembly; }
+            get { return _fieldInfo.IsProtectedOrInternal; }
         }
     }
 }

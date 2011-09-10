@@ -6,60 +6,60 @@ using System.Windows.Media;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using Mono.Cecil;
+using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.Common
 {
 	class EventViewModel : MemberViewModel
 	{
-		private readonly EventDefinition _eventDefinition;
+		private readonly EventInfo _eventInfo;
 
-		public EventViewModel(EventDefinition eventDefinition)
+		public EventViewModel(EventInfo eventInfo) : base(eventInfo)
 		{
-			_eventDefinition = eventDefinition;
+			_eventInfo = eventInfo;
 		}
 
 		public override ImageSource Icon
 		{
-			get { return EventTreeNode.GetIcon(_eventDefinition); }
+			get { return _eventInfo.Icon; }
 		}
 
 		public override string Text
 		{
 			get
 			{
-				return EventTreeNode
-					.GetText(_eventDefinition, MainWindow.Instance.CurrentLanguage) as string;
+				return _eventInfo.Text;
 			}
 		}
 
-        public override MemberReference MemberReference
+        public override object MemberReference
         {
-            get { return _eventDefinition; }
+            get { return _eventInfo.MemberReference; }
         }
 
         public override bool IsPublic
         {
-            get { return _eventDefinition.AddMethod.IsPublic; }
+            get { return _eventInfo.IsPublic; }
         }
 
         public override bool IsProtected
         {
-            get { return _eventDefinition.AddMethod.IsFamily; }
+            get { return _eventInfo.IsProtected; }
         }
 
         public override bool IsInternal
         {
-            get { return _eventDefinition.AddMethod.IsAssembly; }
+            get { return _eventInfo.IsInternal; }
         }
 
         public override bool IsPrivate
         {
-            get { return _eventDefinition.AddMethod.IsPrivate; }
+            get { return _eventInfo.IsPrivate; }
         }
 
         public override bool IsProtectedInternal
         {
-            get { return _eventDefinition.AddMethod.IsFamilyOrAssembly; }
+            get { return _eventInfo.IsProtectedOrInternal; }
         }
 	}
 }

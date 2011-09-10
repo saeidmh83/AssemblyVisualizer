@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using ILSpyVisualizer.AssemblyBrowser.ViewModels;
 using Mono.Cecil;
 using ICSharpCode.ILSpy;
+using ILSpyVisualizer.Model;
+using ILSpyVisualizer.HAL;
 
 
 namespace ILSpyVisualizer.AssemblyBrowser
@@ -26,7 +28,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 	/// </summary>
 	partial class AssemblyBrowserWindow : Window
 	{
-		public AssemblyBrowserWindow(IEnumerable<AssemblyDefinition> assemblyDefinitions)
+		public AssemblyBrowserWindow(IEnumerable<AssemblyInfo> assemblyDefinitions)
 		{
 			InitializeComponent();
 
@@ -54,7 +56,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 				var loadedAssembly =
 					MainWindow.Instance.CurrentAssemblyList.OpenAssembly(assemblyFilePath);
 				
-				ViewModel.AddAssembly(loadedAssembly.AssemblyDefinition);
+				ViewModel.AddAssembly(Converter.Assembly(loadedAssembly.AssemblyDefinition));
 			}
 		}
 

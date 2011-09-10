@@ -11,6 +11,8 @@ using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.TreeView;
 using ILSpyVisualizer.Properties;
+using ILSpyVisualizer.Model;
+using ILSpyVisualizer.HAL;
 
 namespace ILSpyVisualizer.AssemblyBrowser
 {
@@ -31,7 +33,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 		{
 			var assemblyDefinitions = selectedNodes
 				.OfType<AssemblyTreeNode>()
-				.Select(n => n.LoadedAssembly.AssemblyDefinition)
+				.Select(n => Converter.Assembly(n.LoadedAssembly.AssemblyDefinition))
 				.ToList();
 			
 			var window = new AssemblyBrowserWindow(assemblyDefinitions)

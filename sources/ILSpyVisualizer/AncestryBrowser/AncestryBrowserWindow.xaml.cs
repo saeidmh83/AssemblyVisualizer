@@ -15,16 +15,17 @@ using System.Linq;
 using Mono.Cecil;
 using ICSharpCode.ILSpy;
 using ILSpyVisualizer.Common;
+using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.AncestryBrowser
 {	
 	partial class AncestryBrowserWindow : Window
 	{
-		public AncestryBrowserWindow(TypeDefinition typeDefinition)
+		public AncestryBrowserWindow(TypeInfo typeInfo)
 		{
 			InitializeComponent();		
 			
-			ViewModel = new AncestryBrowserWindowViewModel(typeDefinition);
+			ViewModel = new AncestryBrowserWindowViewModel(typeInfo);
 		}
 		
 		public AncestryBrowserWindowViewModel ViewModel

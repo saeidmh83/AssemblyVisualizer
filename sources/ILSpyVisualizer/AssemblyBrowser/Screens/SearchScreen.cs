@@ -164,23 +164,23 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 				switch (_searchMode)
 				{
 					case SearchMode.Interfaces:
-						results = results.Where(t => t.TypeDefinition.IsInterface);
+						results = results.Where(t => t.TypeInfo.IsInterface);
 						break;
 					case SearchMode.ValueTypes:
-						results = results.Where(t => t.TypeDefinition.IsValueType);
+						results = results.Where(t => t.TypeInfo.IsValueType);
 						break;
 					case SearchMode.Enums:
-						results = results.Where(t => t.TypeDefinition.IsEnum);
+						results = results.Where(t => t.TypeInfo.IsEnum);
 						break;
 				}
 
 				switch (_typeVisibilityFilter)
 				{
 					case TypeVisibility.Internal:
-						results = results.Where(t => t.TypeDefinition.IsNotPublic);
+						results = results.Where(t => t.TypeInfo.IsInternal);
 						break;
 					case TypeVisibility.Public:
-						results = results.Where(t => t.TypeDefinition.IsPublic);
+						results = results.Where(t => t.TypeInfo.IsPublic);
 						break;
 				}
 

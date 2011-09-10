@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows.Media;
 using ILSpyVisualizer.Infrastructure;
 using Mono.Cecil;
+using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
@@ -15,23 +16,23 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 	{
 		private static readonly Brush DefaultForeground = new SolidColorBrush(Color.FromRgb(85, 85, 85));
 
-		private readonly AssemblyDefinition _assemblyDefinition;
+		private readonly AssemblyInfo _assemblyInfo;
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
 		private readonly int _exportedTypesCount;
 		private readonly int _internalTypesCount;
 		private bool _showRemoveCommand = true;
 		private Brush _foreground;
 		
-		public AssemblyViewModel(AssemblyDefinition assemblyDefinition, 
+		public AssemblyViewModel(AssemblyInfo assemblyInfo, 
 								 AssemblyBrowserWindowViewModel windowViewModel)
 		{
-			_assemblyDefinition = assemblyDefinition;
+			_assemblyInfo = assemblyInfo;
 			_windowViewModel = windowViewModel;
 
-			var types = _assemblyDefinition.Modules
+			var types = _assemblyInfo.Modules
 				.SelectMany(m => m.Types);
-			_exportedTypesCount = types.Count(t => t.IsPublic);
-			_internalTypesCount = types.Count(t => t.IsNotPublic);
+			_exportedTypesCount = assemblyInfo.ExportedTypesCount;
+            _internalTypesCount = assemblyInfo.InternalTypesCount;
 
 			RemoveCommand = new DelegateCommand(RemoveCommandHandler);
 
@@ -40,12 +41,12 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public string Name
 		{
-			get { return _assemblyDefinition.Name.Name; }
+			get { return _assemblyInfo.Name; }
 		}
 
 		public string FullName
 		{
-			get { return _assemblyDefinition.FullName; }
+			get { return _assemblyInfo.FullName; }
 		}
 
 		public Brush Foreground
@@ -74,9 +75,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public IEnumerable<TypeViewModel> Types { get; set; }
 
-		public AssemblyDefinition AssemblyDefinition
+		public AssemblyInfo AssemblyInfo
 		{
-			get { return _assemblyDefinition; }
+			get { return _assemblyInfo; }
 		}
 
 		public int ExportedTypesCount
@@ -126,7 +127,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private void RemoveCommandHandler()
 		{
-			_windowViewModel.RemoveAssembly(_assemblyDefinition);
+			_windowViewModel.RemoveAssembly(_assemblyInfo);
 		}
 	}
 }

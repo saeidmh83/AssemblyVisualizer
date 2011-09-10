@@ -11,47 +11,48 @@ using Mono.Cecil;
 using ILSpyVisualizer.Common;
 using ICSharpCode.ILSpy;
 using ILSpyVisualizer.Properties;
+using ILSpyVisualizer.Model;
+using ILSpyVisualizer.HAL;
 
 namespace ILSpyVisualizer.AncestryBrowser
 {
     class TypeViewModel : ViewModelBase
     {
-        private TypeDefinition _typeDefinition;
+        private TypeInfo _typeInfo;
         private bool _isExpanded;        
         private IEnumerable<MemberViewModel> _members;
 
-        private IEnumerable<MemberViewModel> _events;
-        private IEnumerable<MemberViewModel> _fields;
-        private IEnumerable<MemberViewModel> _methods;
-        private IEnumerable<MemberViewModel> _properties;
+        private MemberViewModel[] _events;
+        private MemberViewModel[] _fields;
+        private MemberViewModel[] _methods;
+        private MemberViewModel[] _properties;
 
-        public TypeViewModel(TypeDefinition typeDefinition)
+        public TypeViewModel(TypeInfo typeInfo)
         {
             _isExpanded = true;
-            _typeDefinition = typeDefinition;
-            if (_typeDefinition.BaseType != null)
+            _typeInfo = typeInfo;
+            if (_typeInfo.BaseType != null)
             {
-                BaseType = new TypeViewModel(_typeDefinition.BaseType.Resolve());
+                BaseType = new TypeViewModel(_typeInfo.BaseType);
             }
 
-            _fields = _typeDefinition.Fields
+            _fields = _typeInfo.Fields
                 .OrderBy(f => f.Name)
                 .Select(f => new FieldViewModel(f))
                 .OfType<MemberViewModel>()
                 .ToArray();
-            _properties = _typeDefinition.Properties
+            _properties = _typeInfo.Properties
                 .OrderBy(p => p.Name)
                 .Select(p => new PropertyViewModel(p))
                 .OfType<MemberViewModel>()
                 .ToArray();
-            _events = _typeDefinition.Events
+            _events = _typeInfo.Events
                 .OrderBy(e => e.Name)
                 .Select(e => new EventViewModel(e))
                 .OfType<MemberViewModel>()
                 .ToArray();
-            _methods = _typeDefinition.Methods
-                .OrderBy(m => m.Name)
-                .Where(m => !m.IsGetter && !m.IsSetter && !m.IsAddOn && !m.IsRemoveOn)
+            _methods = _typeInfo.Methods
+                .OrderBy(m => m.Name)               
                 .Select(m => new MethodViewModel(m))
                 .OfType<MemberViewModel>()
                 .ToArray();   
@@ -66,7 +67,7 @@ namespace ILSpyVisualizer.AncestryBrowser
                 OnPropertyChanged("Members");
             }
         }
-        public TypeDefinition TypeDefinition { get { return _typeDefinition; } }
+        public TypeInfo TypeInfo { get { return _typeInfo; } }
         public TypeViewModel BaseType { get; set; }
         public AssemblyViewModel Assembly { get; set; }
 
@@ -88,7 +89,7 @@ namespace ILSpyVisualizer.AncestryBrowser
         {
             get
             {
-                return MainWindow.Instance.CurrentLanguage.FormatTypeName(_typeDefinition);
+                return _typeInfo.Name;
             }
         }
 
@@ -96,7 +97,7 @@ namespace ILSpyVisualizer.AncestryBrowser
         {
             get
             {
-                return GetFullName(_typeDefinition.Namespace, Name);
+                return _typeInfo.FullName;
             }
         }
 
@@ -161,7 +162,7 @@ namespace ILSpyVisualizer.AncestryBrowser
             }
             if (!string.IsNullOrWhiteSpace(options.SearchTerm))
             { 
-                members = members.Where(m => m.MemberReference.Name.IndexOf(options.SearchTerm.Trim(), StringComparison.InvariantCultureIgnoreCase) >= 0);
+                members = members.Where(m => m.MemberInfo.Name.IndexOf(options.SearchTerm.Trim(), StringComparison.InvariantCultureIgnoreCase) >= 0);
             }
             if (options.MemberKind == MemberKind.Virtual)
             {                
@@ -198,37 +199,18 @@ namespace ILSpyVisualizer.AncestryBrowser
             throw new ArgumentException("No type with such property text in ancestry");
         }
 
-        private TypeViewModel GetTypeInAncestryWithMethod(MethodDefinition methodDefinition)
+        private TypeViewModel GetTypeInAncestryWithMethod(MethodInfo methodInfo)
         {
-            if (_methods
-                    .Select(m => m.MemberReference as MethodDefinition)
-                    .Any(m => m.Name == methodDefinition.Name && ParametersMatch(m, methodDefinition)))
+            if (_methods.Any(m => Services.MethodsMatch(methodInfo, m.MemberInfo as MethodInfo)))
             {
                 return this;
             }
             if (BaseType != null)
             {
-                return BaseType.GetTypeInAncestryWithMethod(methodDefinition);
+                return BaseType.GetTypeInAncestryWithMethod(methodInfo);
             }
             throw new ArgumentException("No type with such method text in ancestry");
-        }
-
-        private static bool ParametersMatch(MethodDefinition method1, MethodDefinition method2)
-        {
-            if (method1.Parameters.Count != method2.Parameters.Count)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < method1.Parameters.Count; i++)
-            {
-                if (method1.Parameters[i].ParameterType.FullName != method2.Parameters[i].ParameterType.FullName)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
+        }        
 
         private void FillPropertiesToolTips()
         {
@@ -263,7 +245,7 @@ namespace ILSpyVisualizer.AncestryBrowser
                 {                    
                     if (BaseType != null)
                     {
-                        var definingType = BaseType.GetTypeInAncestryWithMethod(method.MemberReference as MethodDefinition);
+                        var definingType = BaseType.GetTypeInAncestryWithMethod(method.MemberInfo as MethodInfo);
                         method.ToolTip = string.Format("{0}\n{1} {2}", method.Text, Resources.OverrideFrom, definingType.Name);
                     }
                 }

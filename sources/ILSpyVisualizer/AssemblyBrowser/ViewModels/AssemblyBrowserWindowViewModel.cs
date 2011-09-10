@@ -14,6 +14,7 @@ using System.Windows.Input;
 using ILSpyVisualizer.AssemblyBrowser.Screens;
 using ILSpyVisualizer.Common;
 using ILSpyVisualizer.Properties;
+using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
@@ -60,7 +61,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private readonly Dispatcher _dispatcher;
 		private readonly ObservableCollection<AssemblyViewModel> _assemblies;
-		private IEnumerable<TypeDefinition> _allTypeDefinitions;
+		private IEnumerable<TypeInfo> _allTypeInfo;
 		private IEnumerable<TypeViewModel> _types;
 		private Screen _screen;
 		private readonly SearchScreen _searchScreen;
@@ -73,7 +74,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		#region // .ctor
 
-		public AssemblyBrowserWindowViewModel(IEnumerable<AssemblyDefinition> assemblyDefinitions,
+		public AssemblyBrowserWindowViewModel(IEnumerable<AssemblyInfo> assemblyDefinitions,
 											  Dispatcher dispatcher)
 		{
 			_dispatcher = dispatcher;
@@ -119,19 +120,19 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			get { return _searchScreen; }
 		}
 
-		public IEnumerable<TypeDefinition> AllTypeDefinitions
+		public IEnumerable<TypeInfo> AllTypeInfo
 		{
 			get
 			{
-				if (_allTypeDefinitions == null)
+				if (_allTypeInfo == null)
 				{
-					_allTypeDefinitions = _assemblies
-						.Select(a => a.AssemblyDefinition)
+					_allTypeInfo = _assemblies
+						.Select(a => a.AssemblyInfo)
 						.SelectMany(a => a.Modules)
 						.SelectMany(m => m.Types)
 						.ToList();
 				}
-				return _allTypeDefinitions;
+				return _allTypeInfo;
 			}
 		}
 
@@ -201,7 +202,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 					{
 						var currentAssembly = assembly;
 
-						var assemblyTypes = currentAssembly.AssemblyDefinition.Modules
+						var assemblyTypes = currentAssembly.AssemblyInfo.Modules
 							.SelectMany(m => m.Types)
 							.Select(t => new TypeViewModel(t, this))
 							.ToList();
@@ -302,9 +303,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			Navigate(new NavigationItem(type));
 		}
 
-		public void AddAssemblies(IEnumerable<AssemblyDefinition> assemblies)
+		public void AddAssemblies(IEnumerable<AssemblyInfo> assemblies)
 		{
-			var newAssemblies = assemblies.Except(_assemblies.Select(a => a.AssemblyDefinition));
+			var newAssemblies = assemblies.Except(_assemblies.Select(a => a.AssemblyInfo));
 			if (newAssemblies.Count() == 0)
 			{
 				return;
@@ -318,9 +319,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			OnAssembliesChanged();
 		}
 
-		public void AddAssembly(AssemblyDefinition assemblyDefinition)
+		public void AddAssembly(AssemblyInfo assemblyDefinition)
 		{
-			if (_assemblies.Any(vm => vm.AssemblyDefinition == assemblyDefinition))
+			if (_assemblies.Any(vm => vm.AssemblyInfo == assemblyDefinition))
 			{
 				return;
 			}
@@ -330,10 +331,10 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			OnAssembliesChanged();
 		}
 
-		public void RemoveAssembly(AssemblyDefinition assemblyDefinition)
+		public void RemoveAssembly(AssemblyInfo assemblyDefinition)
 		{
 			var assemblyViewModel = _assemblies
-				.FirstOrDefault(vm => vm.AssemblyDefinition == assemblyDefinition);
+				.FirstOrDefault(vm => vm.AssemblyInfo == assemblyDefinition);
 			if (assemblyViewModel != null)
 			{
 				_assemblies.Remove(assemblyViewModel);
@@ -355,15 +356,15 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private void UpdateInternalTypeCollections()
 		{
-			_allTypeDefinitions = null;
+			_allTypeInfo = null;
 			_types = null;
 
-			var typesDictionary = Types.ToDictionary(type => type.TypeDefinition);
+			var typesDictionary = Types.ToDictionary(type => type.TypeInfo);
 
-			foreach (var typeDefinition in AllTypeDefinitions
+			foreach (var typeDefinition in AllTypeInfo
 				.Where(t => t.BaseType != null))
 			{
-				var baseType = typeDefinition.BaseType.Resolve();
+				var baseType = typeDefinition.BaseType;
 				if (baseType != null && typesDictionary.ContainsKey(baseType))
 				{
 					typesDictionary[baseType].AddDerivedType(
@@ -447,7 +448,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 					navigationStack.Push(item);
 					continue;
 				}
-				var sameType = Types.SingleOrDefault(t => t.TypeDefinition == item.Type.TypeDefinition);
+				var sameType = Types.SingleOrDefault(t => t.TypeInfo == item.Type.TypeInfo);
 				if (sameType != null)
 				{
 					navigationStack.Push(new NavigationItem(sameType));

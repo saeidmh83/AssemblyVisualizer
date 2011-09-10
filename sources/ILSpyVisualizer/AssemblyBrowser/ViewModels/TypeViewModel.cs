@@ -13,6 +13,7 @@ using ILSpyVisualizer.Common;
 using System.Windows.Media;
 using ILSpyVisualizer.AncestryBrowser;
 using ILSpyVisualizer.Properties;
+using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 {
@@ -22,7 +23,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		private static readonly Brush DefaultBackground = Brushes.White;
 		private static readonly Brush GraphRootBackground = Brushes.Yellow;
 
-		private readonly TypeDefinition _typeDefinition;
+		private readonly TypeInfo _typeInfo;
 		private readonly IList<TypeViewModel> _derivedTypes = new List<TypeViewModel>();
 
 		private int _descendantsCount;
@@ -42,24 +43,23 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
 
-		public TypeViewModel(TypeDefinition typeDefinition, AssemblyBrowserWindowViewModel windowViewModel)
+		public TypeViewModel(TypeInfo typeInfo, AssemblyBrowserWindowViewModel windowViewModel)
 		{
-			_typeDefinition = typeDefinition;
+			_typeInfo = typeInfo;
 			_windowViewModel = windowViewModel;
 
-			_name = MainWindow.Instance.CurrentLanguage.FormatTypeName(typeDefinition);
-			_fullName = GetFullName(_typeDefinition.Namespace, _name);
+            _name = typeInfo.Name;
+            _fullName = typeInfo.FullName;
 			_extendedInfo = IsInternal
 			                	? string.Format("{0}\n{1}", FullName, Resources.Internal)
 			                	: FullName;
 
 			if (HasBaseType)
 			{
-				var baseType = _typeDefinition.BaseType.Resolve();
-				
-				_baseTypeName = baseType != null ? MainWindow.Instance.CurrentLanguage
-					.FormatTypeName(baseType) : _typeDefinition.BaseType.Name;
-				_baseTypeFullName = GetFullName(_typeDefinition.BaseType.Namespace, BaseTypeName);
+                var baseType = _typeInfo.BaseType;
+
+                _baseTypeName = baseType.Name;
+                _baseTypeFullName = baseType.FullName;
 				if (baseType == null)
 				{
 					_baseTypeFullName = _baseTypeFullName + "\n" + Resources.NotAvailable;
@@ -67,24 +67,23 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 				}
 			}
 
-			var properties = typeDefinition.Properties
-				.Where(p => p.GetMethod != null && p.GetMethod.IsPublic
-							|| p.SetMethod != null && p.SetMethod.IsPublic)
+			var properties = typeInfo.Properties
+				.Where(p => p.IsPublic)
 				.Select(p => new PropertyViewModel(p))
 				.OfType<MemberViewModel>();
 
-			var events = typeDefinition.Events
-				.Where(e => e.AddMethod.IsPublic)
+			var events = typeInfo.Events
+				.Where(e => e.IsPublic)
 				.Select(e => new EventViewModel(e))
 				.OfType<MemberViewModel>();
 
-			var methods = typeDefinition.Methods
-				.Where(m => m.IsPublic && !m.IsGetter && !m.IsSetter && !m.IsAddOn && !m.IsRemoveOn)
+			var methods = typeInfo.Methods
+				.Where(m => m.IsPublic)
 				.Select(m => new MethodViewModel(m))
 				.OfType<MemberViewModel>();
 
 			Members = properties.Concat(events).Concat(methods);
-			_membersCount = Members.Count();
+            _membersCount = typeInfo.MembersCount;
 
 			VisualizeCommand = new DelegateCommand(VisualizeCommandHandler);
 			NavigateCommand = new DelegateCommand(NavigateCommandHandler);
@@ -101,9 +100,9 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 		public ICommand ShowMembersCommand { get; private set; }
         public ICommand BrowseAncestryCommand { get; private set; }
 
-		public TypeDefinition TypeDefinition
+		public TypeInfo TypeInfo
 		{
-			get { return _typeDefinition; }
+			get { return _typeInfo; }
 		}
 
 		public IEnumerable<TypeViewModel> FlattenedHierarchy
@@ -146,14 +145,14 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		public bool IsInternal
 		{
-			get { return _typeDefinition.IsNotPublic; }
+			get { return _typeInfo.IsInternal; }
 		}
 
 		public bool HasBaseType
 		{
 			get
 			{
-				return _typeDefinition.BaseType != null;
+				return _typeInfo.BaseType != null;
 			}
 		}
 
@@ -288,7 +287,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
 		private void NavigateCommandHandler()
 		{
-			MainWindow.Instance.JumpToReference(_typeDefinition);
+			MainWindow.Instance.JumpToReference(_typeInfo);
 		}
 
 		private void NavigateToBaseCommandHandler()
@@ -297,7 +296,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 			{
 				return;
 			}
-			MainWindow.Instance.JumpToReference(_typeDefinition.BaseType);
+			MainWindow.Instance.JumpToReference(_typeInfo.BaseType);
 		}
 
 		private void ShowMembersCommandHandler()
@@ -312,20 +311,13 @@ namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
 
         private void BrowseAncestryCommandHandler()
         {
-            var window = new AncestryBrowserWindow(_typeDefinition)
+            var window = new AncestryBrowserWindow(_typeInfo)
             {
                 Owner = MainWindow.Instance
             };
             window.Show();
         }
 
-		private static string GetFullName(string typeNamespace, string typeName)
-		{
-			if (string.IsNullOrEmpty(typeNamespace))
-			{
-				return typeName;
-			}
-			return string.Format("{0}.{1}", typeNamespace, typeName);
-		}
+		
 	}
 }

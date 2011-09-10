@@ -6,29 +6,29 @@ using System.Windows.Media;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using Mono.Cecil;
+using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.Common
 {
 	class PropertyViewModel : MemberViewModel, ICanBeVirtual
 	{
-		private readonly PropertyDefinition _propertyDefinition;
+		private readonly PropertyInfo _propertyInfo;
 
-		public PropertyViewModel(PropertyDefinition propertyDefinition)
+		public PropertyViewModel(PropertyInfo propertyInfo) : base(propertyInfo)
 		{
-			_propertyDefinition = propertyDefinition;
+			_propertyInfo = propertyInfo;
 		}
 
 		public override ImageSource Icon
 		{
-			get { return PropertyTreeNode.GetIcon(_propertyDefinition); }
+			get { return _propertyInfo.Icon; }
 		}
 
 		public override string Text
 		{
 			get
 			{
-				return PropertyTreeNode
-					.GetText(_propertyDefinition, MainWindow.Instance.CurrentLanguage) as string;
+				return _propertyInfo.Text;
 			}
 		}
 
@@ -36,8 +36,7 @@ namespace ILSpyVisualizer.Common
         {
             get
             {
-                return _propertyDefinition.GetMethod != null && _propertyDefinition.GetMethod.IsVirtual
-                       || _propertyDefinition.SetMethod != null && _propertyDefinition.SetMethod.IsVirtual;
+                return _propertyInfo.IsVirtual;
             }
         }
 
@@ -45,28 +44,20 @@ namespace ILSpyVisualizer.Common
         {
             get
             {
-                return _propertyDefinition.GetMethod != null 
-                       && _propertyDefinition.GetMethod.IsVirtual 
-                       && !_propertyDefinition.GetMethod.IsNewSlot
-                       || _propertyDefinition.SetMethod != null 
-                       && _propertyDefinition.SetMethod.IsVirtual 
-                       && !_propertyDefinition.SetMethod.IsNewSlot;
+                return _propertyInfo.IsOverride;
             }
         }
 
-        public override MemberReference MemberReference
+        public override object MemberReference
         {
-            get { return _propertyDefinition; }
+            get { return _propertyInfo.MemberReference; }
         }
 
         public override bool IsPublic
         {
             get
             {
-                return _propertyDefinition.GetMethod != null
-                     && _propertyDefinition.GetMethod.IsPublic
-                     || _propertyDefinition.SetMethod != null
-                     && _propertyDefinition.SetMethod.IsPublic;
+                return _propertyInfo.IsPublic;
             }
         }
 
@@ -74,10 +65,7 @@ namespace ILSpyVisualizer.Common
         {
             get
             {
-                return _propertyDefinition.GetMethod != null
-                     && _propertyDefinition.GetMethod.IsFamily
-                     || _propertyDefinition.SetMethod != null
-                     && _propertyDefinition.SetMethod.IsFamily;
+                return _propertyInfo.IsProtected;
             }
         }
 
@@ -85,10 +73,7 @@ namespace ILSpyVisualizer.Common
         {
             get
             {
-                return _propertyDefinition.GetMethod != null
-                       && _propertyDefinition.GetMethod.IsAssembly
-                       || _propertyDefinition.SetMethod != null
-                       && _propertyDefinition.SetMethod.IsAssembly;
+                return _propertyInfo.IsInternal;
             }
         }
 
@@ -96,10 +81,7 @@ namespace ILSpyVisualizer.Common
         {
             get
             {
-                return _propertyDefinition.GetMethod != null
-                       && _propertyDefinition.GetMethod.IsPrivate
-                       || _propertyDefinition.SetMethod != null
-                       && _propertyDefinition.SetMethod.IsPrivate;
+                return _propertyInfo.IsPrivate;
             }
         }
 
@@ -107,10 +89,7 @@ namespace ILSpyVisualizer.Common
         {
             get
             {
-                return _propertyDefinition.GetMethod != null
-                     && _propertyDefinition.GetMethod.IsFamilyOrAssembly
-                     || _propertyDefinition.SetMethod != null
-                     && _propertyDefinition.SetMethod.IsFamilyOrAssembly;
+                return _propertyInfo.IsProtectedOrInternal;
             }
         }
 	}

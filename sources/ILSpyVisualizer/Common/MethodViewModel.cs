@@ -6,29 +6,29 @@ using System.Windows.Media;
 using ICSharpCode.ILSpy.TreeNodes;
 using Mono.Cecil;
 using ICSharpCode.ILSpy;
+using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.Common
 {
 	class MethodViewModel : MemberViewModel, ICanBeVirtual
 	{
-		private readonly MethodDefinition _methodDefinition;
+		private readonly MethodInfo _methodInfo;
 
-		public MethodViewModel(MethodDefinition methodDefinition)
+		public MethodViewModel(MethodInfo methodInfo) : base(methodInfo)
 		{
-			_methodDefinition = methodDefinition;           
+			_methodInfo = methodInfo;           
 		}
 
 		public override ImageSource Icon
 		{
-			get { return MethodTreeNode.GetIcon(_methodDefinition); }
+			get { return _methodInfo.Icon; }
 		}
 
 		public override string Text
 		{
 			get
 			{
-				return MethodTreeNode
-					.GetText(_methodDefinition, MainWindow.Instance.CurrentLanguage) as string;
+                return _methodInfo.Text;
 			}
 		}
 
@@ -36,7 +36,7 @@ namespace ILSpyVisualizer.Common
         {
             get
             {
-                return _methodDefinition.IsVirtual;
+                return _methodInfo.IsVirtual;
             }
         }
 
@@ -44,43 +44,38 @@ namespace ILSpyVisualizer.Common
         {
             get
             {
-                if (_methodDefinition.DeclaringType.FullName == "System.Object")
-                {
-                    // Method System.Object.Finalize() looks like override in IL
-                    return false;
-                }
-                return _methodDefinition.IsVirtual && !_methodDefinition.IsNewSlot;                
+                return _methodInfo.IsOverride;           
             }
         }
 
-        public override MemberReference MemberReference
+        public override object MemberReference
         {
-            get { return _methodDefinition; }
+            get { return _methodInfo.MemberReference; }
         }
 
         public override bool IsPublic
         {
-            get { return _methodDefinition.IsPublic; }
+            get { return _methodInfo.IsPublic; }
         }
 
         public override bool IsProtected
         {
-            get { return _methodDefinition.IsFamily; }
+            get { return _methodInfo.IsProtected; }
         }
 
         public override bool IsInternal
         {
-            get { return _methodDefinition.IsAssembly; }
+            get { return _methodInfo.IsInternal; }
         }
 
         public override bool IsPrivate
         {
-            get { return _methodDefinition.IsPrivate; }
+            get { return _methodInfo.IsPrivate; }
         }
 
         public override bool IsProtectedInternal
         {
-            get { return _methodDefinition.IsFamilyOrAssembly; }
+            get { return _methodInfo.IsProtectedOrInternal; }
         }        
 	}
 }

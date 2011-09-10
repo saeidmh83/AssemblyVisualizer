@@ -8,17 +8,18 @@ using System.Linq;
 using System.Text;
 using Mono.Cecil;
 using System.Windows.Media;
+using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.AncestryBrowser
 {
     class AssemblyViewModel
     {
-        private AssemblyDefinition _assemblyDefinition;
+        private AssemblyInfo _assemblyInfo;
         private IEnumerable<TypeViewModel> _types;
 
-        public AssemblyViewModel(AssemblyDefinition assemblyDefinition, IEnumerable<TypeViewModel> types)
+        public AssemblyViewModel(AssemblyInfo assemblyInfo, IEnumerable<TypeViewModel> types)
         {
-            _assemblyDefinition = assemblyDefinition;
+            _assemblyInfo = assemblyInfo;
             _types = types;
 
             foreach (var type in _types)
@@ -27,7 +28,7 @@ namespace ILSpyVisualizer.AncestryBrowser
             }
         }
 
-        public string Name { get { return _assemblyDefinition.Name.Name; } }
+        public string Name { get { return _assemblyInfo.Name; } }
         public IEnumerable<TypeViewModel> Types { get { return _types; } }
         public Brush BackgroundBrush { get; set; }
         public Brush CaptionBrush { get; set; }

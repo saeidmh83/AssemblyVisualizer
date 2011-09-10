@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Input;
 using ILSpyVisualizer.Common.CommandsGroup;
 using ILSpyVisualizer.Properties;
+using ILSpyVisualizer.Model;
 
 namespace ILSpyVisualizer.AncestryBrowser
 {
@@ -24,16 +25,16 @@ namespace ILSpyVisualizer.AncestryBrowser
 
 	class AncestryBrowserWindowViewModel : ViewModelBase
 	{
-		private TypeDefinition _typeDefinition;
+		private TypeInfo _typeInfo;
         private TypeViewModel _typeViewModel;
         private IEnumerable<AssemblyViewModel> _assemblies;
         private IEnumerable<TypeViewModel> _ancestry;   
         private MemberOptions _options; 
         private bool _isAllCollapsed;
 		
-		public AncestryBrowserWindowViewModel(TypeDefinition typeDefinition)
+		public AncestryBrowserWindowViewModel(TypeInfo typeInfo)
 		{
-			_typeDefinition = typeDefinition;
+			_typeInfo = typeInfo;
 
             ExpandCollapseAllCommand = new DelegateCommand(ExpandCollapseAllCommandHandler);
 
@@ -47,12 +48,12 @@ namespace ILSpyVisualizer.AncestryBrowser
                 ShowPublic = true
             };
 
-            _typeViewModel = new TypeViewModel(_typeDefinition);
+            _typeViewModel = new TypeViewModel(_typeInfo);
 
             _ancestry = _typeViewModel.Ancestry.ToList();
             _ancestry.Last().IsLast = true;
             _assemblies = _ancestry
-                .GroupBy(t => t.TypeDefinition.Module.Assembly)
+                .GroupBy(t => t.TypeInfo.Module.Assembly)
                 .Select(g => new AssemblyViewModel(g.Key, g))
                 .ToList();
 
@@ -101,7 +102,7 @@ namespace ILSpyVisualizer.AncestryBrowser
 		{
 			get
 			{
-				return MainWindow.Instance.CurrentLanguage.FormatTypeName(_typeDefinition);
+                return _typeInfo.Name;
 			}
 		}
 

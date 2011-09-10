@@ -11,8 +11,7 @@
     <RootNamespace>ILSpyVisualizer</RootNamespace>
     <AssemblyName>ILSpyVisualizer.Plugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -67,6 +66,12 @@
   <ItemGroup>
     <Compile Include="AncestryBrowser\AssemblyViewModel.cs" />
     <Compile Include="AncestryBrowser\MemberOptions.cs" />
+    <Compile Include="DependencyBrowser\AssemblyViewModel.cs" />
+    <Compile Include="DependencyBrowser\DependencyBrowserWindow.xaml.cs">
+      <DependentUpon>DependencyBrowserWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DependencyBrowser\DependencyBrowserWindowViewModel.cs" />
+    <Compile Include="DependencyBrowser\Graph.cs" />
     <Compile Include="HAL\Converter.cs" />
     <Compile Include="HAL\IConverter.cs" />
     <Compile Include="HAL\ILSpy\AddAssemblyContextMenuEntry.cs" />
@@ -260,6 +265,7 @@
     <Compile Include="Controls\ZoomControl\ZoomControl.cs" />
     <Compile Include="Controls\ZoomControl\ZoomControlModes.cs" />
     <Compile Include="Controls\ZoomControl\ZoomViewModifierMode.cs" />
+    <Compile Include="HAL\ILSpy\BrowseDependenciesContextMenuEntry.cs" />
     <Compile Include="HAL\Reflector\Converter.cs" />
     <Compile Include="HAL\Reflector\Package.cs" />
     <Compile Include="Infrastructure\DelegateCommand.cs" />
@@ -323,6 +329,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Common\DataTemplatesDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DependencyBrowser\DependencyBrowserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

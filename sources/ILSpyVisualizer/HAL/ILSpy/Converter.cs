@@ -42,9 +42,14 @@ namespace ILSpyVisualizer.HAL.ILSpy
 
             _assemblyCorrespondence.Add(assemblyDefinition, assemblyInfo);
             assemblyInfo.Modules = assemblyDefinition.Modules.Select(m => Module(m));
+            assemblyInfo.ReferencedAssemblies = assemblyDefinition.Modules
+                .SelectMany(m => m.AssemblyReferences
+                    .Select(r => m.AssemblyResolver.Resolve(r))
+                    .Where(ad => ad != null)
+                    .Select(ad => Assembly(ad)));
 
             return assemblyInfo;
-        }
+        }        
         
         public ModuleInfo Module(ModuleDefinition moduleDefinition)
         {

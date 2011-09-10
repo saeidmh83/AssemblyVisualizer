@@ -40,7 +40,7 @@ namespace ILSpyVisualizer.AssemblyBrowser
 												   (s, e) => ViewModel.NavigateBackCommand.Execute(null)));
 		}
 
-		internal AssemblyBrowserWindowViewModel ViewModel
+		public AssemblyBrowserWindowViewModel ViewModel
 		{
 			get { return DataContext as AssemblyBrowserWindowViewModel; }
 			set { DataContext = value; }

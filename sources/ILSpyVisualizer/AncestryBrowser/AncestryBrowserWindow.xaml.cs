@@ -38,6 +38,11 @@ namespace ILSpyVisualizer.AncestryBrowser
 			{
 				DataContext = value;
 			}
-		}        
+		}
+
+        private void SearchExecuted(object sender, ExecutedRoutedEventArgs e)
+        {
+            txtSearch.Focus();            
+        }
 	}
 }

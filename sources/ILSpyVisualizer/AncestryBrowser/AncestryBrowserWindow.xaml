@@ -89,7 +89,11 @@
                 </DataTemplate.Triggers>
             </DataTemplate>
         </ResourceDictionary>
-    </Window.Resources>
+    </Window.Resources>    
+    <Window.CommandBindings>
+        <CommandBinding Command="Search" Executed="SearchExecuted"/>
+    </Window.CommandBindings>
+    
     <Grid UseLayoutRounding="True"
           TextOptions.TextFormattingMode="Display">
         <Grid.ColumnDefinitions>
@@ -179,7 +183,8 @@
                         </Style>
                     </TextBlock.Style>
                 </TextBlock>
-                <TextBox Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                <TextBox x:Name="txtSearch"
+                         Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
                          HorizontalAlignment="Stretch"
                          Margin="10"
                          FontSize="20"

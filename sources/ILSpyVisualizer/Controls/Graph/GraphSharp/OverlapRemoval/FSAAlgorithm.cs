@@ -163,7 +163,12 @@ namespace ILSpyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
             wrappedRectangles.Sort( XComparison );
             int i = 0, n = wrappedRectangles.Count;
 
-            //bal szelso
+            if (n == 0)
+            {
+                return 0;
+            }
+
+            //bal szelso            
             RectangleWrapper<TObject> lmin = wrappedRectangles[0];
             double sigma = 0, x0 = lmin.CenterX;
             var gamma = new double[wrappedRectangles.Count];
@@ -318,6 +323,12 @@ namespace ILSpyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
         {
             wrappedRectangles.Sort( YComparison );
             int i = 0, n = wrappedRectangles.Count;
+
+            if (n == 0)
+            {
+                return 0;
+            }
+
             RectangleWrapper<TObject> lmin = wrappedRectangles[0];
             double sigma = 0, y0 = lmin.CenterY;
             var gamma = new double[wrappedRectangles.Count];

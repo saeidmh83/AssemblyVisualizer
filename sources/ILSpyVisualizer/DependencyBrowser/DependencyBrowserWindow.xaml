@@ -10,113 +10,118 @@
         Height="600" 
         Width="800">
     <Window.Resources>
-        <!--Vertex style-->
-        <Style TargetType="{x:Type Graph:VertexControl}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Graph:VertexControl}">
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="..\Common\ControlStylesDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!--Vertex style-->
+            <Style TargetType="{x:Type Graph:VertexControl}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Graph:VertexControl}">
 
-                        <ContentPresenter Content="{TemplateBinding Vertex}" >
-                            <ContentPresenter.ContentTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding Name}"/>
-                                </DataTemplate>
-                            </ContentPresenter.ContentTemplate>
-                        </ContentPresenter>
-                                      
+                            <ContentPresenter Content="{TemplateBinding Vertex}" >
+                                <ContentPresenter.ContentTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ContentPresenter.ContentTemplate>
+                            </ContentPresenter>
 
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
 
-        <!--Edge style-->
-        <Converters:EdgeRouteToPathConverter x:Key="routeToPathConverter" />
-        <Style TargetType="{x:Type Graph:EdgeControl}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Graph:EdgeControl}">
-                        <Path Stroke="{TemplateBinding Foreground}"
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!--Edge style-->
+            <Converters:EdgeRouteToPathConverter x:Key="routeToPathConverter" />
+            <Style TargetType="{x:Type Graph:EdgeControl}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type Graph:EdgeControl}">
+                            <Path Stroke="{TemplateBinding Foreground}"
                                   StrokeThickness="2"
                                   MinWidth="1"
                                   MinHeight="1"
                                   ToolTip="{TemplateBinding ToolTip}"
                                   x:Name="edgePath">
-                            <Path.Data>
-                                <PathGeometry>
-                                    <PathGeometry.Figures>
-                                        <MultiBinding Converter="{StaticResource routeToPathConverter}">
-                                            <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                <Path.Data>
+                                    <PathGeometry>
+                                        <PathGeometry.Figures>
+                                            <MultiBinding Converter="{StaticResource routeToPathConverter}">
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Source.(Graph:GraphCanvas.X)" />
-                                            <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Source.(Graph:GraphCanvas.Y)" />
-                                            <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Source.ActualWidth" />
-                                            <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Source.ActualHeight" />
-                                            <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Target.(Graph:GraphCanvas.X)" />
-                                            <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Target.(Graph:GraphCanvas.Y)" />
-                                            <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Target.ActualWidth" />
-                                            <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="Target.ActualHeight" />
-                                            <Binding RelativeSource="{RelativeSource TemplatedParent}"
+                                                <Binding RelativeSource="{RelativeSource TemplatedParent}"
                                                  Path="RoutePoints" />
-                                        </MultiBinding>
-                                    </PathGeometry.Figures>
-                                </PathGeometry>
-                            </Path.Data>
-                        </Path>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Graph:GraphElementBehaviour.HighlightTrigger"
+                                            </MultiBinding>
+                                        </PathGeometry.Figures>
+                                    </PathGeometry>
+                                </Path.Data>
+                            </Path>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Graph:GraphElementBehaviour.HighlightTrigger"
                 Value="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}" />
-            <Setter Property="MinWidth"
+                <Setter Property="MinWidth"
                 Value="1" />
-            <Setter Property="MinHeight"
+                <Setter Property="MinHeight"
                 Value="1" />
-            <Setter Property="Background"
+                <Setter Property="Background"
                 Value="Red" />
-            <Setter Property="Foreground"
+                <Setter Property="Foreground"
                 Value="Silver" />
-            <Setter Property="Opacity"
+                <Setter Property="Opacity"
                 Value="0.5" />
-            <Style.Triggers>
-                <Trigger Property="Graph:GraphElementBehaviour.IsHighlighted"
+                <Style.Triggers>
+                    <Trigger Property="Graph:GraphElementBehaviour.IsHighlighted"
                      Value="True">
-                    <Setter Property="Foreground"
+                        <Setter Property="Foreground"
                         Value="Black" />
-                </Trigger>
-                <Trigger Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
+                    </Trigger>
+                    <Trigger Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
                      Value="True">
-                    <Setter Property="Foreground"
+                        <Setter Property="Foreground"
                         Value="Yellow" />
-                </Trigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
+                    </Trigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
                                Value="True" />
-                        <Condition Property="Graph:GraphElementBehaviour.SemiHighlightInfo"
+                            <Condition Property="Graph:GraphElementBehaviour.SemiHighlightInfo"
                                Value="InEdge" />
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Foreground"
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Foreground"
                         Value="DarkGreen" />
-                </MultiTrigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
+                    </MultiTrigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
                                Value="True" />
-                        <Condition Property="Graph:GraphElementBehaviour.SemiHighlightInfo"
+                            <Condition Property="Graph:GraphElementBehaviour.SemiHighlightInfo"
                                Value="OutEdge" />
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Foreground"
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Foreground"
                         Value="#3578FF" />
-                </MultiTrigger>
-            </Style.Triggers>
-        </Style>
+                    </MultiTrigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <ZoomControl:ZoomControl x:Name="zoomControl"
@@ -129,7 +134,32 @@
                                              Graph="{Binding Graph}"    
                                              LayoutAlgorithmType="LinLog"
                                              OverlapRemovalAlgorithmType="FSA"
-                                             HighlightAlgorithmType="Simple"/>
+                                             HighlightAlgorithmType="Simple"/>            
         </ZoomControl:ZoomControl>
+
+        <!--Commands-->
+        <ItemsControl ItemsSource="{Binding Commands}"
+                      Margin="4"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Top">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="White"
+                        CornerRadius="8">
+                        <TextBlock Margin="8, 4">
+                        <Hyperlink Command="{Binding Command}"
+                                   Style="{StaticResource HyperlinkStyle}">
+                            <TextBlock Text="{Binding Text}"/>
+                        </Hyperlink>
+                    </TextBlock>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Window>

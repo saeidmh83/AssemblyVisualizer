@@ -33,8 +33,7 @@
     <Window.CommandBindings>
         <CommandBinding Command="Search" Executed="SearchExecuted"/>
     </Window.CommandBindings>
-    <Grid UseLayoutRounding="True"
-          TextOptions.TextFormattingMode="Display">      
+    <Grid>      
 
         <!--Content-->  
         <UserControls:ScreenPresenter Screen="{Binding Screen}"

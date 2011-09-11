@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using ILSpyVisualizer.Infrastructure;
 using ILSpyVisualizer.Model;
+using ILSpyVisualizer.Properties;
+using System.Collections.ObjectModel;
 
 namespace ILSpyVisualizer.DependencyBrowser
 {
@@ -20,15 +22,46 @@ namespace ILSpyVisualizer.DependencyBrowser
         {
             _assemblies = assemblies.ToList();
             _assemblyGraph = CreateGraph(assemblies.Select(a => AssemblyViewModel.Create(a)));
+
+            Commands = new ObservableCollection<UserCommand>
+			           	{
+			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
+			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
+			           	};
         }
+
+        public event Action FillGraphRequest;
+        public event Action OriginalSizeRequest;
+
+        public IEnumerable<UserCommand> Commands { get; private set; }
 
         public AssemblyGraph Graph
         {
-            get 
+            get
             {
                 return _assemblyGraph;
             }
-        }        
+        }
+
+        private void OnFillGraphRequest()
+        {
+            var handler = FillGraphRequest;
+
+            if (handler != null)
+            {
+                handler();
+            }
+        }
+
+        private void OnOriginalSizeRequest()
+        {
+            var handler = OriginalSizeRequest;
+
+            if (handler != null)
+            {
+                handler();
+            }
+        }
 
         private static AssemblyGraph CreateGraph(IEnumerable<AssemblyViewModel> assemblies)
         {

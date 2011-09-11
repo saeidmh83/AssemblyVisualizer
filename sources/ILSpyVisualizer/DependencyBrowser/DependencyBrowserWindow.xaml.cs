@@ -15,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using ILSpyVisualizer.Model;
+using System.Windows.Media.Animation;
+using ILSpyVisualizer.Controls.ZoomControl;
 
 namespace ILSpyVisualizer.DependencyBrowser
 {
@@ -28,6 +30,9 @@ namespace ILSpyVisualizer.DependencyBrowser
             InitializeComponent();
 
             ViewModel = new DependencyBrowserWindowViewModel(assemblies);
+
+            ViewModel.FillGraphRequest += FillGraphRequestHandler;
+            ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;
         }
 
         public DependencyBrowserWindowViewModel ViewModel
@@ -40,6 +45,17 @@ namespace ILSpyVisualizer.DependencyBrowser
             {
                 DataContext = value;
             }
+        }
+
+        private void FillGraphRequestHandler()
+        {
+            zoomControl.ZoomToFill();
+        }
+
+        private void OriginalSizeRequestHandler()
+        {
+            var animation = new DoubleAnimation(1, TimeSpan.FromSeconds(1));
+            zoomControl.BeginAnimation(ZoomControl.ZoomProperty, animation);
         }
     }
 }

@@ -38,9 +38,16 @@ namespace ILSpyVisualizer.HAL.Reflector
                 ExportedTypesCount = typeDefinitions.Count(t => t.Visibility == TypeVisibility.Public),
                 InternalTypesCount = typeDefinitions.Count(t => t.Visibility == TypeVisibility.Private)
             };
-
+            
             _assemblyCorrespondence.Add(assemblyDefinition, assemblyInfo);
-            assemblyInfo.Modules = assemblyDefinition.Modules.OfType<IModule>().Select(m => Module(m));
+            assemblyInfo.Modules = assemblyDefinition.Modules.OfType<IModule>().Select(m => Module(m));            
+
+            assemblyInfo.ReferencedAssemblies = assemblyDefinition.Modules
+                .OfType<IModule>()
+                .SelectMany(m => m.AssemblyReferences.OfType<IAssemblyReference>()
+                    .Select(r => r.Resolve())
+                    .Where(ad => ad != null)
+                    .Select(ad => Assembly(ad)));
 
             return assemblyInfo;
         }
@@ -62,7 +69,7 @@ namespace ILSpyVisualizer.HAL.Reflector
                 Assembly = Assembly(module.Assembly)
             };
             _moduleCorrespondence.Add(module, moduleInfo);
-            moduleInfo.Types = module.Types.OfType<ITypeDeclaration>().Select(t => Type(t));
+            moduleInfo.Types = module.Types.OfType<ITypeDeclaration>().Select(t => Type(t, moduleInfo));
 
             return moduleInfo;
         }
@@ -92,6 +99,11 @@ namespace ILSpyVisualizer.HAL.Reflector
 
         public TypeInfo Type(ITypeDeclaration type)
         {
+            return Type(type, null);
+        }
+
+        public TypeInfo Type(ITypeDeclaration type, ModuleInfo module)
+        {
             if (type == null)
             {
                 return null;
@@ -102,50 +114,59 @@ namespace ILSpyVisualizer.HAL.Reflector
                 return _typeCorrespondence[type];
             }
 
-            var methods = type.Methods.OfType<IMethodDeclaration>();
-                   // .Where(m => !m..IsGetter && !m.IsSetter && !m.IsAddOn && !m.IsRemoveOn);
+            var methods = type.Methods.OfType<IMethodDeclaration>()
+                   .Where(m => !m.Name.Contains("get_") 
+                               && !m.Name.Contains("set_")
+                               && !m.Name.Contains("add_")
+                               && !m.Name.Contains("remove_"));
 
             var typeInfo = new TypeInfo
             {
-                BaseTypeRetriever = () => Type(type.BaseType),
-                //DeclaringType = Type(type.d),
+                BaseTypeRetriever = () => Type(type.BaseType),                
                 Name = type.Name,
                 //Icon = type.ico,
-                Events = type.Events.OfType<IEventDeclaration>().Select(e => Event(e)),
-                Fields = type.Fields.OfType<IFieldDeclaration>().Select(f => Field(f)),
-                Methods = methods.Select(m => Method(m)),
+                Events = type.Events.OfType<IEventDeclaration>().Select(e => Event(e)),               
                 Properties = type.Properties.OfType<IPropertyDeclaration>().Select(p => Property(p)),
                 MembersCount = methods.Count() + type.Events.Count + type.Properties.Count + type.Fields.Count,
                 IsInternal = type.Visibility != TypeVisibility.Public,
                 IsPublic = type.Visibility == TypeVisibility.Public,
                 MemberReference = type,
-                //IsEnum = type.Enum,
+                IsEnum = IsEnum(type),
                 IsInterface = type.Interface,
                 IsValueType = type.ValueType
             };
             typeInfo.FullName = GetFullName(type.Namespace, typeInfo.Name);
+            typeInfo.Methods = methods.Select(m => Method(m, typeInfo));
+            typeInfo.Fields = type.Fields.OfType<IFieldDeclaration>().Select(f => Field(f, typeInfo));
 
             foreach (var eventInfo in typeInfo.Events)
             {
                 eventInfo.DeclaringType = typeInfo;
-            }
-            foreach (var methodInfo in typeInfo.Methods)
-            {
-                methodInfo.DeclaringType = typeInfo;
-            }
-            foreach (var fieldInfo in typeInfo.Fields)
-            {
-                fieldInfo.DeclaringType = typeInfo;
-            }
+            }  
             foreach (var propertyInfo in typeInfo.Properties)
             {
                 propertyInfo.DeclaringType = typeInfo;
             }
-                      
-            // TODO: find a module
-            //typeInfo.Module = Module(type.Module);
+
+            _typeCorrespondence.Add(type, typeInfo);  
+            typeInfo.Module = module ?? Module(GetModuleForType(type));
 
             return typeInfo;
+        }
+
+        private static bool IsEnum(ITypeDeclaration type)
+        {
+            return type.ValueType && type.BaseType.Name == "Enum" && type.BaseType.Namespace == "System";
+        }
+
+        private static IModule GetModuleForType(ITypeDeclaration typeDeclaration)
+        {            
+            var module = typeDeclaration.Owner as IModule;
+            if (module != null)
+            {
+                return module;
+            }
+            return GetModuleForType(typeDeclaration.Owner as ITypeDeclaration);
         }
 
         private static string GetFullName(string typeNamespace, string typeName)
@@ -157,58 +178,69 @@ namespace ILSpyVisualizer.HAL.Reflector
             return string.Format("{0}.{1}", typeNamespace, typeName);
         }
 
-        public EventInfo Event(IEventDeclaration ieventDeclaration)
-        {
-            var eventDeclaration = ieventDeclaration as EventDeclaration;
-            var addMethod = eventDeclaration.AddMethod as MethodDeclaration;
+        public EventInfo Event(IEventDeclaration eventDeclaration)
+        {                        
+            var addMethod = eventDeclaration.AddMethod.Resolve();
 
             var eventInfo = new EventInfo
             {
-                Text = eventDeclaration.Name,
+                Text = eventDeclaration.ToString(),
                 Name = eventDeclaration.Name,
-                //FullName = eventDefinition.,
-                //Icon = EventTreeNode.GetIcon(eventDeclaration),
+                FullName = eventDeclaration.Name,                
                 IsInternal = addMethod.Visibility == MethodVisibility.Assembly,
                 IsPrivate = addMethod.Visibility == MethodVisibility.Private,
                 IsPublic = addMethod.Visibility == MethodVisibility.Public,
                 IsProtected = addMethod.Visibility == MethodVisibility.Family,
                 IsProtectedAndInternal = addMethod.Visibility == MethodVisibility.FamilyAndAssembly,
                 IsProtectedOrInternal = addMethod.Visibility == MethodVisibility.FamilyOrAssembly,
+                IsStatic = addMethod.Static,
                 MemberReference = eventDeclaration
             };
+
+            eventInfo.Text = eventInfo.Text.Substring(eventInfo.Text.LastIndexOf('.') + 1);
+            eventInfo.Name = eventInfo.Name.Substring(eventInfo.Name.LastIndexOf('.') + 1);
+
+            eventInfo.Icon = Images.Images.GetEventIcon(eventInfo);
 
             return eventInfo;
         }
 
-        public FieldInfo Field(IFieldDeclaration fieldDefinition)
+        public FieldInfo Field(IFieldDeclaration fieldDefinition, TypeInfo type)
         {
             var fieldInfo = new FieldInfo
             {
-                Text = fieldDefinition.Name,
+                Text = fieldDefinition.ToString(),
                 Name = fieldDefinition.Name,
-                //FullName = fieldDefinition.FullName,
-                //Icon = FieldTreeNode.GetIcon(fieldDefinition),
+                FullName = fieldDefinition.Name,                
                 IsInternal = fieldDefinition.Visibility == FieldVisibility.Assembly,
                 IsPrivate = fieldDefinition.Visibility == FieldVisibility.Private,
                 IsPublic = fieldDefinition.Visibility == FieldVisibility.Public,
                 IsProtected = fieldDefinition.Visibility == FieldVisibility.Family,
                 IsProtectedAndInternal = fieldDefinition.Visibility == FieldVisibility.FamilyAndAssembly,
                 IsProtectedOrInternal = fieldDefinition.Visibility == FieldVisibility.FamilyOrAssembly,
-                MemberReference = fieldDefinition
+                IsStatic = fieldDefinition.Static,
+                IsLiteral = fieldDefinition.Literal,
+                IsInitOnly = fieldDefinition.ReadOnly,
+                IsSpecialName = fieldDefinition.SpecialName,
+                MemberReference = fieldDefinition,
+                DeclaringType = type
             };
+
+            fieldInfo.Text = fieldInfo.Text.Substring(fieldInfo.Text.LastIndexOf('.') + 1);
+            fieldInfo.Name = fieldInfo.Name.Substring(fieldInfo.Name.LastIndexOf('.') + 1);
+
+            fieldInfo.Icon = Images.Images.GetFieldIcon(fieldInfo);
 
             return fieldInfo;
         }
 
-        public MethodInfo Method(IMethodDeclaration method)
+        public MethodInfo Method(IMethodDeclaration method, TypeInfo type)
         {
             var methodInfo = new MethodInfo
-            {
-                //Text = MethodTreeNode.GetText(methodDefinition, MainWindow.Instance.CurrentLanguage) as string,
-                Text = method.Name,
+            {                
+                Text = method.ToString(),
                 Name = method.Name,
-                //FullName = methodDefinition.FullName,
-                //Icon = MethodTreeNode.GetIcon(methodDefinition),
+                FullName = method.Name,                
                 IsInternal = method.Visibility == MethodVisibility.Assembly,
                 IsPrivate = method.Visibility == MethodVisibility.Private,
                 IsPublic = method.Visibility == MethodVisibility.Public,
@@ -216,22 +248,32 @@ namespace ILSpyVisualizer.HAL.Reflector
                 IsProtectedAndInternal = method.Visibility == MethodVisibility.FamilyAndAssembly,
                 IsProtectedOrInternal = method.Visibility == MethodVisibility.FamilyOrAssembly,
                 IsVirtual = method.Virtual,
-                IsOverride = method.Overrides != null && method.Overrides.Count > 0,
-                MemberReference = method
-            };
+                IsOverride = method.Virtual && !method.NewSlot,
+                IsSpecialName = method.SpecialName,
+                IsStatic = method.Static,
+                IsFinal = method.Final,
+                MemberReference = method,
+                DeclaringType = type
+            };          
+
+            if (method.Overrides.Count > 0)
+            {
+                var overridden = method.Overrides[0];
+                var declaringType = overridden.DeclaringType as ITypeReference;
+                if (declaringType.Resolve().Interface)
+                {
+                    methodInfo.IsOverride = false;
+                }
+            }
+
+            int correction = methodInfo.Text.Contains(".ctor") || methodInfo.Text.Contains(".cctor") ? 0 : 1;
+            methodInfo.Text = methodInfo.Text.Substring(methodInfo.Text.LastIndexOf('.') + correction);
+            methodInfo.Name = methodInfo.Name.Substring(methodInfo.Name.LastIndexOf('.') + correction);
+
+            methodInfo.Icon = Images.Images.GetMethodIcon(methodInfo);
 
             return methodInfo;
-        }
-
-        /*private bool IsOverride(MethodDefinition methodDefinition)
-        {
-            if (methodDefinition.DeclaringType.FullName == "System.Object")
-            {
-                // Method System.Object.Finalize() looks like override in IL
-                return false;
-            }
-            return methodDefinition.IsVirtual && !methodDefinition.IsNewSlot;
-        }*/
+        }        
 
         public PropertyInfo Property(IPropertyDeclaration propertyDefinition)
         {            
@@ -239,12 +281,10 @@ namespace ILSpyVisualizer.HAL.Reflector
             var setMethod = propertyDefinition.SetMethod == null ? null : propertyDefinition.SetMethod.Resolve();
 
             var propertyInfo = new PropertyInfo
-            {
-                //Text = PropertyTreeNode.GetText(propertyDefinition, MainWindow.Instance.CurrentLanguage) as string,
-                Text = propertyDefinition.Name,
+            {                
+                Text = propertyDefinition.ToString(),
                 Name = propertyDefinition.Name,
-                //FullName = propertyDefinition.FullName,
-                //Icon = PropertyTreeNode.GetIcon(propertyDefinition),
+                FullName = propertyDefinition.Name,                
                 IsPublic = getMethod != null
                            && getMethod.Visibility == MethodVisibility.Public
                            || setMethod != null
@@ -277,8 +317,14 @@ namespace ILSpyVisualizer.HAL.Reflector
                              || setMethod != null
                              && setMethod.Virtual
                              && !setMethod.NewSlot,
+                IsStatic = getMethod != null && getMethod.Static
+                           || setMethod != null && setMethod.Static,
+                IsFinal = getMethod != null && getMethod.Final
+                          || setMethod != null && setMethod.Final,
                 MemberReference = propertyDefinition
             };
+
+            propertyInfo.Icon = Images.Images.GetPropertyIcon(propertyInfo);
 
             return propertyInfo;
         }

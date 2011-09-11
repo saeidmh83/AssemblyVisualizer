@@ -38,13 +38,31 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 
 		private void LoadedHandler(object sender, RoutedEventArgs e)
 		{
-			if (!_isInitialized)
-			{
-				ViewModel.SearchFocusRequested += SearchFocusRequestedHandler;
-				_isInitialized = true;
-			}
-			txtSearch.Focus();
-		}
+            if (ViewModel == null)
+            {
+                DataContextChanged += SearchScreenView_DataContextChanged;
+            }
+            else
+            {
+                if (!_isInitialized)
+                {
+                    ViewModel.SearchFocusRequested += SearchFocusRequestedHandler;
+
+                    _isInitialized = true;
+                }
+            }            
+            txtSearch.Focus();
+		}       
+
+        private void SearchScreenView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (!_isInitialized)
+            {
+                ViewModel.SearchFocusRequested += SearchFocusRequestedHandler;
+
+                _isInitialized = true;
+            }
+        }
 
 		private void SearchFocusRequestedHandler()
 		{

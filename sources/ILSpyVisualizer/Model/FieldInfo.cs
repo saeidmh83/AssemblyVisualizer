@@ -11,5 +11,8 @@ namespace ILSpyVisualizer.Model
 {
     class FieldInfo : MemberInfo
     {
+        public bool IsInitOnly { get; set; }
+        public bool IsSpecialName { get; set; }
+        public bool IsLiteral { get; set; }
     }
 }

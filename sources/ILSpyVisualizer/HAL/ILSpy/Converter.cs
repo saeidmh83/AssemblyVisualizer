@@ -173,6 +173,7 @@ namespace ILSpyVisualizer.HAL.ILSpy
                 IsProtected = eventDefinition.AddMethod.IsFamily,
                 IsProtectedAndInternal = eventDefinition.AddMethod.IsFamilyAndAssembly,
                 IsProtectedOrInternal = eventDefinition.AddMethod.IsFamilyOrAssembly,
+                IsStatic = eventDefinition.AddMethod.IsStatic,
                 MemberReference = eventDefinition
             };
 
@@ -193,6 +194,10 @@ namespace ILSpyVisualizer.HAL.ILSpy
                 IsProtected = fieldDefinition.IsFamily,
                 IsProtectedAndInternal = fieldDefinition.IsFamilyAndAssembly,
                 IsProtectedOrInternal = fieldDefinition.IsFamilyOrAssembly,
+                IsStatic = fieldDefinition.IsStatic,
+                IsLiteral = fieldDefinition.IsLiteral,
+                IsInitOnly = fieldDefinition.IsInitOnly,
+                IsSpecialName = fieldDefinition.IsSpecialName,
                 MemberReference = fieldDefinition
             };
 
@@ -214,7 +219,10 @@ namespace ILSpyVisualizer.HAL.ILSpy
                 IsProtectedAndInternal = methodDefinition.IsFamilyAndAssembly,
                 IsProtectedOrInternal = methodDefinition.IsFamilyOrAssembly,
                 IsVirtual = methodDefinition.IsVirtual,
+                IsSpecialName = methodDefinition.IsSpecialName,
                 IsOverride = IsOverride(methodDefinition),
+                IsStatic = methodDefinition.IsStatic,
+                IsFinal = methodDefinition.IsFinal,
                 MemberReference = methodDefinition
             };
 
@@ -271,6 +279,10 @@ namespace ILSpyVisualizer.HAL.ILSpy
                              || propertyDefinition.SetMethod != null
                              && propertyDefinition.SetMethod.IsVirtual
                              && !propertyDefinition.SetMethod.IsNewSlot,
+                IsStatic = propertyDefinition.GetMethod != null && propertyDefinition.GetMethod.IsStatic
+                            || propertyDefinition.SetMethod != null && propertyDefinition.SetMethod.IsStatic,
+                IsFinal = propertyDefinition.GetMethod != null && propertyDefinition.GetMethod.IsFinal
+                            || propertyDefinition.SetMethod != null && propertyDefinition.SetMethod.IsFinal,
                 MemberReference = propertyDefinition
             };
 

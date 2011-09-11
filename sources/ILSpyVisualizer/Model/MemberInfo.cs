@@ -22,6 +22,7 @@ namespace ILSpyVisualizer.Model
         public bool IsPrivate { get; set; }
         public bool IsProtectedOrInternal { get; set; }
         public bool IsProtectedAndInternal { get; set; }
+        public bool IsStatic { get; set; }
         public ImageSource Icon { get; set; }
         public object MemberReference { get; set; }
     }

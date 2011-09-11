@@ -8,6 +8,11 @@ using System.Linq;
 using System.Text;
 using ILSpyVisualizer.Model;
 
+#if Reflector
+using ILSpyVisualizer.HAL.Reflector;
+using Reflector.CodeModel;
+#endif
+
 #if ILSpy
 using ICSharpCode.ILSpy;
 using Mono.Cecil;
@@ -23,6 +28,9 @@ namespace ILSpyVisualizer.HAL
             #if ILSpy
             MainWindow.JumpToReference(memberReference);
             #endif
+            #if Reflector
+            Package.AssemblyBrowser.ActiveItem = memberReference;
+            #endif
         }
 
         public static bool MethodsMatch(MethodInfo method1, MethodInfo method2)
@@ -32,9 +40,15 @@ namespace ILSpyVisualizer.HAL
             var md2 = method2.MemberReference as MethodDefinition;
 
             return md1.Name == md2.Name && ParametersMatch(md1, md2);
+            #elif Reflector
+            var md1 = method1.MemberReference as IMethodDeclaration;
+            var md2 = method2.MemberReference as IMethodDeclaration;            
+
+            //return md1.Name == md2.Name && ParametersMatch(md1, md2);           
+            return method1.Text == method2.Text;
             #else
 
-            return method1.Text == method2.Text;
+            return false;
 
             #endif
         }
@@ -65,6 +79,27 @@ namespace ILSpyVisualizer.HAL
             }
             return true;
         }
+        #endif
+
+        #if Reflector
+
+        private static bool ParametersMatch(IMethodDeclaration method1, IMethodDeclaration method2)
+        {
+            if (method1.Parameters.Count != method2.Parameters.Count)
+            {
+                return false;
+            }            
+
+            for (int i = 0; i < method1.Parameters.Count; i++)
+            {
+                if (method1.Parameters[i].ParameterType != method2.Parameters[i].ParameterType)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         #endif
     }
 }

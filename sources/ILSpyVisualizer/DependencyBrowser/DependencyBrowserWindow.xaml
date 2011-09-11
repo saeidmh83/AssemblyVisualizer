@@ -123,12 +123,14 @@
             </Style>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid>
+    <Grid UseLayoutRounding="True"
+          TextOptions.TextFormattingMode="Display">
         <ZoomControl:ZoomControl x:Name="zoomControl"
-                          Grid.Row="1"
-                          ZoomBoxOpacity="0.5"
-                          HideZoom="Collapsed"
-                          RequireCtrlForZoom="False">
+                                 Grid.Row="1"
+                                 ZoomBoxOpacity="0.5"
+                                 HideZoom="Collapsed"
+                                 RequireCtrlForZoom="False"                                  
+                                 TextOptions.TextFormattingMode="Ideal">
             <DependencyBrowser:AssemblyGraphLayout x:Name="graphLayout"                                             
                                              Margin="10"                                             
                                              Graph="{Binding Graph}"    

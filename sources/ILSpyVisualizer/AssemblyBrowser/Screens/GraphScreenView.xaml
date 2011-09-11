@@ -194,10 +194,11 @@
       
         <!--Main content-->
         <ZoomControl:ZoomControl x:Name="zoomControl"
-                          Grid.Row="1"
-                          ZoomBoxOpacity="0.5"
-                          HideZoom="Collapsed"
-                          RequireCtrlForZoom="False">
+                                 Grid.Row="1"
+                                 ZoomBoxOpacity="0.5"
+                                 HideZoom="Collapsed"
+                                 RequireCtrlForZoom="False"                                                          
+                                 TextOptions.TextFormattingMode="Ideal">
             <AssemblyBrowser:TypeGraphLayout x:Name="graphLayout"                                             
                                              Margin="10"                                             
                                              Graph="{Binding Graph}"    

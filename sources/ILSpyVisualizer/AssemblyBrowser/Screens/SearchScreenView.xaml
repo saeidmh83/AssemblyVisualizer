@@ -7,9 +7,7 @@
              xmlns:CommandsGroup="clr-namespace:ILSpyVisualizer.Common.CommandsGroup" mc:Ignorable="d"
              xmlns:Controls="clr-namespace:ILSpyVisualizer.Controls"
              d:DesignHeight="300" d:DesignWidth="300"
-             Background="White"
-             UseLayoutRounding="True"
-             TextOptions.TextFormattingMode="Display">
+             Background="White">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

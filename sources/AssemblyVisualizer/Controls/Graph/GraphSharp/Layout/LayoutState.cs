@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Layout
 {
 	public class LayoutState<TVertex, TEdge>
 	{

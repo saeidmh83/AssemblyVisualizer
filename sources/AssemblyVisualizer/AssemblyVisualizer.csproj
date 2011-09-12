@@ -8,8 +8,8 @@
     <ProjectGuid>{6ADE1DC4-9429-40A8-B0C3-B4575486E141}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ILSpyVisualizer</RootNamespace>
-    <AssemblyName>ILSpyVisualizer.Plugin</AssemblyName>
+    <RootNamespace>AssemblyVisualizer</RootNamespace>
+    <AssemblyName>AssemblyVisualizer.Plugin</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

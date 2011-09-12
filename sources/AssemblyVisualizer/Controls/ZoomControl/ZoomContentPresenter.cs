@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace ILSpyVisualizer.Controls.ZoomControl
+namespace AssemblyVisualizer.Controls.ZoomControl
 {
     public class ZoomContentPresenter : ContentPresenter
     {

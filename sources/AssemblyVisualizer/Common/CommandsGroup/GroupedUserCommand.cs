@@ -3,10 +3,10 @@
 // (for details please see \docs\Ms-PL)
 
 using System;
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.Infrastructure;
 using System.Windows.Input;
 
-namespace ILSpyVisualizer.Common.CommandsGroup
+namespace AssemblyVisualizer.Common.CommandsGroup
 {
 	class GroupedUserCommand : ViewModelBase
 	{

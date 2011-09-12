@@ -4,9 +4,9 @@
 
 using System.Collections.ObjectModel;
 using System.Windows;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.Layout;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
     [TemplatePart(Name = CompoundVertexControl.PartInnerCanvas, Type = typeof(FrameworkElement))]
     public class CompoundVertexControl : VertexControl, ICompoundVertexControl

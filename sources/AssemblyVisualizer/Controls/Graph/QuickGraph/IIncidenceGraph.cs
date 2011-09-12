@@ -3,10 +3,10 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Collections.Generic;
-using ILSpyVisualizer.Controls.Graph.QuickGraph.Contracts;
+using AssemblyVisualizer.Controls.Graph.QuickGraph.Contracts;
 using System.Diagnostics.Contracts;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph
 {
     [ContractClass(typeof(IIncidenceGraphContract<,>))]
     public interface IIncidenceGraph<TVertex, TEdge> 

@@ -6,7 +6,7 @@ using System;
 using System.Windows;
 using System.Diagnostics;
 
-namespace ILSpyVisualizer.Behaviors
+namespace AssemblyVisualizer.Behaviors
 {
 	public static class DragBehavior
 	{

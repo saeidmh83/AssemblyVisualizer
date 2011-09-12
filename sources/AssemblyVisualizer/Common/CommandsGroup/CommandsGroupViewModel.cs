@@ -7,9 +7,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.Infrastructure;
 
-namespace ILSpyVisualizer.Common.CommandsGroup
+namespace AssemblyVisualizer.Common.CommandsGroup
 {
 	class CommandsGroupViewModel : ViewModelBase
 	{

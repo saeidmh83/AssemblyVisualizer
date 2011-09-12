@@ -4,9 +4,9 @@
 
 using System;
 using System.Windows;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Layout
 {
 	public partial class LinLogLayoutAlgorithm<TVertex, TEdge, TGraph> 
 		where TVertex : class

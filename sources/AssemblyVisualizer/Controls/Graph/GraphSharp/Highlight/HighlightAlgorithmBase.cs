@@ -3,9 +3,9 @@
 // (for details please see \docs\Ms-PL)
 
 using System.ComponentModel;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Highlight
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Highlight
 {
     public abstract class HighlightAlgorithmBase<TVertex, TEdge, TGraph, TParameters> : IHighlightAlgorithm<TVertex, TEdge, TGraph>
         where TVertex : class

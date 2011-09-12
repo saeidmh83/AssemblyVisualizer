@@ -12,10 +12,10 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Linq;
-using ILSpyVisualizer.Common;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Common;
+using AssemblyVisualizer.Model;
 
-namespace ILSpyVisualizer.AncestryBrowser
+namespace AssemblyVisualizer.AncestryBrowser
 {	
 	partial class AncestryBrowserWindow : Window
 	{

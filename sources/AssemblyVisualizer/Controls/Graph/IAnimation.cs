@@ -5,7 +5,7 @@
 using System;
 using System.Windows.Controls;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
     public interface IAnimation
     {

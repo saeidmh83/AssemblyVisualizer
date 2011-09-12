@@ -3,9 +3,9 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Collections.Generic;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Layout
 {
     public interface ILayoutAlgorithmFactory<TVertex, TEdge, TGraph>
         where TVertex : class

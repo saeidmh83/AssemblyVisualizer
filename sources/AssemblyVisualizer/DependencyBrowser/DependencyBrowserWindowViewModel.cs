@@ -6,12 +6,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ILSpyVisualizer.Infrastructure;
-using ILSpyVisualizer.Model;
-using ILSpyVisualizer.Properties;
+using AssemblyVisualizer.Infrastructure;
+using AssemblyVisualizer.Model;
+using AssemblyVisualizer.Properties;
 using System.Collections.ObjectModel;
 
-namespace ILSpyVisualizer.DependencyBrowser
+namespace AssemblyVisualizer.DependencyBrowser
 {
     class DependencyBrowserWindowViewModel : ViewModelBase
     {

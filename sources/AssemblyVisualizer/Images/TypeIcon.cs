@@ -20,7 +20,7 @@
 
 using System;
 
-namespace ILSpyVisualizer.Images
+namespace AssemblyVisualizer.Images
 {
 	internal enum TypeIcon
 	{

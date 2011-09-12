@@ -2,9 +2,9 @@
 // This code is distributed under Microsoft Public License 
 // (for details please see \docs\Ms-PL)
 
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Highlight
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Highlight
 {
 	public class SimpleHighlightAlgorithm<TVertex, TEdge, TGraph> : HighlightAlgorithmBase<TVertex, TEdge, TGraph, IHighlightParameters>
 		where TVertex : class

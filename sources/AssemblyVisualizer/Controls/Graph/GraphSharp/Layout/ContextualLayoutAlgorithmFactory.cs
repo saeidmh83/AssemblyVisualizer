@@ -4,11 +4,11 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
 //using GraphSharp.Algorithms.Layout.Simple.Tree;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Layout
 {
 	public class ContextualLayoutAlgorithmFactory<TVertex, TEdge, TGraph> : IContextualLayoutAlgorithmFactory<TVertex, TEdge, TGraph>
 		where TVertex : class

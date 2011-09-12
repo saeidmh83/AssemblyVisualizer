@@ -4,7 +4,7 @@
 
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.ZoomControl
+namespace AssemblyVisualizer.Controls.ZoomControl
 {
     public delegate void ContentSizeChangedHandler(object sender, Size newSize);
 }

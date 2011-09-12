@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ILSpyVisualizer.AssemblyBrowser.Screens
+namespace AssemblyVisualizer.AssemblyBrowser.Screens
 {
 	/// <summary>
 	/// Interaction logic for SearchScreenView.xaml

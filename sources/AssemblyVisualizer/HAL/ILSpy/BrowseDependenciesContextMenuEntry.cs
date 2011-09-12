@@ -12,12 +12,12 @@ using System.Windows;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.TreeView;
-using ILSpyVisualizer.Properties;
-using ILSpyVisualizer.Model;
-using ILSpyVisualizer.AncestryBrowser;
-using ILSpyVisualizer.DependencyBrowser;
+using AssemblyVisualizer.Properties;
+using AssemblyVisualizer.Model;
+using AssemblyVisualizer.AncestryBrowser;
+using AssemblyVisualizer.DependencyBrowser;
 
-namespace ILSpyVisualizer.HAL.ILSpy
+namespace AssemblyVisualizer.HAL.ILSpy
 {
     [ExportContextMenuEntry(Header = "Browse Dependencies")]
     sealed class BrowseDependenciesContextMenuEntry : IContextMenuEntry

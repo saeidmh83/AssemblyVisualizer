@@ -23,16 +23,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows;
 using System.Collections.Generic;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Model;
 
-namespace ILSpyVisualizer.Images
+namespace AssemblyVisualizer.Images
 {
     static class Images
     {
         static BitmapImage LoadBitmap(string name)
         {
        // pack://application:,,,/ReferencedAssembly;component/ResourceFile.xaml
-            BitmapImage image = new BitmapImage(new Uri("pack://application:,,,/ILSpyVisualizer.Plugin;component/Images/" + name + ".png"));
+            BitmapImage image = new BitmapImage(new Uri("pack://application:,,,/AssemblyVisualizer.Plugin;component/Images/" + name + ".png"));
             image.Freeze();
             return image;
         }

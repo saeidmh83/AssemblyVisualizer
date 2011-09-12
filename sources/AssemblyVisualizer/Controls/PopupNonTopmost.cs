@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace ILSpyVisualizer.Controls
+namespace AssemblyVisualizer.Controls
 {
 	public class PopupNonTopmost : System.Windows.Controls.Primitives.Popup
 	{

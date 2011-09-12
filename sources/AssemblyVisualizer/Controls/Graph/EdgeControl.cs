@@ -6,9 +6,9 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
-using ILSpyVisualizer.Controls.Graph.Helpers;
+using AssemblyVisualizer.Controls.Graph.Helpers;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
 	public class EdgeControl : Control, IPoolObject, IDisposable
 	{

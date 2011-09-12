@@ -2,7 +2,7 @@
 // This code is distributed under Microsoft Public License 
 // (for details please see \docs\Ms-PL)
 
-namespace ILSpyVisualizer.Controls.ZoomControl
+namespace AssemblyVisualizer.Controls.ZoomControl
 {
     public enum ZoomViewModifierMode
     {

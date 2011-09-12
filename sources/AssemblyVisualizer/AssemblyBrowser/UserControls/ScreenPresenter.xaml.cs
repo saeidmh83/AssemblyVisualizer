@@ -9,9 +9,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using ILSpyVisualizer.AssemblyBrowser.Screens;
+using AssemblyVisualizer.AssemblyBrowser.Screens;
 
-namespace ILSpyVisualizer.AssemblyBrowser.UserControls
+namespace AssemblyVisualizer.AssemblyBrowser.UserControls
 {
 	/// <summary>
 	/// Interaction logic for CachingScreenPresenter.xaml

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph
 {
 #if !SILVERLIGHT
     [Serializable]

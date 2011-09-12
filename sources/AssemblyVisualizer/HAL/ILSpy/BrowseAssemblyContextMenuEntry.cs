@@ -11,11 +11,11 @@ using System.Windows;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.TreeView;
-using ILSpyVisualizer.Properties;
-using ILSpyVisualizer.Model;
-using ILSpyVisualizer.HAL;
+using AssemblyVisualizer.Properties;
+using AssemblyVisualizer.Model;
+using AssemblyVisualizer.HAL;
 
-namespace ILSpyVisualizer.AssemblyBrowser
+namespace AssemblyVisualizer.AssemblyBrowser
 {
     [ExportContextMenuEntry(Header = "Browse Assembly")]
 	sealed class BrowseAssemblyContextMenuEntry : IContextMenuEntry

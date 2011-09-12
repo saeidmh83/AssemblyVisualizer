@@ -5,7 +5,7 @@
 using System;
 using System.ComponentModel;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp
 {
 	public interface IAlgorithmParameters : ICloneable, INotifyPropertyChanged
 	{

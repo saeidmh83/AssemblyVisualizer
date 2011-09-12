@@ -4,7 +4,7 @@
 
 using System;
 
-namespace ILSpyVisualizer.Controls.Graph.Transitions
+namespace AssemblyVisualizer.Controls.Graph.Transitions
 {
     public abstract class TransitionBase : ITransition
     {

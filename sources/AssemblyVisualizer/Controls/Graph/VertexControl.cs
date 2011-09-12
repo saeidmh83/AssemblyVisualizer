@@ -5,9 +5,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using System;
-using ILSpyVisualizer.Controls.Graph.Helpers;
+using AssemblyVisualizer.Controls.Graph.Helpers;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
 	/// <summary>
 	/// Logical representation of a vertex.

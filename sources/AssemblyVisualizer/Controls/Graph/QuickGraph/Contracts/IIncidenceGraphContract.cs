@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph.Contracts
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph.Contracts
 {
     [ContractClassFor(typeof(IIncidenceGraph<,>))]
     abstract class IIncidenceGraphContract<TVertex, TEdge>

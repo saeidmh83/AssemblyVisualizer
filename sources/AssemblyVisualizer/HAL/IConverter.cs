@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Model;
 
-namespace ILSpyVisualizer.HAL
+namespace AssemblyVisualizer.HAL
 {
     interface IConverter
     {

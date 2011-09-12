@@ -3,14 +3,14 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Windows.Media;
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.Infrastructure;
 
 using System.Windows.Input;
 
-using ILSpyVisualizer.Model;
-using ILSpyVisualizer.HAL;
+using AssemblyVisualizer.Model;
+using AssemblyVisualizer.HAL;
 
-namespace ILSpyVisualizer.Common
+namespace AssemblyVisualizer.Common
 {
 	abstract class MemberViewModel : ViewModelBase
 	{

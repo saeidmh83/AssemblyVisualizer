@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 
-namespace ILSpyVisualizer.Infrastructure
+namespace AssemblyVisualizer.Infrastructure
 {
 	class UserCommand : ViewModelBase
 	{

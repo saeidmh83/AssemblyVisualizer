@@ -5,7 +5,7 @@
 using System;
 using System.Diagnostics.Contracts;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph.Contracts
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph.Contracts
 {
     [ContractClassFor(typeof(IAlgorithm<>))]
     abstract class IAlgorithmContract<TGraph>

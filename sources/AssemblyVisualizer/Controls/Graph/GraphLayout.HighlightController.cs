@@ -4,10 +4,10 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.Highlight;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.Highlight;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
 	public partial class GraphLayout<TVertex, TEdge, TGraph> : IHighlightController<TVertex, TEdge, TGraph>
 		where TVertex : class

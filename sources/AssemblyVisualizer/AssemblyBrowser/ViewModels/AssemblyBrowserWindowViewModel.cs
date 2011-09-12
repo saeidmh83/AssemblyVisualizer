@@ -7,16 +7,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.Infrastructure;
 
 using System.Windows.Threading;
 using System.Windows.Input;
-using ILSpyVisualizer.AssemblyBrowser.Screens;
-using ILSpyVisualizer.Common;
-using ILSpyVisualizer.Properties;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.AssemblyBrowser.Screens;
+using AssemblyVisualizer.Common;
+using AssemblyVisualizer.Properties;
+using AssemblyVisualizer.Model;
 
-namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
+namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 {
 	class AssemblyBrowserWindowViewModel : ViewModelBase
 	{

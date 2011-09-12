@@ -5,7 +5,7 @@
 using System.Windows.Controls;
 using System;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
     public interface ITransition
     {

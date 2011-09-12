@@ -4,7 +4,7 @@
 
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
 {
 	/// <summary>
 	/// A System.Windows.Rect egy struktúra, ezért a heap-en tárolódik. Bizonyos esetekben ez nem

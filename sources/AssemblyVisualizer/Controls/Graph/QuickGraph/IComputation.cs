@@ -4,9 +4,9 @@
 
 using System;
 using System.Diagnostics.Contracts;
-using ILSpyVisualizer.Controls.Graph.QuickGraph.Contracts;
+using AssemblyVisualizer.Controls.Graph.QuickGraph.Contracts;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph
 {
     [ContractClass(typeof(IComputationContract))]
     public interface IComputation

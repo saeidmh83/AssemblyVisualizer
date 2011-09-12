@@ -3,9 +3,9 @@
 // (for details please see \docs\Ms-PL)
 
 using System;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp
 {
 	/// <summary>
 	/// Simple algorithm interface which is not connected to any graph.

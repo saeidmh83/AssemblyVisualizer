@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph.Contracts
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph.Contracts
 {
     [ContractClassFor(typeof(IEdgeSet<,>))]
     abstract class IEdgeSetContract<TVertex, TEdge> 

@@ -3,10 +3,10 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Collections.Generic;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.Layout;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.EdgeRouting
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.EdgeRouting
 {
 	public interface IEdgeRoutingAlgorithmFactory<TVertex, TEdge, TGraph>
 		where TVertex : class

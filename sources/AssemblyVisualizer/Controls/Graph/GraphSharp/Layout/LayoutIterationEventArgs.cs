@@ -5,9 +5,9 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Layout
 {
 	public class LayoutIterationEventArgs<TVertex, TEdge, TVertexInfo, TEdgeInfo> 
         : LayoutIterationEventArgs<TVertex, TEdge>,

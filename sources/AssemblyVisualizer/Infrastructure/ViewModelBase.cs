@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 
-namespace ILSpyVisualizer.Infrastructure
+namespace AssemblyVisualizer.Infrastructure
 {
 	abstract class ViewModelBase : INotifyPropertyChanged
 	{

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics.Contracts;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph.Contracts
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph.Contracts
 {
     [ContractClassFor(typeof(IMutableVertexAndEdgeSet<,>))]
     abstract class IMutableVertexAndEdgeSetContract<TVertex, TEdge>

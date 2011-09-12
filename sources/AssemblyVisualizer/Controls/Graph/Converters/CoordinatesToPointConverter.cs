@@ -7,7 +7,7 @@ using System.Windows.Data;
 using System.Diagnostics;
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph.Converters
+namespace AssemblyVisualizer.Controls.Graph.Converters
 {
 	public class CoordinatesToPointConverter : IMultiValueConverter
 	{

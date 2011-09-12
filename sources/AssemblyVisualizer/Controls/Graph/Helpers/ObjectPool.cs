@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace ILSpyVisualizer.Controls.Graph.Helpers
+namespace AssemblyVisualizer.Controls.Graph.Helpers
 {
 	public delegate void DisposingHandler( object sender );
 

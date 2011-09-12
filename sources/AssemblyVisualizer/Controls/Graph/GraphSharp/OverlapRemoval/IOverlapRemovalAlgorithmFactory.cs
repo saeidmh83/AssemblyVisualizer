@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
 {
 	public interface IOverlapRemovalAlgorithmFactory<TVertex>
 		where TVertex : class

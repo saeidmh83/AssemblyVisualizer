@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
 {
 	public abstract class OverlapRemovalAlgorithmBase<TObject, TParam> : AlgorithmBase, IOverlapRemovalAlgorithm<TObject, TParam>
 		where TObject : class

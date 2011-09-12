@@ -4,9 +4,9 @@
 
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
-using ILSpyVisualizer.Controls.Graph.QuickGraph.Contracts;
+using AssemblyVisualizer.Controls.Graph.QuickGraph.Contracts;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph
 {
     /// <summary>
     /// A directed graph datastructure that is efficient

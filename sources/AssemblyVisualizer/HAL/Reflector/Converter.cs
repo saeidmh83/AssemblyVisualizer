@@ -8,11 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Model;
 using Reflector.CodeModel;
 using Reflector.CodeModel.Memory;
 
-namespace ILSpyVisualizer.HAL.Reflector
+namespace AssemblyVisualizer.HAL.Reflector
 {
     class Converter : IConverter
     {

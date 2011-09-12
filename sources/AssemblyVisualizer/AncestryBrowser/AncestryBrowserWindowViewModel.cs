@@ -5,17 +5,17 @@
 using System;
 using System.Linq;
 
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.Infrastructure;
 
 using System.Collections.Generic;
-using ILSpyVisualizer.Common;
+using AssemblyVisualizer.Common;
 using System.Windows.Media;
 using System.Windows.Input;
-using ILSpyVisualizer.Common.CommandsGroup;
-using ILSpyVisualizer.Properties;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Common.CommandsGroup;
+using AssemblyVisualizer.Properties;
+using AssemblyVisualizer.Model;
 
-namespace ILSpyVisualizer.AncestryBrowser
+namespace AssemblyVisualizer.AncestryBrowser
 {
     enum MemberKind
     { 

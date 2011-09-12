@@ -3,18 +3,18 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Collections.Generic;
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.Infrastructure;
 using System.Linq;
 using System.Windows.Input;
-using ILSpyVisualizer.AssemblyBrowser.Screens;
-using ILSpyVisualizer.Common;
+using AssemblyVisualizer.AssemblyBrowser.Screens;
+using AssemblyVisualizer.Common;
 using System.Windows.Media;
-using ILSpyVisualizer.AncestryBrowser;
-using ILSpyVisualizer.Properties;
-using ILSpyVisualizer.Model;
-using ILSpyVisualizer.HAL;
+using AssemblyVisualizer.AncestryBrowser;
+using AssemblyVisualizer.Properties;
+using AssemblyVisualizer.Model;
+using AssemblyVisualizer.HAL;
 
-namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
+namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 {
 	class TypeViewModel : ViewModelBase
 	{

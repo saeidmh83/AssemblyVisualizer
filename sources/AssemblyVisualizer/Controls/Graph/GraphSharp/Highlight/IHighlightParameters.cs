@@ -5,7 +5,7 @@
 using System;
 using System.ComponentModel;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Highlight
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Highlight
 {
 	public interface IHighlightParameters : ICloneable, INotifyPropertyChanged
 	{

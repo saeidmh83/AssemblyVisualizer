@@ -3,11 +3,11 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Collections.Generic;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.Layout;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
 	public class ContextualGraphLayout<TVertex, TEdge, TGraph> : GraphLayout<TVertex, TEdge, TGraph>
 		where TVertex : class

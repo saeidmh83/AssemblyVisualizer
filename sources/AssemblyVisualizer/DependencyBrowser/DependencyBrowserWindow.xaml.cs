@@ -14,11 +14,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Model;
 using System.Windows.Media.Animation;
-using ILSpyVisualizer.Controls.ZoomControl;
+using AssemblyVisualizer.Controls.ZoomControl;
 
-namespace ILSpyVisualizer.DependencyBrowser
+namespace AssemblyVisualizer.DependencyBrowser
 {
     /// <summary>
     /// Interaction logic for DependencyBrowserWindow.xaml

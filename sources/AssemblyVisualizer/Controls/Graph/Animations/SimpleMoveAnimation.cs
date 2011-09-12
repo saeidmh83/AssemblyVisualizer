@@ -5,7 +5,7 @@
 using System;
 using System.Windows.Media.Animation;
 
-namespace ILSpyVisualizer.Controls.Graph.Animations
+namespace AssemblyVisualizer.Controls.Graph.Animations
 {
     public class SimpleMoveAnimation : IAnimation
     {

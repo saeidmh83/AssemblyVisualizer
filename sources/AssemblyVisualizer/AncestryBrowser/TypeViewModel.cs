@@ -6,15 +6,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.Infrastructure;
 
-using ILSpyVisualizer.Common;
+using AssemblyVisualizer.Common;
 
-using ILSpyVisualizer.Properties;
-using ILSpyVisualizer.Model;
-using ILSpyVisualizer.HAL;
+using AssemblyVisualizer.Properties;
+using AssemblyVisualizer.Model;
+using AssemblyVisualizer.HAL;
 
-namespace ILSpyVisualizer.AncestryBrowser
+namespace AssemblyVisualizer.AncestryBrowser
 {
     class TypeViewModel : ViewModelBase
     {

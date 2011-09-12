@@ -8,10 +8,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Windows;
-using ILSpyVisualizer.Controls.Graph.GraphSharp;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.GraphSharp;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
     public partial class GraphLayout<TVertex, TEdge, TGraph> : GraphCanvas
         where TVertex : class

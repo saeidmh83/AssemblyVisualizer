@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Layout
 {
 	public abstract class LayoutParametersBase : ILayoutParameters
 	{

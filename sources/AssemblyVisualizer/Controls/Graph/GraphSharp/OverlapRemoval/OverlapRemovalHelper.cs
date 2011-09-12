@@ -4,7 +4,7 @@
 
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
 {
 	public static class OverlapRemovalHelper
 	{

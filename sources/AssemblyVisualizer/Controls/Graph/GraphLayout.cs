@@ -9,16 +9,16 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows;
 using System.Linq;
-using ILSpyVisualizer.Controls.Graph.GraphSharp;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.EdgeRouting;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.Highlight;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.GraphSharp;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.EdgeRouting;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.Highlight;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.Layout;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 using Point = System.Windows.Point;
 using Size = System.Windows.Size;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
     /// <summary>
     /// For general purposes, with general types.

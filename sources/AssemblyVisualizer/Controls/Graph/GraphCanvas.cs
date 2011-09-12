@@ -5,10 +5,10 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
-using ILSpyVisualizer.Controls.Graph.Animations;
-using ILSpyVisualizer.Controls.Graph.Transitions;
+using AssemblyVisualizer.Controls.Graph.Animations;
+using AssemblyVisualizer.Controls.Graph.Transitions;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
     public class GraphCanvas : Panel
     {

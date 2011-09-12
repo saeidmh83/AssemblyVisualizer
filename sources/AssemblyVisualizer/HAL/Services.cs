@@ -6,10 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Model;
 
 #if Reflector
-using ILSpyVisualizer.HAL.Reflector;
+using AssemblyVisualizer.HAL.Reflector;
 using Reflector.CodeModel;
 #endif
 
@@ -19,7 +19,7 @@ using Mono.Cecil;
 using System.Windows;
 #endif
 
-namespace ILSpyVisualizer.HAL
+namespace AssemblyVisualizer.HAL
 {
     class Services
     {

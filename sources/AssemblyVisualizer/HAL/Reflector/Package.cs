@@ -9,10 +9,10 @@ using System.Linq;
 using System.Text;
 using Reflector;
 using Reflector.CodeModel;
-using ILSpyVisualizer.AncestryBrowser;
-using ILSpyVisualizer.DependencyBrowser;
+using AssemblyVisualizer.AncestryBrowser;
+using AssemblyVisualizer.DependencyBrowser;
 
-namespace ILSpyVisualizer.HAL.Reflector
+namespace AssemblyVisualizer.HAL.Reflector
 {
     class Package : IPackage
     {

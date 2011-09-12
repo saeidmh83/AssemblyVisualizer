@@ -3,10 +3,10 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Collections.Generic;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Layout
 {
     public interface ILayoutContext<TVertex, TEdge, TGraph>
         where TEdge : IEdge<TVertex>
@@ -17,6 +17,6 @@ namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
 
         TGraph Graph { get; }
 
-        global::ILSpyVisualizer.Controls.Graph.GraphSharp.Layout.LayoutMode Mode { get; }
+        global::AssemblyVisualizer.Controls.Graph.GraphSharp.Layout.LayoutMode Mode { get; }
     }
 }

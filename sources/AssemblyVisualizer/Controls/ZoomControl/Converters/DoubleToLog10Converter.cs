@@ -5,7 +5,7 @@
 using System.Windows.Data;
 using System;
 
-namespace ILSpyVisualizer.Controls.ZoomControl.Converters
+namespace AssemblyVisualizer.Controls.ZoomControl.Converters
 {
     public class DoubleToLog10Converter : IValueConverter
     {

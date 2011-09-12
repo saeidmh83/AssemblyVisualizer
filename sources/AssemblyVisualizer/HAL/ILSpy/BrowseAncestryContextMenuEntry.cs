@@ -12,11 +12,11 @@ using System.Windows;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.TreeView;
-using ILSpyVisualizer.Properties;
-using ILSpyVisualizer.Model;
-using ILSpyVisualizer.AncestryBrowser;
+using AssemblyVisualizer.Properties;
+using AssemblyVisualizer.Model;
+using AssemblyVisualizer.AncestryBrowser;
 
-namespace ILSpyVisualizer.HAL.ILSpy
+namespace AssemblyVisualizer.HAL.ILSpy
 {
 	[ExportContextMenuEntry(Header = "Browse Ancestry")]
 	sealed class BrowseAncestryContextMenuEntry : IContextMenuEntry

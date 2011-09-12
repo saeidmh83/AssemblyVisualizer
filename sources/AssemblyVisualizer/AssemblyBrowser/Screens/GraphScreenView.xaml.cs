@@ -16,9 +16,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
-using ILSpyVisualizer.Controls.ZoomControl;
+using AssemblyVisualizer.Controls.ZoomControl;
 
-namespace ILSpyVisualizer.AssemblyBrowser.Screens
+namespace AssemblyVisualizer.AssemblyBrowser.Screens
 {
 	/// <summary>
 	/// Interaction logic for GraphScreen.xaml

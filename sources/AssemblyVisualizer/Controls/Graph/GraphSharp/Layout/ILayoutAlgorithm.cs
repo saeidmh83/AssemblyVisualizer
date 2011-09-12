@@ -3,10 +3,10 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Collections.Generic;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Layout
 {
 	public delegate void LayoutIterationEndedEventHandler<TVertex, TEdge>( object sender, ILayoutIterationEventArgs<TVertex> e )
 		where TVertex : class

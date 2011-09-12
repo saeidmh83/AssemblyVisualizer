@@ -2,7 +2,7 @@
 // This code is distributed under Microsoft Public License 
 // (for details please see \docs\Ms-PL)
 
-namespace ILSpyVisualizer.Controls.Graph.Transitions
+namespace AssemblyVisualizer.Controls.Graph.Transitions
 {
     public class FadeInTransition : FadeTransition
     {

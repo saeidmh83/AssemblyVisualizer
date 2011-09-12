@@ -4,7 +4,7 @@
 
 using System;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph
 {
     /// <summary>
     /// The computation state of a graph algorithm

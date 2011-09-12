@@ -4,10 +4,10 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.Layout;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.EdgeRouting
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.EdgeRouting
 {
 	public class StandardEdgeRoutingAlgorithmFactory<TVertex, TEdge, TGraph> : IEdgeRoutingAlgorithmFactory<TVertex, TEdge, TGraph>
 		where TVertex : class

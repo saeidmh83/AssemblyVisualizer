@@ -3,9 +3,9 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Windows.Media;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Model;
 
-namespace ILSpyVisualizer.Common
+namespace AssemblyVisualizer.Common
 {
 	class MethodViewModel : MemberViewModel, ICanBeVirtual
 	{

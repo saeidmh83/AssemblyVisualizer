@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Media.Animation;
 using System.Windows.Controls;
 
-namespace ILSpyVisualizer.Controls.Graph.Transitions
+namespace AssemblyVisualizer.Controls.Graph.Transitions
 {
     public class FadeTransition : TransitionBase
     {

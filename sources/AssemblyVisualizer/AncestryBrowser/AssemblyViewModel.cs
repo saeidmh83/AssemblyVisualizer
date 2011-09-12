@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 
 using System.Windows.Media;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Model;
 
-namespace ILSpyVisualizer.AncestryBrowser
+namespace AssemblyVisualizer.AncestryBrowser
 {
     class AssemblyViewModel
     {

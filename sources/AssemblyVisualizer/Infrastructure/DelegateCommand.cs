@@ -5,7 +5,7 @@
 using System;
 using System.Windows.Input;
 
-namespace ILSpyVisualizer.Infrastructure
+namespace AssemblyVisualizer.Infrastructure
 {
 	class DelegateCommand : ICommand
 	{

@@ -2,10 +2,10 @@
 // This code is distributed under Microsoft Public License 
 // (for details please see \docs\Ms-PL)
 
-using ILSpyVisualizer.Controls.Graph.QuickGraph.Contracts;
+using AssemblyVisualizer.Controls.Graph.QuickGraph.Contracts;
 using System.Diagnostics.Contracts;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph
 {
     /// <summary>
     /// A directed edge

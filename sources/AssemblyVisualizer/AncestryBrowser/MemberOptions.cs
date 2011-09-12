@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ILSpyVisualizer.AncestryBrowser
+namespace AssemblyVisualizer.AncestryBrowser
 {
     class MemberOptions
     {

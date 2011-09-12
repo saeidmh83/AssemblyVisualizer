@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
 /*using GraphSharp.Algorithms.Layout.Simple.Tree;
 using GraphSharp.Algorithms.Layout.Simple.Circular;
@@ -13,7 +13,7 @@ using GraphSharp.Algorithms.Layout.Simple.Hierarchical;
 using GraphSharp.Algorithms.Layout.Compound;
 using GraphSharp.Algorithms.Layout.Compound.FDP;*/
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Layout
 {
     public class StandardLayoutAlgorithmFactory<TVertex, TEdge, TGraph> : ILayoutAlgorithmFactory<TVertex, TEdge, TGraph>
         where TVertex : class

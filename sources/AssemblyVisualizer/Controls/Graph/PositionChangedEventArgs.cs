@@ -4,7 +4,7 @@
 
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
     public class PositionChangedEventArgs : RoutedEventArgs
     {

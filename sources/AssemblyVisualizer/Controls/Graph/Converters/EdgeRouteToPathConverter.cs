@@ -8,7 +8,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 
-namespace ILSpyVisualizer.Controls.Graph.Converters
+namespace AssemblyVisualizer.Controls.Graph.Converters
 {
 	/// <summary>
 	/// Converts the position and sizes of the source and target points, and the route informations

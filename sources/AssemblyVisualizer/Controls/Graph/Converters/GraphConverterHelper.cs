@@ -5,7 +5,7 @@
 using System;
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph.Converters
+namespace AssemblyVisualizer.Controls.Graph.Converters
 {
 	static class GraphConverterHelper
 	{

@@ -4,7 +4,7 @@
 
 using System.Diagnostics.Contracts;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph.Contracts
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph.Contracts
 {
     [ContractClassFor(typeof(IImplicitVertexSet<>))]
     abstract class IImplicitVertexSetContract<TVertex>

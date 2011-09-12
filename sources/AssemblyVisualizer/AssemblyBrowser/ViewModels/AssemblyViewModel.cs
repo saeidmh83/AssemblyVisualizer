@@ -6,11 +6,11 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using System.Linq;
 using System.Windows.Media;
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.Infrastructure;
 
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Model;
 
-namespace ILSpyVisualizer.AssemblyBrowser.ViewModels
+namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 {
 	class AssemblyViewModel : ViewModelBase
 	{

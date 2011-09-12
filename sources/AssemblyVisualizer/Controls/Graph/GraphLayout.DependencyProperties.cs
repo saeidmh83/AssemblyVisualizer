@@ -4,13 +4,13 @@
 
 using System;
 using System.Windows;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.EdgeRouting;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.Highlight;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.EdgeRouting;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.Highlight;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.Layout;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph
+namespace AssemblyVisualizer.Controls.Graph
 {
     public partial class GraphLayout<TVertex, TEdge, TGraph> : GraphCanvas
         where TVertex : class

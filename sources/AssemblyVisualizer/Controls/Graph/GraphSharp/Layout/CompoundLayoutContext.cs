@@ -4,9 +4,9 @@
 
 using System.Collections.Generic;
 using System.Windows;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Layout
 {
     public class CompoundLayoutContext<TVertex, TEdge, TGraph> 
         : LayoutContext<TVertex, TEdge, TGraph>, ICompoundLayoutContext<TVertex, TEdge, TGraph>
@@ -17,7 +17,7 @@ namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
             TGraph graph,
             IDictionary<TVertex, Point> positions,
             IDictionary<TVertex, Size> sizes,
-            global::ILSpyVisualizer.Controls.Graph.GraphSharp.Layout.LayoutMode mode,
+            global::AssemblyVisualizer.Controls.Graph.GraphSharp.Layout.LayoutMode mode,
             IDictionary<TVertex, Thickness> vertexBorders,
             IDictionary<TVertex, CompoundVertexInnerLayoutType> layoutTypes)
             : base( graph, positions, sizes, mode )

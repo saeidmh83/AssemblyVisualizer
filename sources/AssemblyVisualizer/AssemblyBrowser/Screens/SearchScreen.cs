@@ -9,14 +9,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows.Threading;
-using ILSpyVisualizer.AssemblyBrowser.ViewModels;
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.AssemblyBrowser.ViewModels;
+using AssemblyVisualizer.Infrastructure;
 
 using System.Windows.Input;
-using ILSpyVisualizer.Common.CommandsGroup;
-using ILSpyVisualizer.Properties;
+using AssemblyVisualizer.Common.CommandsGroup;
+using AssemblyVisualizer.Properties;
 
-namespace ILSpyVisualizer.AssemblyBrowser.Screens
+namespace AssemblyVisualizer.AssemblyBrowser.Screens
 {
 	class SearchScreen : Screen
 	{
@@ -42,7 +42,7 @@ namespace ILSpyVisualizer.AssemblyBrowser.Screens
 			MembersCount
 		}
 
-		private const string HomePageUri = @"http://ilspyvisualizer.denismarkelov.com";
+		private const string HomePageUri = @"http://AssemblyVisualizer.denismarkelov.com";
 
 		private string _searchTerm = string.Empty;
 		private bool _isSearchPerformed = true;

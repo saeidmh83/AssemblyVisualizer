@@ -15,9 +15,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.Infrastructure;
 
-namespace ILSpyVisualizer.Common.CommandsGroup
+namespace AssemblyVisualizer.Common.CommandsGroup
 {
 	/// <summary>
 	/// Interaction logic for CommandsGroupView.xaml

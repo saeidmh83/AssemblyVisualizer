@@ -9,7 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace ILSpyVisualizer.Controls.ZoomControl
+namespace AssemblyVisualizer.Controls.ZoomControl
 {
     [TemplatePart(Name = PART_Presenter, Type = typeof(ZoomContentPresenter))]
     public class ZoomControl : ContentControl

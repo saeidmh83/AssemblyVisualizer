@@ -11,10 +11,10 @@ using System.Text;
 using ICSharpCode.ILSpy;
 using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.TreeView;
-using ILSpyVisualizer.Properties;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Properties;
+using AssemblyVisualizer.Model;
 
-namespace ILSpyVisualizer.HAL.ILSpy
+namespace AssemblyVisualizer.HAL.ILSpy
 {
 	[ExportContextMenuEntry(Header = "Add to Browser")]
 	sealed class AddAssemblyContextMenuEntry : IContextMenuEntry

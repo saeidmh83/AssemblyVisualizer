@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using ILSpyVisualizer.AssemblyBrowser.ViewModels;
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.AssemblyBrowser.ViewModels;
+using AssemblyVisualizer.Infrastructure;
 
-namespace ILSpyVisualizer.AssemblyBrowser.Screens
+namespace AssemblyVisualizer.AssemblyBrowser.Screens
 {
 	class Screen : ViewModelBase
 	{

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media;
 
-namespace ILSpyVisualizer.Model
+namespace AssemblyVisualizer.Model
 {
     class MemberInfo
     {

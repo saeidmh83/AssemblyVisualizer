@@ -11,9 +11,9 @@ using System.Text;
 using Mono.Cecil;
 using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.ILSpy;
-using ILSpyVisualizer.Model;
+using AssemblyVisualizer.Model;
 
-namespace ILSpyVisualizer.HAL.ILSpy
+namespace AssemblyVisualizer.HAL.ILSpy
 {
     class Converter : IConverter
     {

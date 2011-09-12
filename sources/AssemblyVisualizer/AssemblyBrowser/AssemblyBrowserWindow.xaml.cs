@@ -14,12 +14,12 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using ILSpyVisualizer.AssemblyBrowser.ViewModels;
-using ILSpyVisualizer.Model;
-using ILSpyVisualizer.HAL;
+using AssemblyVisualizer.AssemblyBrowser.ViewModels;
+using AssemblyVisualizer.Model;
+using AssemblyVisualizer.HAL;
 
 
-namespace ILSpyVisualizer.AssemblyBrowser
+namespace AssemblyVisualizer.AssemblyBrowser
 {
 	/// <summary>
 	/// Interaction logic for AssemblyBrowserWindow.xaml

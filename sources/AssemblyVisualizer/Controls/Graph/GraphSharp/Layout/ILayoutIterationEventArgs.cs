@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Layout
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Layout
 {
     public interface ILayoutIterationEventArgs<TVertex>
         where TVertex : class

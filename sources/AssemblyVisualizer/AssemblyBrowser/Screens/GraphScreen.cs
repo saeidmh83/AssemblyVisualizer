@@ -7,14 +7,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
-using ILSpyVisualizer.AssemblyBrowser.ViewModels;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
-using ILSpyVisualizer.Infrastructure;
+using AssemblyVisualizer.AssemblyBrowser.ViewModels;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Infrastructure;
 using System.Windows.Input;
 using System.Windows;
-using ILSpyVisualizer.Properties;
+using AssemblyVisualizer.Properties;
 
-namespace ILSpyVisualizer.AssemblyBrowser.Screens
+namespace AssemblyVisualizer.AssemblyBrowser.Screens
 {
 	class GraphScreen : Screen
 	{	

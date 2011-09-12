@@ -6,7 +6,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace ILSpyVisualizer.Controls.ZoomControl.Converters
+namespace AssemblyVisualizer.Controls.ZoomControl.Converters
 {
     public class EqualityToBooleanConverter : IValueConverter
     {

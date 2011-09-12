@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Data;
 using System.Windows;
 
-namespace ILSpyVisualizer.Controls.Graph.Converters
+namespace AssemblyVisualizer.Controls.Graph.Converters
 {
 	public class PointArrayToString : IValueConverter
 	{

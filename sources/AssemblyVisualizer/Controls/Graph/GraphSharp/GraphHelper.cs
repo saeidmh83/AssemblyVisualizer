@@ -5,11 +5,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
 //using QuickGraph.Algorithms.ShortestPath;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp
 {
     public static class GraphHelper
     {

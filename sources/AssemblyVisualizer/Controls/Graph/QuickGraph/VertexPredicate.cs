@@ -4,7 +4,7 @@
 
 using System.Diagnostics.Contracts;
 
-namespace ILSpyVisualizer.Controls.Graph.QuickGraph
+namespace AssemblyVisualizer.Controls.Graph.QuickGraph
 {
     [Pure]
     public delegate bool VertexPredicate<TVertex>(TVertex v);

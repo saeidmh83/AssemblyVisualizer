@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Diagnostics;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.OverlapRemoval
 {
     public class FSAAlgorithm<TObject> : FSAAlgorithm<TObject, IOverlapRemovalParameters>
         where TObject : class

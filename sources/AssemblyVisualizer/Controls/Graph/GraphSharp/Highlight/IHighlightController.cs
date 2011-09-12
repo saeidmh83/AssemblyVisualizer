@@ -3,9 +3,9 @@
 // (for details please see \docs\Ms-PL)
 
 using System.Collections.Generic;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.Controls.Graph.GraphSharp.Highlight
+namespace AssemblyVisualizer.Controls.Graph.GraphSharp.Highlight
 {
 	public interface IHighlightController<TVertex, TEdge, TGraph>
 		where TVertex : class

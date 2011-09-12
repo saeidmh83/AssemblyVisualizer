@@ -5,12 +5,12 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-using ILSpyVisualizer.AssemblyBrowser.ViewModels;
-using ILSpyVisualizer.Controls.Graph;
-using ILSpyVisualizer.Controls.Graph.GraphSharp.Layout;
-using ILSpyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.AssemblyBrowser.ViewModels;
+using AssemblyVisualizer.Controls.Graph;
+using AssemblyVisualizer.Controls.Graph.GraphSharp.Layout;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
-namespace ILSpyVisualizer.AssemblyBrowser
+namespace AssemblyVisualizer.AssemblyBrowser
 {
 	class TypeGraph : BidirectionalGraph<TypeViewModel, Edge<TypeViewModel>>
 	{

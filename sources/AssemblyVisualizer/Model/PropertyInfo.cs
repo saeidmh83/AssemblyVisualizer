@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ILSpyVisualizer.Model
+namespace AssemblyVisualizer.Model
 {
     class PropertyInfo : MemberInfo
     {

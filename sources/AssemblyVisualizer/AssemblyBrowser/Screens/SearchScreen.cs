@@ -11,7 +11,6 @@ using System.Text;
 using System.Windows.Threading;
 using AssemblyVisualizer.AssemblyBrowser.ViewModels;
 using AssemblyVisualizer.Infrastructure;
-
 using System.Windows.Input;
 using AssemblyVisualizer.Common.CommandsGroup;
 using AssemblyVisualizer.Properties;
@@ -42,7 +41,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 			MembersCount
 		}
 
-		private const string HomePageUri = @"http://AssemblyVisualizer.denismarkelov.com";
+		private const string HomePageUri = @"http://visualizer.denismarkelov.com";
 
 		private string _searchTerm = string.Empty;
 		private bool _isSearchPerformed = true;

@@ -1,11 +1,11 @@
-# ILSpy Visualizer 
+# Assembly Visualizer 
 
-*ILSpy Visualizer* is a plugin for ILSpy, .NET assembly browser and decompiler
+*Assembly Visualizer* is a plugin for ILSpy, .NET assembly browser and decompiler
 (http://www.ilspy.net/).
 Its intention is to visualize data that can be 
 obtained using ILSpy.
 
-Website: http://ilspyvisualizer.denismarkelov.com    
+Website: http://visualizer.denismarkelov.com    
 Copyright 2011 Denis Markelov    
 Licensed under the Microsoft Public License
 

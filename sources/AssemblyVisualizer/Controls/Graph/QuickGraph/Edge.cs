@@ -56,6 +56,12 @@ namespace AssemblyVisualizer.Controls.Graph.QuickGraph
             get { return this.target; }
         }
 
+        public bool IsTwoWay
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
         /// </summary>

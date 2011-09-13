@@ -29,6 +29,7 @@ namespace AssemblyVisualizer.DependencyBrowser
         }
 
         public bool IsProcessed { get; set; }
+        public bool IsMarked { get; set; }
         public string Name 
         {
             get

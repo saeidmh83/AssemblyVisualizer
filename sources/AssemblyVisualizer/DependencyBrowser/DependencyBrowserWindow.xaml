@@ -23,7 +23,13 @@
                             <ContentPresenter Content="{TemplateBinding Vertex}" >
                                 <ContentPresenter.ContentTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Name}"/>
+                                        <TextBlock x:Name="txtName"
+                                                   Text="{Binding Name}"/>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsMarked}" Value="True">
+                                                <Setter TargetName="txtName" Property="Foreground" Value="DarkGreen"/>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ContentPresenter.ContentTemplate>
                             </ContentPresenter>
@@ -89,6 +95,11 @@
                 <Setter Property="Opacity"
                 Value="0.5" />
                 <Style.Triggers>
+                    <Trigger Property="Graph:EdgeControl.IsTwoWay"
+                     Value="True">
+                        <Setter Property="Foreground"
+                        Value="Thistle" />
+                    </Trigger>
                     <Trigger Property="Graph:GraphElementBehaviour.IsHighlighted"
                      Value="True">
                         <Setter Property="Foreground"
@@ -98,7 +109,17 @@
                      Value="True">
                         <Setter Property="Foreground"
                         Value="Yellow" />
-                    </Trigger>
+                    </Trigger>                    
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
+                               Value="True" />
+                            <Condition Property="Graph:GraphElementBehaviour.SemiHighlightInfo"
+                               Value="OutEdge" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Foreground"
+                        Value="#3578FF" />
+                    </MultiTrigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
                             <Condition Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
@@ -118,6 +139,16 @@
                         </MultiTrigger.Conditions>
                         <Setter Property="Foreground"
                         Value="#3578FF" />
+                    </MultiTrigger>
+                    <MultiTrigger>
+                        <MultiTrigger.Conditions>
+                            <Condition Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
+                               Value="True" />
+                            <Condition Property="Graph:EdgeControl.IsTwoWay"
+                               Value="True" />
+                        </MultiTrigger.Conditions>
+                        <Setter Property="Foreground"
+                        Value="DarkViolet" />
                     </MultiTrigger>
                 </Style.Triggers>
             </Style>

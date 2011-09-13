@@ -329,6 +329,7 @@ namespace AssemblyVisualizer.Controls.Graph
             //set the Source and the Target
             edgeControl.Source = _vertexControls[edge.Source];
             edgeControl.Target = _vertexControls[edge.Target];
+            edgeControl.IsTwoWay = edge.IsTwoWay;
 
             if (ActualLayoutMode == GraphSharp.Layout.LayoutMode.Simple)
                 Children.Insert(0, edgeControl);

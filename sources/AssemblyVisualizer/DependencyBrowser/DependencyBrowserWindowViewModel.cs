@@ -10,6 +10,7 @@ using AssemblyVisualizer.Infrastructure;
 using AssemblyVisualizer.Model;
 using AssemblyVisualizer.Properties;
 using System.Collections.ObjectModel;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
 namespace AssemblyVisualizer.DependencyBrowser
 {
@@ -21,7 +22,12 @@ namespace AssemblyVisualizer.DependencyBrowser
         public DependencyBrowserWindowViewModel(IEnumerable<AssemblyInfo> assemblies)
         {
             _assemblies = assemblies.ToList();
-            _assemblyGraph = CreateGraph(assemblies.Select(a => AssemblyViewModel.Create(a)));
+            var assemblyViewModels = assemblies.Select(a => AssemblyViewModel.Create(a));
+            foreach(var vm in assemblyViewModels)
+            {
+                vm.IsMarked = true;
+            }
+            _assemblyGraph = CreateGraph(assemblyViewModels);
 
             Commands = new ObservableCollection<UserCommand>
 			           	{
@@ -90,8 +96,16 @@ namespace AssemblyVisualizer.DependencyBrowser
                     graph.AddVertex(refAssembly);
                 }
 
-                var edge = new Controls.Graph.QuickGraph.Edge<AssemblyViewModel>(assembly, refAssembly);
-                
+                var edge = new Edge<AssemblyViewModel>(assembly, refAssembly);
+
+                Edge<AssemblyViewModel> reverseEdge;
+                var result = graph.TryGetEdge(refAssembly, assembly, out reverseEdge);
+                if (result)
+                {
+                    reverseEdge.IsTwoWay = true;
+                    edge.IsTwoWay = true;
+                }
+
                 graph.AddEdge(edge);
                 if (!refAssembly.IsProcessed)
                 {

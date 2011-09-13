@@ -22,5 +22,7 @@ namespace AssemblyVisualizer.Controls.Graph.QuickGraph
         /// Gets the target vertex
         /// </summary>
         TVertex Target { get;}
+
+        bool IsTwoWay { get; }
     }
 }

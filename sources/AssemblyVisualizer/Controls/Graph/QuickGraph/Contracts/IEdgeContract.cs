@@ -35,5 +35,7 @@ namespace AssemblyVisualizer.Controls.Graph.QuickGraph.Contracts
                 return default(TVertex);
             }
         }
+
+        public bool IsTwoWay { get; set; }
     }
 }

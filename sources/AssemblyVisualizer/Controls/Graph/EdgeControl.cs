@@ -22,7 +22,11 @@ namespace AssemblyVisualizer.Controls.Graph
 		public static readonly DependencyProperty TargetProperty = DependencyProperty.Register( "Target",
 																							   typeof( VertexControl ),
 																							   typeof( EdgeControl ),
-																							   new UIPropertyMetadata( null ) );
+																							   new UIPropertyMetadata( null ) );   
+        
+        public static readonly DependencyProperty IsTwoWayProperty =
+            DependencyProperty.Register("IsTwoWay", typeof(bool), typeof(EdgeControl), new UIPropertyMetadata(false));
+
 
 		public static readonly DependencyProperty RoutePointsProperty = DependencyProperty.Register( "RoutePoints",
 																									typeof( Point[] ),
@@ -51,6 +55,12 @@ namespace AssemblyVisualizer.Controls.Graph
 			get { return (VertexControl)GetValue( TargetProperty ); }
 			internal set { SetValue( TargetProperty, value ); }
 		}
+
+        public bool IsTwoWay
+        {
+            get { return (bool)GetValue(IsTwoWayProperty); }
+            set { SetValue(IsTwoWayProperty, value); }
+        }
 
 		public Point[] RoutePoints
 		{

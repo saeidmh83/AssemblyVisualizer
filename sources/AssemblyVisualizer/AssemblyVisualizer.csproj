@@ -38,14 +38,21 @@
     <StartProgram>..\..\build\ILSpy.exe</StartProgram>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ICSharpCode.TreeView">
+    <Reference Include="ICSharpCode.TreeView, Version=4.1.0.7275, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\ICSharpCode.TreeView.dll</HintPath>
     </Reference>
-    <Reference Include="ILSpy">
+    <Reference Include="ILSpy, Version=1.0.0.1000, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <ExecutableExtension>.exe</ExecutableExtension>
       <HintPath>..\..\build\ILSpy.exe</HintPath>
     </Reference>
-    <Reference Include="Mono.Cecil">
+    <Reference Include="Mono.Cecil, Version=0.9.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Reflector">
+      <HintPath>..\..\build\Reflector\Reflector.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />

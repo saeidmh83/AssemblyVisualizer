@@ -21,7 +21,7 @@ namespace AssemblyVisualizer.HAL.Reflector
         private Dictionary<ITypeDeclaration, TypeInfo> _typeCorrespondence = new Dictionary<ITypeDeclaration, TypeInfo>();
 
         public AssemblyInfo Assembly(object assembly)
-        { 
+        {
             var assemblyDefinition = assembly as IAssembly;
 
             if (_assemblyCorrespondence.ContainsKey(assemblyDefinition))
@@ -31,16 +31,36 @@ namespace AssemblyVisualizer.HAL.Reflector
 
             var typeDefinitions = assemblyDefinition.Modules.OfType<IModule>().SelectMany(GetTypeDeclarations).ToArray();
 
+            string publicKeyToken;
+            if (assemblyDefinition.PublicKeyToken == null || assemblyDefinition.PublicKeyToken.Length == 0)
+            {
+                publicKeyToken = "null";
+            }
+            else
+            {
+                var builder = new StringBuilder();
+                for (int i = 0; i < assemblyDefinition.PublicKeyToken.Length; i++)
+                {
+                    builder.Append(assemblyDefinition.PublicKeyToken[i].ToString("x2"));
+                }
+                publicKeyToken = builder.ToString();
+            }
+
+            var culture = string.IsNullOrWhiteSpace(assemblyDefinition.Culture) ? "neutral" : assemblyDefinition.Culture;
+
+            var fullName = string.Format("{0}, Version={1}, Culture={2}, PublicKeyToken={3}",
+                assemblyDefinition.Name, assemblyDefinition.Version.ToString(4), culture, publicKeyToken);
+
             var assemblyInfo = new AssemblyInfo
             {
                 Name = assemblyDefinition.Name,
-                FullName = assemblyDefinition.Name, // TODO: make real FullName
+                FullName = fullName,
                 ExportedTypesCount = typeDefinitions.Count(t => t.Visibility == TypeVisibility.Public),
                 InternalTypesCount = typeDefinitions.Count(t => t.Visibility == TypeVisibility.Private)
             };
-            
+
             _assemblyCorrespondence.Add(assemblyDefinition, assemblyInfo);
-            assemblyInfo.Modules = assemblyDefinition.Modules.OfType<IModule>().Select(m => Module(m));            
+            assemblyInfo.Modules = assemblyDefinition.Modules.OfType<IModule>().Select(m => Module(m));
 
             assemblyInfo.ReferencedAssemblies = assemblyDefinition.Modules
                 .OfType<IModule>()
@@ -56,7 +76,7 @@ namespace AssemblyVisualizer.HAL.Reflector
         {
             return module.Types.OfType<ITypeDeclaration>();
         }
-        
+
         public ModuleInfo Module(IModule module)
         {
             if (_moduleCorrespondence.ContainsKey(module))
@@ -85,7 +105,7 @@ namespace AssemblyVisualizer.HAL.Reflector
             var typeDefinition = type as ITypeDeclaration;
             return Type(typeDefinition);
         }
-        
+
         public TypeInfo Type(ITypeReference typeReference)
         {
             if (typeReference == null)
@@ -115,16 +135,16 @@ namespace AssemblyVisualizer.HAL.Reflector
             }
 
             var methods = type.Methods.OfType<IMethodDeclaration>()
-                   .Where(m => !m.Name.Contains("get_") 
+                   .Where(m => !m.Name.Contains("get_")
                                && !m.Name.Contains("set_")
                                && !m.Name.Contains("add_")
                                && !m.Name.Contains("remove_"));
 
             var typeInfo = new TypeInfo
             {
-                BaseTypeRetriever = () => Type(type.BaseType),                
-                Name = type.Name,                
-                Events = type.Events.OfType<IEventDeclaration>().Select(e => Event(e)),               
+                BaseTypeRetriever = () => Type(type.BaseType),
+                Name = type.Name,
+                Events = type.Events.OfType<IEventDeclaration>().Select(e => Event(e)),
                 Properties = type.Properties.OfType<IPropertyDeclaration>().Select(p => Property(p)),
                 MembersCount = methods.Count() + type.Events.Count + type.Properties.Count + type.Fields.Count,
                 IsInternal = type.Visibility != TypeVisibility.Public,
@@ -143,13 +163,13 @@ namespace AssemblyVisualizer.HAL.Reflector
             foreach (var eventInfo in typeInfo.Events)
             {
                 eventInfo.DeclaringType = typeInfo;
-            }  
+            }
             foreach (var propertyInfo in typeInfo.Properties)
             {
                 propertyInfo.DeclaringType = typeInfo;
             }
 
-            _typeCorrespondence.Add(type, typeInfo);  
+            _typeCorrespondence.Add(type, typeInfo);
             typeInfo.Module = module ?? Module(GetModuleForType(type));
 
             typeInfo.Icon = Images.Images.GetTypeIcon(typeInfo);
@@ -163,7 +183,7 @@ namespace AssemblyVisualizer.HAL.Reflector
         }
 
         private static IModule GetModuleForType(ITypeDeclaration typeDeclaration)
-        {            
+        {
             var module = typeDeclaration.Owner as IModule;
             if (module != null)
             {
@@ -182,14 +202,14 @@ namespace AssemblyVisualizer.HAL.Reflector
         }
 
         public EventInfo Event(IEventDeclaration eventDeclaration)
-        {                        
+        {
             var addMethod = eventDeclaration.AddMethod.Resolve();
 
             var eventInfo = new EventInfo
             {
                 Text = eventDeclaration.ToString(),
                 Name = eventDeclaration.Name,
-                FullName = eventDeclaration.Name,                
+                FullName = eventDeclaration.Name,
                 IsInternal = addMethod.Visibility == MethodVisibility.Assembly,
                 IsPrivate = addMethod.Visibility == MethodVisibility.Private,
                 IsPublic = addMethod.Visibility == MethodVisibility.Public,
@@ -214,7 +234,7 @@ namespace AssemblyVisualizer.HAL.Reflector
             {
                 Text = fieldDefinition.ToString(),
                 Name = fieldDefinition.Name,
-                FullName = fieldDefinition.Name,                
+                FullName = fieldDefinition.Name,
                 IsInternal = fieldDefinition.Visibility == FieldVisibility.Assembly,
                 IsPrivate = fieldDefinition.Visibility == FieldVisibility.Private,
                 IsPublic = fieldDefinition.Visibility == FieldVisibility.Public,
@@ -240,10 +260,10 @@ namespace AssemblyVisualizer.HAL.Reflector
         public MethodInfo Method(IMethodDeclaration method, TypeInfo type)
         {
             var methodInfo = new MethodInfo
-            {                
+            {
                 Text = method.ToString(),
                 Name = method.Name,
-                FullName = method.Name,                
+                FullName = method.Name,
                 IsInternal = method.Visibility == MethodVisibility.Assembly,
                 IsPrivate = method.Visibility == MethodVisibility.Private,
                 IsPublic = method.Visibility == MethodVisibility.Public,
@@ -257,7 +277,7 @@ namespace AssemblyVisualizer.HAL.Reflector
                 IsFinal = method.Final,
                 MemberReference = method,
                 DeclaringType = type
-            };          
+            };
 
             if (method.Overrides.Count > 0)
             {
@@ -276,18 +296,18 @@ namespace AssemblyVisualizer.HAL.Reflector
             methodInfo.Icon = Images.Images.GetMethodIcon(methodInfo);
 
             return methodInfo;
-        }        
+        }
 
         public PropertyInfo Property(IPropertyDeclaration propertyDefinition)
-        {            
-            var getMethod =  propertyDefinition.GetMethod == null ? null : propertyDefinition.GetMethod.Resolve();
+        {
+            var getMethod = propertyDefinition.GetMethod == null ? null : propertyDefinition.GetMethod.Resolve();
             var setMethod = propertyDefinition.SetMethod == null ? null : propertyDefinition.SetMethod.Resolve();
 
             var propertyInfo = new PropertyInfo
-            {                
+            {
                 Text = propertyDefinition.ToString(),
                 Name = propertyDefinition.Name,
-                FullName = propertyDefinition.Name,                
+                FullName = propertyDefinition.Name,
                 IsPublic = getMethod != null
                            && getMethod.Visibility == MethodVisibility.Public
                            || setMethod != null

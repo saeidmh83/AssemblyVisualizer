@@ -177,35 +177,50 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>                            
-                            <TextBlock FontSize="16"
-                                       FontWeight="Bold"
-                                       Margin="0, 0, 9, 8"
-                                       HorizontalAlignment="Left"
-                                       TextWrapping="Wrap">
-                                <TextBlock ToolTip="{Binding ExtendedInfo}">
-                                    <Hyperlink Command="{Binding NavigateCommand}"
-                                               TextDecorations="None"
-                                               Foreground="Black">
-                                        <TextBlock Text="{Binding NameStart}" 
-                                                   Margin="0, 0, -4, 0"/>
-                                        <TextBlock Text="{Binding NameMiddle}"
-                                                   Background="Yellow"/>
-                                        <TextBlock Text="{Binding NameEnd}"
-                                                   Margin="-4, 0, 0, 0"/>
-                                    </Hyperlink>
-                                </TextBlock>
-                                <TextBlock x:Name="txtBaseType">
-                                    <Run Text=" : "/>
-                                    <TextBlock ToolTip="{Binding BaseTypeFullName}">
-                                        <Hyperlink x:Name="hplNavigateToBase"
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Image Source="{Binding Icon}"
+                                   Margin="2, -5, 2, 0"
+                                   HorizontalAlignment="Left"
+                                   Stretch="Uniform"
+                                   Width="16"
+                                   Height="16"/>
+                                <TextBlock FontSize="16"
+                                           FontWeight="Bold"
+                                           Margin="4, 0, 9, 8"
+                                           HorizontalAlignment="Left"
+                                           TextWrapping="Wrap"
+                                           Grid.Column="1">
+                                    <TextBlock ToolTip="{Binding ExtendedInfo}"
+                                               Margin="{Binding NameMargin}">
+                                        <Hyperlink Command="{Binding NavigateCommand}"
                                                    TextDecorations="None"
-                                                   Foreground="Black"                                                       
-                                                   Command="{Binding NavigateToBaseCommand}">
-                                            <TextBlock Text="{Binding BaseTypeName}"/>
+                                                   Foreground="Black">
+                                            <TextBlock Text="{Binding NameStart}" 
+                                                       Margin="0, 0, -4, 0"/>
+                                            <TextBlock Text="{Binding NameMiddle}"
+                                                       Background="Yellow"/>
+                                            <TextBlock Text="{Binding NameEnd}"
+                                                       Margin="-4, 0, 0, 0"/>
                                         </Hyperlink>
                                     </TextBlock>
+                                    <TextBlock x:Name="txtBaseType">
+                                        <Run Text=" : "/>
+                                        <TextBlock ToolTip="{Binding BaseTypeFullName}">
+                                            <Hyperlink x:Name="hplNavigateToBase"
+                                                       TextDecorations="None"
+                                                       Foreground="Black"                                                       
+                                                       Command="{Binding NavigateToBaseCommand}">
+                                                <TextBlock Text="{Binding BaseTypeName}"/>
+                                            </Hyperlink>
+                                        </TextBlock>
+                                    </TextBlock>
                                 </TextBlock>
-                            </TextBlock>
+                            </Grid>                            
 
                             <Grid Grid.Row="1"
                                   Margin="2, 0"
@@ -303,7 +318,7 @@
                         </DataTrigger>
                         <DataTrigger Binding="{Binding IsBaseTypeAvailable}" Value="False">
                             <Setter TargetName="hplNavigateToBase" Property="Cursor" Value="Arrow"/>
-                        </DataTrigger>
+                        </DataTrigger>                        
                     </DataTemplate.Triggers>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

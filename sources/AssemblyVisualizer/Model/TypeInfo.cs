@@ -41,6 +41,8 @@ namespace AssemblyVisualizer.Model
         public bool IsEnum { get; set; }
         public bool IsInterface { get; set; }
         public bool IsValueType { get; set; }
+        public bool IsSealed { get; set; }
+        public bool IsAbstract { get; set; }
 
         public int MembersCount { get; set; }
     }

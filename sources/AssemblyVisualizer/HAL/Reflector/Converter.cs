@@ -21,7 +21,7 @@ namespace AssemblyVisualizer.HAL.Reflector
         private Dictionary<ITypeDeclaration, TypeInfo> _typeCorrespondence = new Dictionary<ITypeDeclaration, TypeInfo>();
 
         public AssemblyInfo Assembly(object assembly)
-        {
+        { 
             var assemblyDefinition = assembly as IAssembly;
 
             if (_assemblyCorrespondence.ContainsKey(assemblyDefinition))
@@ -123,8 +123,7 @@ namespace AssemblyVisualizer.HAL.Reflector
             var typeInfo = new TypeInfo
             {
                 BaseTypeRetriever = () => Type(type.BaseType),                
-                Name = type.Name,
-                //Icon = type.ico,
+                Name = type.Name,                
                 Events = type.Events.OfType<IEventDeclaration>().Select(e => Event(e)),               
                 Properties = type.Properties.OfType<IPropertyDeclaration>().Select(p => Property(p)),
                 MembersCount = methods.Count() + type.Events.Count + type.Properties.Count + type.Fields.Count,
@@ -133,7 +132,9 @@ namespace AssemblyVisualizer.HAL.Reflector
                 MemberReference = type,
                 IsEnum = IsEnum(type),
                 IsInterface = type.Interface,
-                IsValueType = type.ValueType
+                IsValueType = type.ValueType,
+                IsSealed = type.Sealed,
+                IsAbstract = type.Abstract
             };
             typeInfo.FullName = GetFullName(type.Namespace, typeInfo.Name);
             typeInfo.Methods = methods.Select(m => Method(m, typeInfo));
@@ -150,6 +151,8 @@ namespace AssemblyVisualizer.HAL.Reflector
 
             _typeCorrespondence.Add(type, typeInfo);  
             typeInfo.Module = module ?? Module(GetModuleForType(type));
+
+            typeInfo.Icon = Images.Images.GetTypeIcon(typeInfo);
 
             return typeInfo;
         }

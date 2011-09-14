@@ -122,7 +122,9 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 MemberReference = typeDefinition,
                 IsEnum = typeDefinition.IsEnum,
                 IsInterface = typeDefinition.IsInterface,
-                IsValueType = typeDefinition.IsValueType
+                IsValueType = typeDefinition.IsValueType,
+                IsSealed = typeDefinition.IsSealed,
+                IsAbstract = typeDefinition.IsAbstract
             };
             typeInfo.FullName = GetFullName(typeDefinition.Namespace, typeInfo.Name);
 

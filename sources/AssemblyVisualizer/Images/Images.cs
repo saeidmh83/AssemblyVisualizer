@@ -136,6 +136,44 @@ namespace AssemblyVisualizer.Images
                 return memberIconCache.GetIcon(icon, overlay, isStatic);
         }
 
+        public static ImageSource GetTypeIcon(TypeInfo type)
+        {
+            TypeIcon typeIcon;
+
+            if (type.IsValueType)
+            {
+                if (type.IsEnum)
+                    typeIcon = TypeIcon.Enum;
+                else
+                    typeIcon = TypeIcon.Struct;
+            }
+            else
+            {
+                if (type.IsInterface)
+                    typeIcon = TypeIcon.Interface;
+                else if (IsDelegate(type))
+                    typeIcon = TypeIcon.Delegate;
+                else if (IsStaticClass(type))
+                    typeIcon = TypeIcon.StaticClass;
+                else
+                    typeIcon = TypeIcon.Class;
+            }
+            
+            AccessOverlayIcon overlayIcon = GetOverlayIcon(type);
+
+            return Images.GetIcon(typeIcon, overlayIcon);
+        }
+
+        private static bool IsDelegate(TypeInfo type)
+        {
+            return type.BaseType != null && type.BaseType.FullName == typeof(MulticastDelegate).FullName;
+        }
+
+        private static bool IsStaticClass(TypeInfo type)
+        {
+            return type.IsSealed && type.IsAbstract;
+        }
+
         public static ImageSource GetMethodIcon(MethodInfo method)
         {
             if (method.IsSpecialName && method.Name.StartsWith("op_", StringComparison.Ordinal))

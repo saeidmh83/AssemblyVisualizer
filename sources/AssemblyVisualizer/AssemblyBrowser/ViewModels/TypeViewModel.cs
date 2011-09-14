@@ -13,6 +13,7 @@ using AssemblyVisualizer.AncestryBrowser;
 using AssemblyVisualizer.Properties;
 using AssemblyVisualizer.Model;
 using AssemblyVisualizer.HAL;
+using System.Windows;
 
 namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 {
@@ -107,7 +108,35 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 
         public string NameStart { get; set; }
         public string NameMiddle { get; set; }
-        public string NameEnd { get; set; }
+        public string NameEnd { get; set; }       
+
+        public Thickness NameMargin
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(NameMiddle))
+                {
+                    return new Thickness(0, 0, -4, 0);
+                }
+                if (string.IsNullOrWhiteSpace(NameStart)
+                    && string.IsNullOrWhiteSpace(NameEnd))
+                {
+                    return new Thickness(-4, 0, -4, 0);
+                }
+                if (string.IsNullOrWhiteSpace(NameStart))
+                {
+                    return new Thickness(-4, 0, 0, 0);
+                }
+                if (string.IsNullOrWhiteSpace(NameEnd))
+                {
+                    return new Thickness(0, 0, -4, 0);
+                }
+
+                return new Thickness();
+            }
+        }
+
+        public bool IsNameMiddleEmpty { get { return string.IsNullOrWhiteSpace(NameMiddle); } }
 
 		public IEnumerable<TypeViewModel> FlattenedHierarchy
 		{
@@ -121,6 +150,8 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 				return list;
 			}
 		}
+
+        public ImageSource Icon { get { return _typeInfo.Icon; } }
 
 		public string Name
 		{

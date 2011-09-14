@@ -91,6 +91,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
             BrowseAncestryCommand = new DelegateCommand(BrowseAncestryCommandHandler);
 
 			RefreshBackground();
+            ResetName();
 		}
 
 		public ICommand VisualizeCommand { get; private set; }
@@ -103,6 +104,10 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 		{
 			get { return _typeInfo; }
 		}
+
+        public string NameStart { get; set; }
+        public string NameMiddle { get; set; }
+        public string NameEnd { get; set; }
 
 		public IEnumerable<TypeViewModel> FlattenedHierarchy
 		{
@@ -269,6 +274,13 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 
 			Background = brush;
 		}
+
+        public void ResetName()
+        {
+            NameStart = Name;
+            NameMiddle = string.Empty;
+            NameEnd = string.Empty;
+        }       
 
 		public void CountDescendants()
 		{

@@ -186,8 +186,12 @@
                                     <Hyperlink Command="{Binding NavigateCommand}"
                                                TextDecorations="None"
                                                Foreground="Black">
-                                        <TextBlock Text="{Binding Name}"                                                
-                                                   TextWrapping="Wrap"/>
+                                        <TextBlock Text="{Binding NameStart}" 
+                                                   Margin="0, 0, -4, 0"/>
+                                        <TextBlock Text="{Binding NameMiddle}"
+                                                   Background="Yellow"/>
+                                        <TextBlock Text="{Binding NameEnd}"
+                                                   Margin="-4, 0, 0, 0"/>
                                     </Hyperlink>
                                 </TextBlock>
                                 <TextBlock x:Name="txtBaseType">

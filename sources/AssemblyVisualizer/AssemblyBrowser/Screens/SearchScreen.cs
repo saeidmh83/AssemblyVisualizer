@@ -157,7 +157,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 
 				if (!string.IsNullOrWhiteSpace(SearchTerm))
 				{
-					results = results.Where(SatisfiesSearchTerm);
+					results = results.Where(SatisfiesSearchTerm);                    
 				}
 
 				switch (_searchMode)
@@ -196,6 +196,15 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 						break;
 				}
 
+                if (!string.IsNullOrWhiteSpace(SearchTerm))
+                {
+                    results = results.Select(MarkSearchTerm);
+                }
+                else
+                {
+                    results = results.Select(ClearSearchTerm);
+                }
+
 				return results;
 			}
 		}
@@ -227,6 +236,22 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 				.Name.IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase) >= 0;
 
 		}
+
+        private TypeViewModel MarkSearchTerm(TypeViewModel type)
+        {            
+            var index = type.Name.IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase);
+            type.NameStart = type.Name.Substring(0, index);
+            type.NameMiddle = type.Name.Substring(index, SearchTerm.Length);
+            type.NameEnd = type.Name.Substring(index + SearchTerm.Length);
+            
+            return type;
+        }
+
+        public TypeViewModel ClearSearchTerm(TypeViewModel type)
+        {
+            type.ResetName();
+            return type;
+        }
 
 		private void SearchTimerTick(object sender, EventArgs e)
 		{

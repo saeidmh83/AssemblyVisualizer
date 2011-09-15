@@ -17,5 +17,6 @@ namespace AssemblyVisualizer.Model
         public IEnumerable<AssemblyInfo> ReferencedAssemblies { get; set; }
         public int ExportedTypesCount { get; set; }
         public int InternalTypesCount { get; set; }
+        public Version Version { get; set; }
     }
 }

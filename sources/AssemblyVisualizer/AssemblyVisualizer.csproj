@@ -51,9 +51,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\build\Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="Reflector">
-      <HintPath>..\..\build\Reflector\Reflector.exe</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />

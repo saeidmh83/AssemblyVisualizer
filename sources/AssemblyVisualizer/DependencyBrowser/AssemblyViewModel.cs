@@ -30,21 +30,8 @@ namespace AssemblyVisualizer.DependencyBrowser
 
         public bool IsProcessed { get; set; }
         public bool IsMarked { get; set; }
-        public string Name 
-        {
-            get
-            {
-                return _assembly.Name;
-            }
-        }
-
-        public string FullName
-        {
-            get
-            {
-                return _assembly.FullName;
-            }
-        }
+        public string Name { get { return _assembly.Name; } }        
+        public string FullName { get { return _assembly.FullName; } }
 
         public IEnumerable<AssemblyViewModel> ReferencedAssemblies
         {

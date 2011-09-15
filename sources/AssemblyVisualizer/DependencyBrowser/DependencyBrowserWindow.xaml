@@ -24,7 +24,9 @@
                                 <ContentPresenter.ContentTemplate>
                                     <DataTemplate>
                                         <TextBlock x:Name="txtName"
-                                                   Text="{Binding Name}"/>
+                                                   Text="{Binding Name}"
+                                                   ToolTip="{Binding FullName}"
+                                                   FontSize="16"/>
                                         <DataTemplate.Triggers>
                                             <DataTrigger Binding="{Binding IsMarked}" Value="True">
                                                 <Setter TargetName="txtName" Property="Foreground" Value="DarkGreen"/>

@@ -53,6 +53,24 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 			_extendedInfo = IsInternal
 			                	? string.Format("{0}\n{1}", FullName, Resources.Internal)
 			                	: FullName;
+            if (_typeInfo.IsEnum)
+            {
+                var enumValues = _typeInfo.Fields.Where(f => f.Name != "value__").Select(f => f.Name);
+                if (enumValues.Count() > 0)
+                {
+                    var values = string.Join("\n", _typeInfo.Fields.Where(f => f.Name != "value__").Select(f => f.Name));
+                    _extendedInfo = string.Format("{0}\n\n{1}", _extendedInfo, values);
+                }
+            }
+            else if (_typeInfo.IsInterface)
+            {
+                var members = _typeInfo.Methods.Select(m => m.Text).Concat(_typeInfo.Properties.Select(p => p.Text));
+                if (members.Count() > 0)
+                {
+                    var values = string.Join("\n", members);
+                    _extendedInfo = string.Format("{0}\n\n{1}", _extendedInfo, values);
+                }
+            }
 
 			if (HasBaseType)
 			{

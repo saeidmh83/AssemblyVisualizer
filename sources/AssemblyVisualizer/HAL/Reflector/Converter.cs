@@ -56,7 +56,8 @@ namespace AssemblyVisualizer.HAL.Reflector
                 Name = assemblyDefinition.Name,
                 FullName = fullName,
                 ExportedTypesCount = typeDefinitions.Count(t => t.Visibility == TypeVisibility.Public),
-                InternalTypesCount = typeDefinitions.Count(t => t.Visibility == TypeVisibility.Private)
+                InternalTypesCount = typeDefinitions.Count(t => t.Visibility == TypeVisibility.Private),
+                Version = assemblyDefinition.Version
             };
 
             _assemblyCorrespondence.Add(assemblyDefinition, assemblyInfo);

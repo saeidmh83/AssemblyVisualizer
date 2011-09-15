@@ -49,6 +49,11 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 			get { return _assemblyInfo.FullName; }
 		}
 
+        public string Version
+        {
+            get { return _assemblyInfo.Version.ToString(); }
+        }
+
 		public Brush Foreground
 		{
 			get { return _foreground; }

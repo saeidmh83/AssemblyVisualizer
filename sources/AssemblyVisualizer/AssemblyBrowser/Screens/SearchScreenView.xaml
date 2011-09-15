@@ -65,6 +65,10 @@
                                 Grid.ColumnSpan="2"
                                 Margin="8, 0, 8, 3">
                         <TextBlock Margin="0, 3">
+                            <Run Text="Version: " FontStyle="Italic"/>
+                            <TextBlock Text="{Binding Version}"/>
+                        </TextBlock>                        
+                        <TextBlock Margin="0, 3">
                             <Run Text="Exported types: " FontStyle="Italic"/>
                             <TextBlock Text="{Binding ExportedTypesCount}"/>
                         </TextBlock>

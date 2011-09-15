@@ -37,7 +37,8 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 Name = assemblyDefinition.Name.Name,
                 FullName = assemblyDefinition.FullName,
                 ExportedTypesCount = typeDefinitions.Count(t => t.IsPublic),
-                InternalTypesCount = typeDefinitions.Count(t => t.IsNotPublic)
+                InternalTypesCount = typeDefinitions.Count(t => t.IsNotPublic),
+                Version = assemblyDefinition.Name.Version
             };
 
             _assemblyCorrespondence.Add(assemblyDefinition, assemblyInfo);

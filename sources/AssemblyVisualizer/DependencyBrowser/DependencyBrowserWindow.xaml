@@ -13,6 +13,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\Common\ControlStylesDictionary.xaml"/>
+                <ResourceDictionary Source="..\Common\ImagesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!--Vertex style-->
             <Style TargetType="{x:Type Graph:VertexControl}">
@@ -23,14 +24,50 @@
                             <ContentPresenter Content="{TemplateBinding Vertex}" >
                                 <ContentPresenter.ContentTemplate>
                                     <DataTemplate>
-                                        <TextBlock x:Name="txtName"
-                                                   Text="{Binding Name}"
-                                                   ToolTip="{Binding FullName}"
-                                                   FontSize="16"/>
+                                        <Grid x:Name="grid"
+                                              Background="Transparent">
+                                            <Border x:Name="brd"                                                    
+                                                    CornerRadius="10">
+                                                <TextBlock x:Name="txtName"
+                                                           Text="{Binding Name}"
+                                                           ToolTip="{Binding FullName}"
+                                                           ToolTipService.InitialShowDelay="2600"
+                                                           FontSize="16"
+                                                           Margin="4"/>
+                                            </Border>
+                                            <Border Background="White"
+                                                    CornerRadius="8"
+                                                    x:Name="commandsPanel"
+                                                    Visibility="Collapsed"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Center">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button x:Name="btnSelection"
+                                                        VerticalAlignment="Center"                                                                      
+                                                        Command="{Binding ToggleSelectionCommand}" 
+                                                        Margin="4, 0"
+                                                        Width="16"
+                                                        Height="16"
+                                                        MinWidth="0"
+                                                        MinHeight="0"
+                                                        Background="{StaticResource BluePlusDrawing}"
+                                                        Style="{StaticResource ImageButtonStyle}"
+                                                        ToolTip="Select"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
                                         <DataTemplate.Triggers>
                                             <DataTrigger Binding="{Binding IsMarked}" Value="True">
                                                 <Setter TargetName="txtName" Property="Foreground" Value="DarkGreen"/>
                                             </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                <Setter TargetName="brd" Property="Background" Value="Yellow"/>
+                                                <Setter TargetName="btnSelection" Property="ToolTip" Value="Deselect"/>
+                                                <Setter TargetName="btnSelection" Property="Background" Value="{StaticResource BlueMinusDrawing}"/>
+                                            </DataTrigger>
+                                            <Trigger SourceName="grid" Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="commandsPanel" Property="Visibility" Value="Visible"/>
+                                            </Trigger>                                            
                                         </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ContentPresenter.ContentTemplate>

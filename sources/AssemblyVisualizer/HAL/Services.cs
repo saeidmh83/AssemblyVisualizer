@@ -17,30 +17,42 @@ using Reflector.CodeModel;
 using ICSharpCode.ILSpy;
 using Mono.Cecil;
 using System.Windows;
+using AssemblyVisualizer.AssemblyBrowser;
 #endif
 
 namespace AssemblyVisualizer.HAL
 {
     class Services
     {
+        public static void BrowseAssemblies(IEnumerable<AssemblyInfo> assemblies)
+        {
+            var window = new AssemblyBrowserWindow(assemblies);
+#if ILSpy
+            window.Owner = MainWindow;
+#elif Reflector
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(window);
+#endif
+            window.Show();
+        }
+
         public static void JumpTo(object memberReference)
         {
-            #if ILSpy
+#if ILSpy
             MainWindow.JumpToReference(memberReference);
-            #endif
-            #if Reflector
+#endif
+#if Reflector
             Package.AssemblyBrowser.ActiveItem = memberReference;
-            #endif
+#endif
         }
 
         public static bool MethodsMatch(MethodInfo method1, MethodInfo method2)
         { 
-            #if ILSpy
+#if ILSpy
             var md1 = method1.MemberReference as MethodDefinition;
             var md2 = method2.MemberReference as MethodDefinition;
 
             return md1.Name == md2.Name && ParametersMatch(md1, md2);
-            #elif Reflector
+#elif Reflector
             var md1 = method1.MemberReference as IMethodDeclaration;
             var md2 = method2.MemberReference as IMethodDeclaration;            
 
@@ -50,10 +62,10 @@ namespace AssemblyVisualizer.HAL
 
             return false;
 
-            #endif
+#endif
         }
 
-        #if ILSpy
+#if ILSpy
 
         public static MainWindow MainWindow
         {
@@ -79,9 +91,9 @@ namespace AssemblyVisualizer.HAL
             }
             return true;
         }
-        #endif
+#endif
 
-        #if Reflector
+#if Reflector
 
         private static bool ParametersMatch(IMethodDeclaration method1, IMethodDeclaration method2)
         {
@@ -100,6 +112,6 @@ namespace AssemblyVisualizer.HAL
             return true;
         }
 
-        #endif
+#endif
     }
 }

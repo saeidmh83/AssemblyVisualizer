@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using AssemblyVisualizer.Infrastructure;
 using AssemblyVisualizer.Model;
+using System.Windows.Input;
 
 namespace AssemblyVisualizer.DependencyBrowser
 {
@@ -17,6 +18,7 @@ namespace AssemblyVisualizer.DependencyBrowser
 
         private AssemblyInfo _assembly;
         private IList<AssemblyViewModel> _referencedAssemblies = new List<AssemblyViewModel>();
+        private bool _isSelected;
         
         private AssemblyViewModel(AssemblyInfo assembly)
         {
@@ -26,12 +28,29 @@ namespace AssemblyVisualizer.DependencyBrowser
             {
                 _referencedAssemblies.Add(Create(assemblyInfo));
             }
+
+            ToggleSelectionCommand = new DelegateCommand(ToggleSelectionCommandHandler);
         }
+
+        public ICommand ToggleSelectionCommand { get; private set; }
 
         public bool IsProcessed { get; set; }
         public bool IsMarked { get; set; }
         public string Name { get { return _assembly.Name; } }        
         public string FullName { get { return _assembly.FullName; } }
+
+        public bool IsSelected
+        {
+            get
+            {
+                return _isSelected;
+            }
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged("IsSelected");
+            }
+        }
 
         public IEnumerable<AssemblyViewModel> ReferencedAssemblies
         {
@@ -39,6 +58,11 @@ namespace AssemblyVisualizer.DependencyBrowser
             {
                 return _referencedAssemblies;
             }
+        }
+
+        public AssemblyInfo AssemblyInfo
+        {
+            get { return _assembly; }
         }
 
         public static AssemblyViewModel Create(AssemblyInfo assemblyInfo)
@@ -53,6 +77,11 @@ namespace AssemblyVisualizer.DependencyBrowser
         public static void ClearCache()
         {
             _correspondence.Clear();
+        }
+
+        private void ToggleSelectionCommandHandler()
+        {
+            IsSelected = !IsSelected;
         }
     }
 }

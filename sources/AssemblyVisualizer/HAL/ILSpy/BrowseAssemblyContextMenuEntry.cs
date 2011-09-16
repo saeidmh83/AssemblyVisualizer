@@ -36,12 +36,8 @@ namespace AssemblyVisualizer.AssemblyBrowser
 				.OfType<AssemblyTreeNode>()
 				.Select(n => Converter.Assembly(n.LoadedAssembly.AssemblyDefinition))
 				.ToList();
-			
-			var window = new AssemblyBrowserWindow(assemblyDefinitions)
-			             	{
-			             		Owner = MainWindow.Instance
-			             	};
-			window.Show();
+
+            Services.BrowseAssemblies(assemblyDefinitions);
 		}
 	}
 }

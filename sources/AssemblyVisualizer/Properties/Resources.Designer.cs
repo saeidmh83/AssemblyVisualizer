@@ -97,6 +97,15 @@ namespace AssemblyVisualizer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browse.
+        /// </summary>
+        internal static string Browse {
+            get {
+                return ResourceManager.GetString("Browse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot navigate back.
         /// </summary>
         internal static string CannotNavigateBack {
@@ -111,6 +120,15 @@ namespace AssemblyVisualizer.Properties {
         internal static string CannotNavigateForward {
             get {
                 return ResourceManager.GetString("CannotNavigateForward", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear selection.
+        /// </summary>
+        internal static string ClearSelection {
+            get {
+                return ResourceManager.GetString("ClearSelection", resourceCulture);
             }
         }
         

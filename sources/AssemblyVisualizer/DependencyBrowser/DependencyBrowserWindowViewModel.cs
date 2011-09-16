@@ -11,28 +11,35 @@ using AssemblyVisualizer.Model;
 using AssemblyVisualizer.Properties;
 using System.Collections.ObjectModel;
 using AssemblyVisualizer.Controls.Graph.QuickGraph;
+using AssemblyVisualizer.AssemblyBrowser;
+using AssemblyVisualizer.HAL;
 
 namespace AssemblyVisualizer.DependencyBrowser
 {
     class DependencyBrowserWindowViewModel : ViewModelBase
     {
-        private IList<AssemblyInfo> _assemblies;
+        private IEnumerable<AssemblyInfo> _assemblies;
+        private IEnumerable<AssemblyViewModel> _assemblyViewModels;
         private AssemblyGraph _assemblyGraph;       
 
         public DependencyBrowserWindowViewModel(IEnumerable<AssemblyInfo> assemblies)
         {
             _assemblies = assemblies.ToList();
-            var assemblyViewModels = assemblies.Select(a => AssemblyViewModel.Create(a));
-            foreach(var vm in assemblyViewModels)
+            var inputAssemblyViewModels = assemblies
+                .Select(a => AssemblyViewModel.Create(a))
+                .ToList();
+            foreach(var vm in inputAssemblyViewModels)
             {
                 vm.IsMarked = true;
             }
-            _assemblyGraph = CreateGraph(assemblyViewModels);
-
+            _assemblyGraph = CreateGraph(inputAssemblyViewModels);
+            _assemblyViewModels = _assemblyGraph.Vertices.ToList();
             Commands = new ObservableCollection<UserCommand>
 			           	{
 			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
 			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
+                            new UserCommand(Resources.Browse, BrowseCommandHandler),
+                            new UserCommand(Resources.ClearSelection, ClearSelectionCommandHandler)
 			           	};
         }
 
@@ -66,6 +73,22 @@ namespace AssemblyVisualizer.DependencyBrowser
             if (handler != null)
             {
                 handler();
+            }
+        }
+
+        private void BrowseCommandHandler()
+        {
+            var selectedAssemblies = _assemblyViewModels
+                .Where(a => a.IsSelected)
+                .Select(a => a.AssemblyInfo);
+            Services.BrowseAssemblies(selectedAssemblies);            
+        }
+
+        private void ClearSelectionCommandHandler()
+        {
+            foreach (var assemblyViewModel in _assemblyViewModels)
+            {
+                assemblyViewModel.IsSelected = false;
             }
         }
 
@@ -112,6 +135,6 @@ namespace AssemblyVisualizer.DependencyBrowser
                    AddReferencesRecursive(graph, refAssembly);
                 }
             }
-        }
+        }        
     }
 }

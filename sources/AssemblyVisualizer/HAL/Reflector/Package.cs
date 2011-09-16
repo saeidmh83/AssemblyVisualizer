@@ -61,9 +61,7 @@ namespace AssemblyVisualizer.HAL.Reflector
             }
             else
             {
-                var window = new AssemblyBrowser.AssemblyBrowserWindow(assemblies);
-                System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(window);
-                window.Show();
+                Services.BrowseAssemblies(assemblies);
             }
         }
 
@@ -81,9 +79,7 @@ namespace AssemblyVisualizer.HAL.Reflector
             var item = _assemblyBrowser.ActiveItem as IAssembly;
 
             var window = new DependencyBrowserWindow(new [] { HAL.Converter.Assembly(item) });
-            /*{
-                Owner = Services.MainWindow
-            };*/
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(window);
             window.Show();
         }
 

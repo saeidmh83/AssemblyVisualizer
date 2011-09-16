@@ -64,7 +64,9 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
             }
             else if (_typeInfo.IsInterface)
             {
-                var members = _typeInfo.Methods.Select(m => m.Text).Concat(_typeInfo.Properties.Select(p => p.Text));
+                var members = _typeInfo.Events.Select(m => m.Text)
+                    .Concat(_typeInfo.Properties.Select(p => p.Text))
+                    .Concat(_typeInfo.Methods.Select(p => p.Text));
                 if (members.Count() > 0)
                 {
                     var values = string.Join("\n", members);

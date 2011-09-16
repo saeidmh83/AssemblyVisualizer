@@ -33,6 +33,9 @@ namespace AssemblyVisualizer.DependencyBrowser
 
             ViewModel.FillGraphRequest += FillGraphRequestHandler;
             ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;
+            ViewModel.ShowInnerSearchRequest += ShowInnerSearchRequestHandler;
+            ViewModel.HideInnerSearchRequest += HideInnerSearchRequestHandler;
+            ViewModel.FocusSearchRequest += FocusSearchRequestHandler;
         }
 
         public DependencyBrowserWindowViewModel ViewModel
@@ -56,6 +59,45 @@ namespace AssemblyVisualizer.DependencyBrowser
         {
             var animation = new DoubleAnimation(1, TimeSpan.FromSeconds(1));
             zoomControl.BeginAnimation(ZoomControl.ZoomProperty, animation);
+        }
+
+        private void ShowInnerSearchRequestHandler()
+        {
+            var animation = new DoubleAnimation(1, TimeSpan.FromMilliseconds(200));
+            brdSearch.Visibility = Visibility.Visible;
+            brdSearch.BeginAnimation(OpacityProperty, animation);
+        }
+
+        private void HideInnerSearchRequestHandler()
+        {
+            var animation = new DoubleAnimation(0, TimeSpan.FromMilliseconds(200));
+            animation.Completed += HideSearchAnimationCompletedHandler;
+            brdSearch.BeginAnimation(OpacityProperty, animation);
+        }
+
+        private void HideSearchAnimationCompletedHandler(object sender, EventArgs e)
+        {
+            brdSearch.Visibility = Visibility.Collapsed;
+        }
+
+        private void FocusSearchRequestHandler()
+        {
+            txtSearch.Focus();
+        }
+
+        private void SearchPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                e.Handled = true;
+                ViewModel.HideSearchCommand.Execute(null);
+            }
+            if (e.Key == Key.Enter)
+            {
+                e.Handled = true;                
+                ViewModel.BrowseFoundAssemblies();
+                ViewModel.HideSearchCommand.Execute(null);
+            }
         }
     }
 }

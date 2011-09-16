@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using AssemblyVisualizer.Controls.Graph.QuickGraph;
 using AssemblyVisualizer.AssemblyBrowser;
 using AssemblyVisualizer.HAL;
+using System.Windows.Input;
 
 namespace AssemblyVisualizer.DependencyBrowser
 {
@@ -20,10 +21,11 @@ namespace AssemblyVisualizer.DependencyBrowser
     {
         private IEnumerable<AssemblyInfo> _assemblies;
         private IEnumerable<AssemblyViewModel> _assemblyViewModels;
-        private AssemblyGraph _assemblyGraph;       
+        private AssemblyGraph _assemblyGraph;
+        private string _searchTerm;
 
         public DependencyBrowserWindowViewModel(IEnumerable<AssemblyInfo> assemblies)
-        {
+        {  
             _assemblies = assemblies.ToList();
             var inputAssemblyViewModels = assemblies
                 .Select(a => AssemblyViewModel.Create(a))
@@ -34,10 +36,14 @@ namespace AssemblyVisualizer.DependencyBrowser
             }
             _assemblyGraph = CreateGraph(inputAssemblyViewModels);
             _assemblyViewModels = _assemblyGraph.Vertices.ToList();
+
+            HideSearchCommand = new DelegateCommand(HideSearchCommandHandler);
+            ShowSearchCommand = new DelegateCommand(ShowSearchCommandHandler);
             Commands = new ObservableCollection<UserCommand>
 			           	{
 			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
 			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
+                            new UserCommand(Resources.SearchInGraph, ShowSearchCommand),
                             new UserCommand(Resources.Browse, BrowseCommandHandler),
                             new UserCommand(Resources.ClearSelection, ClearSelectionCommandHandler)
 			           	};
@@ -45,14 +51,65 @@ namespace AssemblyVisualizer.DependencyBrowser
 
         public event Action FillGraphRequest;
         public event Action OriginalSizeRequest;
+        public event Action ShowInnerSearchRequest;
+        public event Action HideInnerSearchRequest;
+        public event Action FocusSearchRequest;
 
         public IEnumerable<UserCommand> Commands { get; private set; }
+
+        public ICommand HideSearchCommand { get; private set; }
+        public ICommand ShowSearchCommand { get; private set; }
 
         public AssemblyGraph Graph
         {
             get
             {
                 return _assemblyGraph;
+            }
+        }
+
+        public string SearchTerm
+        {
+            get { return _searchTerm; }
+            set
+            {
+                _searchTerm = value;
+                OnPropertyChanged("SearchTerm");
+                OnPropertyChanged("IsSearchTermEmpty");
+                PerformSearch();
+            }
+        }
+
+        public bool IsSearchTermEmpty { get { return string.IsNullOrWhiteSpace(SearchTerm); } }        
+
+        public void BrowseFoundAssemblies()
+        {
+            var foundAssemblies = _assemblyViewModels
+                .Where(a => a.IsFound)
+                .Select(a => a.AssemblyInfo);
+            Services.BrowseAssemblies(foundAssemblies);    
+        }
+
+        private void PerformSearch()
+        {
+            if (string.IsNullOrEmpty(SearchTerm) || string.IsNullOrEmpty(SearchTerm.Trim()))
+            {
+                ClearSearch();
+                return;
+            }
+
+            foreach (var assemblyViewModel in _assemblyViewModels)
+            {
+                assemblyViewModel.IsFound = assemblyViewModel.Name
+                    .IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase) >= 0;
+            }
+        }
+
+        private void ClearSearch()
+        {
+            foreach (var assemblyViewModel in _assemblyViewModels)
+            {
+                assemblyViewModel.IsFound = false;
             }
         }
 
@@ -89,6 +146,48 @@ namespace AssemblyVisualizer.DependencyBrowser
             foreach (var assemblyViewModel in _assemblyViewModels)
             {
                 assemblyViewModel.IsSelected = false;
+            }
+        }
+
+        private void HideSearchCommandHandler()
+        {
+            OnHideInnerSearchRequest();
+            SearchTerm = string.Empty;
+        }
+
+        private void ShowSearchCommandHandler()
+        {
+            OnShowInnerSearchRequest();
+            OnFocusSearchRequest();
+        }
+
+        private void OnShowInnerSearchRequest()
+        {
+            var handler = ShowInnerSearchRequest;
+
+            if (handler != null)
+            {
+                handler();
+            }
+        }
+
+        private void OnHideInnerSearchRequest()
+        {
+            var handler = HideInnerSearchRequest;
+
+            if (handler != null)
+            {
+                handler();
+            }
+        }
+
+        private void OnFocusSearchRequest()
+        {
+            var handler = FocusSearchRequest;
+
+            if (handler != null)
+            {
+                handler();
             }
         }
 

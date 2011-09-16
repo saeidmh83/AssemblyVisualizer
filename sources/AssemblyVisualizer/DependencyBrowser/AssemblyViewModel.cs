@@ -19,6 +19,7 @@ namespace AssemblyVisualizer.DependencyBrowser
         private AssemblyInfo _assembly;
         private IList<AssemblyViewModel> _referencedAssemblies = new List<AssemblyViewModel>();
         private bool _isSelected;
+        private bool _isFound;
         
         private AssemblyViewModel(AssemblyInfo assembly)
         {
@@ -49,6 +50,19 @@ namespace AssemblyVisualizer.DependencyBrowser
             {
                 _isSelected = value;
                 OnPropertyChanged("IsSelected");
+            }
+        }
+
+        public bool IsFound
+        {
+            get
+            {
+                return _isFound;
+            }
+            set
+            {
+                _isFound = value;
+                OnPropertyChanged("IsFound");
             }
         }
 

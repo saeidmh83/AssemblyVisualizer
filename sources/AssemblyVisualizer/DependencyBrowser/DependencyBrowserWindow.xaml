@@ -61,9 +61,12 @@
                                                 <Setter TargetName="txtName" Property="Foreground" Value="DarkGreen"/>
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                <Setter TargetName="brd" Property="Background" Value="Yellow"/>
+                                                <Setter TargetName="brd" Property="Background" Value="GreenYellow"/>
                                                 <Setter TargetName="btnSelection" Property="ToolTip" Value="Deselect"/>
                                                 <Setter TargetName="btnSelection" Property="Background" Value="{StaticResource BlueMinusDrawing}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsFound}" Value="True">
+                                                <Setter TargetName="brd" Property="Background" Value="Yellow"/>                                                
                                             </DataTrigger>
                                             <Trigger SourceName="grid" Property="IsMouseOver" Value="True">
                                                 <Setter TargetName="commandsPanel" Property="Visibility" Value="Visible"/>
@@ -193,6 +196,9 @@
             </Style>
         </ResourceDictionary>
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding ShowSearchCommand}" Key="F" Modifiers="Control"/>
+    </Window.InputBindings>
     <Grid UseLayoutRounding="True"
           TextOptions.TextFormattingMode="Display">
         <ZoomControl:ZoomControl x:Name="zoomControl"
@@ -233,5 +239,54 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+
+        <!--Search-->
+        <Border x:Name="brdSearch"
+                Background="White"
+                BorderBrush="#666666"
+                BorderThickness="1"
+                CornerRadius="8"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Center"
+                Margin="0, 40, 0, 0"
+                Visibility="Collapsed"
+                Opacity="0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="txtSearch"
+                         Margin="22, 22, 0, 22"
+                         Width="250"
+                         FontSize="19"
+                         Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                         PreviewKeyDown="SearchPreviewKeyDown"/>
+                <Button Style="{StaticResource ImageButtonStyle}"
+                        Background="{StaticResource BlueCrossDrawing}"
+                        Grid.Column="1"
+                        Margin="12, 0"
+                        VerticalAlignment="Center"
+                        Height="22"
+                        Width="22"
+                        Command="{Binding HideSearchCommand}"/>
+                <TextBlock Text="Hit Enter to browse results"
+                           Foreground="#888888"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Center"
+                           Margin="0, 0, 0, 4">
+                    <TextBlock.Style>
+                        <Style TargetType="{x:Type TextBlock}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsSearchTermEmpty}" Value="False">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

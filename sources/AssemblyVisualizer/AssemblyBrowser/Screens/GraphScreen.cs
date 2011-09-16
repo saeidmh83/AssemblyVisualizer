@@ -187,7 +187,8 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 
 			foreach (var type in Types)
 			{
-				type.IsMarked = type.Name.StartsWith(SearchTerm, StringComparison.OrdinalIgnoreCase);
+				type.IsMarked = type.Name
+                    .IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase) >= 0;
 			}
 		}
 

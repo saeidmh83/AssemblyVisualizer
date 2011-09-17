@@ -272,7 +272,7 @@
                         Height="22"
                         Width="22"
                         Command="{Binding HideSearchCommand}"/>
-                <TextBlock Text="Hit Enter to browse results"
+                <TextBlock Text="Hit Enter to select results"
                            Foreground="#888888"
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Center"

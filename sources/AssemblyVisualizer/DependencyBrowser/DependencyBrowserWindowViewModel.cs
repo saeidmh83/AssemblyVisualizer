@@ -82,12 +82,13 @@ namespace AssemblyVisualizer.DependencyBrowser
 
         public bool IsSearchTermEmpty { get { return string.IsNullOrWhiteSpace(SearchTerm); } }        
 
-        public void BrowseFoundAssemblies()
-        {
-            var foundAssemblies = _assemblyViewModels
-                .Where(a => a.IsFound)
-                .Select(a => a.AssemblyInfo);
-            Services.BrowseAssemblies(foundAssemblies);    
+        public void SelectFoundAssemblies()
+        {          
+            foreach (var assembly in _assemblyViewModels
+                .Where(a => a.IsFound))
+            {
+                assembly.IsSelected = true;
+            }
         }
 
         private void PerformSearch()

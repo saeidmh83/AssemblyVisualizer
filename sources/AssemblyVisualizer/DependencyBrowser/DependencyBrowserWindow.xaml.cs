@@ -95,7 +95,7 @@ namespace AssemblyVisualizer.DependencyBrowser
             if (e.Key == Key.Enter)
             {
                 e.Handled = true;                
-                ViewModel.BrowseFoundAssemblies();
+                ViewModel.SelectFoundAssemblies();
                 ViewModel.HideSearchCommand.Execute(null);
             }
         }

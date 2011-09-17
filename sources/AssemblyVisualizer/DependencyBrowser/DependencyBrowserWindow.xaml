@@ -18,9 +18,9 @@
                 <ResourceDictionary Source="..\Common\ControlStylesDictionary.xaml"/>
                 <ResourceDictionary Source="..\Common\ImagesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            
+
             <BooleanToVisibilityConverter x:Key="boolVisibilityConverter"/>
-            
+
             <!--Vertex style-->
             <Style TargetType="{x:Type Graph:VertexControl}">
                 <Setter Property="Template">
@@ -30,16 +30,23 @@
                             <ContentPresenter Content="{TemplateBinding Vertex}" >
                                 <ContentPresenter.ContentTemplate>
                                     <DataTemplate>
-                                        <Grid x:Name="grid"
-                                              Background="Transparent">
+                                        <Grid x:Name="grid">
                                             <Border x:Name="brd"                                                    
                                                     CornerRadius="10">
-                                                <TextBlock x:Name="txtName"
-                                                           Text="{Binding Name}"
-                                                           ToolTip="{Binding FullName}"
-                                                           ToolTipService.InitialShowDelay="2600"
-                                                           FontSize="16"
-                                                           Margin="4"/>
+                                                <Border.Background>
+                                                    <SolidColorBrush x:Name="brdSelectionBrush" Color="Transparent"/>
+                                                </Border.Background>
+                                                <Border CornerRadius="10">
+                                                    <Border.Background>
+                                                        <SolidColorBrush x:Name="brdSearchBrush" Color="Transparent"/>
+                                                    </Border.Background>
+                                                    <TextBlock x:Name="txtName"
+                                                               Text="{Binding Name}"
+                                                               ToolTip="{Binding FullName}"
+                                                               ToolTipService.InitialShowDelay="2600"
+                                                               FontSize="16"
+                                                               Margin="4"/>
+                                                </Border>
                                             </Border>
                                             <Border Background="White"
                                                     CornerRadius="8"
@@ -66,17 +73,55 @@
                                             <DataTrigger Binding="{Binding IsMarked}" Value="True">
                                                 <Setter TargetName="txtName" Property="Foreground" Value="DarkGreen"/>
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                <Setter TargetName="brd" Property="Background" Value="GreenYellow"/>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">                                                
                                                 <Setter TargetName="btnSelection" Property="ToolTip" Value="Deselect"/>
                                                 <Setter TargetName="btnSelection" Property="Background" Value="{StaticResource BlueMinusDrawing}"/>
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimation Storyboard.TargetName="brdSelectionBrush"
+                                                                            Storyboard.TargetProperty="Color"
+                                                                            To="GreenYellow"
+                                                                            Duration="0:0:0.3"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimation Storyboard.TargetName="brdSelectionBrush"
+                                                                            Storyboard.TargetProperty="Color"
+                                                                            To="Transparent"
+                                                                            Duration="0:0:0.3"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.ExitActions>
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsFound}" Value="True">
-                                                <Setter TargetName="brd" Property="Background" Value="Yellow"/>                                                
+                                            <DataTrigger Binding="{Binding IsFound}" Value="True">                                                
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimation Storyboard.TargetName="brdSearchBrush"
+                                                                            Storyboard.TargetProperty="Color"
+                                                                            To="Yellow"
+                                                                            Duration="0:0:0.3"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.EnterActions>
+                                                <DataTrigger.ExitActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimation Storyboard.TargetName="brdSearchBrush"
+                                                                            Storyboard.TargetProperty="Color"
+                                                                            To="Transparent"
+                                                                            Duration="0:0:0.3"/>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </DataTrigger.ExitActions>
                                             </DataTrigger>
                                             <Trigger SourceName="grid" Property="IsMouseOver" Value="True">
                                                 <Setter TargetName="commandsPanel" Property="Visibility" Value="Visible"/>
-                                            </Trigger>                                            
+                                            </Trigger>
                                         </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ContentPresenter.ContentTemplate>
@@ -157,7 +202,7 @@
                      Value="True">
                         <Setter Property="Foreground"
                         Value="Yellow" />
-                    </Trigger>                    
+                    </Trigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
                             <Condition Property="Graph:GraphElementBehaviour.IsSemiHighlighted"
@@ -220,7 +265,7 @@
                                              Graph="{Binding Graph}"    
                                              LayoutAlgorithmType="LinLog"
                                              OverlapRemovalAlgorithmType="FSA"
-                                             HighlightAlgorithmType="Simple"/>            
+                                             HighlightAlgorithmType="Simple"/>
         </ZoomControl:ZoomControl>
 
         <!--Commands-->
@@ -285,7 +330,7 @@
                            HorizontalAlignment="Center"
                            Margin="0, 0, 0, 4"
                            Behaviors:VisibilityAnimation.AnimationType="Fade"
-                           Visibility="{Binding IsSearchTermFilled, Converter={StaticResource boolVisibilityConverter}}">                   
+                           Visibility="{Binding IsSearchTermFilled, Converter={StaticResource boolVisibilityConverter}}">
                 </TextBlock>
             </Grid>
         </Border>

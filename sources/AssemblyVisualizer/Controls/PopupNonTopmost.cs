@@ -6,6 +6,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Media.Animation;
 
 namespace AssemblyVisualizer.Controls
 {
@@ -24,12 +25,12 @@ namespace AssemblyVisualizer.Controls
 		private static void OnTopmostChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
 		{
 			(obj as PopupNonTopmost).UpdateWindow();
-		}
+		}        
 
 		protected override void OnOpened(EventArgs e)
 		{
-			UpdateWindow();
-		}
+			UpdateWindow();            
+        }
 
 		private void UpdateWindow()
 		{

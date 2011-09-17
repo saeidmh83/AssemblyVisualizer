@@ -30,7 +30,8 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 			InitializeComponent();
 
 			Loaded += LoadedHandler;
-		}
+            Unloaded += UnloadedHandler;
+		}        
 
 		private GraphScreen ViewModel
 		{
@@ -49,10 +50,15 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 			ViewModel.HideDetailsRequest += HideDetailsRequestHandler;
 			ViewModel.FillGraphRequest += FillGraphRequestHandler;
 			ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;
-			ViewModel.FocusSearchRequest += FocusSearchRequestHandler;			
-
+			ViewModel.FocusSearchRequest += FocusSearchRequestHandler;
+           
             brdSearch.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);
-		}		
+		}
+
+        private void UnloadedHandler(object sender, RoutedEventArgs e)
+        {           
+            brdSearch.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.None);
+        }
 
 		private void HideSearchAnimationCompletedHandler(object sender, EventArgs e)
 		{

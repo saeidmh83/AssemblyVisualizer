@@ -277,6 +277,7 @@
                         Width="22"
                         Command="{Binding HideSearchCommand}"/>
                 <TextBlock Text="Hit Enter to select results"
+                           x:Name="txtSearchHint"
                            Foreground="#888888"
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Center"

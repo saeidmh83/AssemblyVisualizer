@@ -36,12 +36,19 @@ namespace AssemblyVisualizer.DependencyBrowser
             ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;            
             ViewModel.FocusSearchRequest += FocusSearchRequestHandler;
 
-            Loaded += new RoutedEventHandler(DependencyBrowserWindow_Loaded);           
+            Loaded += LoadedHandler;  
+            Unloaded += UnloadedHandler;
         }
 
-        private void DependencyBrowserWindow_Loaded(object sender, RoutedEventArgs e)
+        private void LoadedHandler(object sender, RoutedEventArgs e)
         {
             brdSearch.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);
+        }
+
+        private void UnloadedHandler(object sender, RoutedEventArgs e)
+        {
+            brdSearch.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.None);
+            txtSearchHint.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.None);
         }
 
         public DependencyBrowserWindowViewModel ViewModel

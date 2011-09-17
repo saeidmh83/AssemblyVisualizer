@@ -15,9 +15,11 @@
         <Grid>            
             <Border x:Name="brdMark"
                     Margin="-15" 
-                    CornerRadius="15"
-                    Background="#3578FF"
-                    Visibility="Collapsed"/>
+                    CornerRadius="15">
+                <Border.Background>
+                    <SolidColorBrush x:Name="brdMarkBrush" Color="Transparent"/>
+                </Border.Background>
+            </Border>
             
             <Border x:Name="brdMain"
                     Style="{StaticResource BorderStyle}"                            
@@ -95,7 +97,26 @@
                 <Setter TargetName="pnlButtons" Property="Visibility" Value="Visible"/>                
             </Trigger>            
             <DataTrigger Binding="{Binding IsMarked}" Value="True">
-                <Setter TargetName="brdMark" Property="Visibility" Value="Visible"/>
+                <DataTrigger.EnterActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetName="brdMarkBrush"
+                                                                            Storyboard.TargetProperty="Color"
+                                                                            To="#3578FF"
+                                                                            Duration="0:0:0.3"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.EnterActions>
+                <DataTrigger.ExitActions>
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <ColorAnimation Storyboard.TargetName="brdMarkBrush"
+                                                                            Storyboard.TargetProperty="Color"
+                                                                            To="Transparent"
+                                                                            Duration="0:0:0.3"/>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </DataTrigger.ExitActions>
             </DataTrigger>
         </DataTemplate.Triggers>
     </DataTemplate>

@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="AncestryBrowser\AssemblyViewModel.cs" />
     <Compile Include="AncestryBrowser\MemberOptions.cs" />
+    <Compile Include="Behaviors\VisibilityAnimation.cs" />
     <Compile Include="DependencyBrowser\AssemblyViewModel.cs" />
     <Compile Include="DependencyBrowser\DependencyBrowserWindow.xaml.cs">
       <DependentUpon>DependencyBrowserWindow.xaml</DependentUpon>

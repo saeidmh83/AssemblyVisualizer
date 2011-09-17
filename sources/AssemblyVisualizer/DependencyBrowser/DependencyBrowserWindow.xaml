@@ -6,6 +6,7 @@
         xmlns:Graph="clr-namespace:AssemblyVisualizer.Controls.Graph" 
         xmlns:DependencyBrowser="clr-namespace:AssemblyVisualizer.DependencyBrowser"
         xmlns:Converters="clr-namespace:AssemblyVisualizer.Controls.Graph.Converters"
+        xmlns:Behaviors="clr-namespace:AssemblyVisualizer.Behaviors"
         Title="Dependency Browser" 
         Height="600" 
         Width="800"
@@ -17,6 +18,9 @@
                 <ResourceDictionary Source="..\Common\ControlStylesDictionary.xaml"/>
                 <ResourceDictionary Source="..\Common\ImagesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            
+            <BooleanToVisibilityConverter x:Key="boolVisibilityConverter"/>
+            
             <!--Vertex style-->
             <Style TargetType="{x:Type Graph:VertexControl}">
                 <Setter Property="Template">
@@ -251,8 +255,8 @@
                 VerticalAlignment="Top"
                 HorizontalAlignment="Center"
                 Margin="0, 40, 0, 0"
-                Visibility="Collapsed"
-                Opacity="0">
+                Visibility="{Binding IsSearchVisible, Converter={StaticResource boolVisibilityConverter}}"
+                >
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -276,17 +280,9 @@
                            Foreground="#888888"
                            VerticalAlignment="Bottom"
                            HorizontalAlignment="Center"
-                           Margin="0, 0, 0, 4">
-                    <TextBlock.Style>
-                        <Style TargetType="{x:Type TextBlock}">
-                            <Setter Property="Visibility" Value="Collapsed"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsSearchTermEmpty}" Value="False">
-                                    <Setter Property="Visibility" Value="Visible"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </TextBlock.Style>
+                           Margin="0, 0, 0, 4"
+                           Behaviors:VisibilityAnimation.AnimationType="Fade"
+                           Visibility="{Binding IsSearchTermFilled, Converter={StaticResource boolVisibilityConverter}}">                   
                 </TextBlock>
             </Grid>
         </Border>

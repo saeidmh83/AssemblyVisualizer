@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-// Copyright 2011 Denis Markelov
+﻿// Copyright 2011 Denis Markelov
 // This code is distributed under Microsoft Public License 
 // (for details please see \docs\Ms-PL)
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,12 +17,10 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using AssemblyVisualizer.Controls.ZoomControl;
+using AssemblyVisualizer.Behaviors;
 
 namespace AssemblyVisualizer.AssemblyBrowser.Screens
-{
-	/// <summary>
-	/// Interaction logic for GraphScreen.xaml
-	/// </summary>
+{	
 	internal partial class GraphScreenView : UserControl
 	{
 		public event Action LayoutFinished;
@@ -51,24 +49,10 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 			ViewModel.HideDetailsRequest += HideDetailsRequestHandler;
 			ViewModel.FillGraphRequest += FillGraphRequestHandler;
 			ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;
-			ViewModel.FocusSearchRequest += FocusSearchRequestHandler;
-			ViewModel.ShowInnerSearchRequest += ShowInnerSearchRequestHandler;
-			ViewModel.HideInnerSearchRequest += HideInnerSearchRequestHandler;
-		}
+			ViewModel.FocusSearchRequest += FocusSearchRequestHandler;			
 
-		private void ShowInnerSearchRequestHandler()
-		{
-			var animation = new DoubleAnimation(1, TimeSpan.FromMilliseconds(200));
-			brdSearch.Visibility = Visibility.Visible;
-			brdSearch.BeginAnimation(OpacityProperty, animation);
-		}
-
-		private void HideInnerSearchRequestHandler()
-		{
-			var animation = new DoubleAnimation(0, TimeSpan.FromMilliseconds(200));
-			animation.Completed += HideSearchAnimationCompletedHandler;
-			brdSearch.BeginAnimation(OpacityProperty, animation);
-		}
+            brdSearch.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);
+		}		
 
 		private void HideSearchAnimationCompletedHandler(object sender, EventArgs e)
 		{

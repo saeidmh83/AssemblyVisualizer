@@ -18,6 +18,8 @@
                 <ResourceDictionary Source="..\..\Common\ControlStylesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+            <BooleanToVisibilityConverter x:Key="boolVisibilityConverter"/>
+            
             <!--Vertex style-->
             <Style TargetType="{x:Type Graph:VertexControl}">
                 <Setter Property="Template">
@@ -242,8 +244,7 @@
                 VerticalAlignment="Top"
                 HorizontalAlignment="Center"
                 Margin="0, 40, 0, 0"
-                Visibility="Collapsed"
-                Opacity="0">
+                Visibility="{Binding IsSearchVisible, Converter={StaticResource boolVisibilityConverter}}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>

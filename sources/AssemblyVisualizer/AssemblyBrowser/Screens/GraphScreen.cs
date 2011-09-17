@@ -25,6 +25,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 		private string _searchTerm;
 		private IEnumerable<TypeViewModel> _types;
 		private readonly UserCommand _toggleColorizeUserCommand;
+        private bool _isSearhVisible;
 
 		public GraphScreen(AssemblyBrowserWindowViewModel windowViewModel) : base(windowViewModel)
 		{
@@ -58,13 +59,24 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 		public event Action FillGraphRequest;
 		public event Action OriginalSizeRequest;
 		public event Action FocusSearchRequest;
-		public event Action ShowInnerSearchRequest;
-		public event Action HideInnerSearchRequest;
-
+		
 		public override bool AllowAssemblyDrop
 		{
 			get { return false; }
 		}
+
+        public bool IsSearchVisible
+        {
+            get
+            {
+                return _isSearhVisible;
+            }
+            set
+            {
+                _isSearhVisible = value;
+                OnPropertyChanged("IsSearchVisible");
+            }
+        }
 
 		public TypeViewModel Type
 		{
@@ -205,13 +217,13 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 
 		private void HideSearchCommandHandler()
 		{
-			OnHideInnerSearchRequest();
+            IsSearchVisible = false;
 			SearchTerm = string.Empty;
 		}
 
 		private void ShowSearchCommandHandler()
 		{
-			OnShowInnerSearchRequest();
+            IsSearchVisible = true;
 			OnFocusSearchRequest();
 		}
 
@@ -281,26 +293,6 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 			{
 				handler();
 			}
-		}
-
-		private void OnShowInnerSearchRequest()
-		{
-			var handler = ShowInnerSearchRequest;
-
-			if (handler != null)
-			{
-				handler();
-			}
-		}
-
-		private void OnHideInnerSearchRequest()
-		{
-			var handler = HideInnerSearchRequest;
-
-			if (handler != null)
-			{
-				handler();
-			}
-		}
+		}		
 	}
 }

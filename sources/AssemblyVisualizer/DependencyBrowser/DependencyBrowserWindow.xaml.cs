@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using AssemblyVisualizer.Model;
 using System.Windows.Media.Animation;
 using AssemblyVisualizer.Controls.ZoomControl;
+using AssemblyVisualizer.Behaviors;
 
 namespace AssemblyVisualizer.DependencyBrowser
 {
@@ -32,10 +33,15 @@ namespace AssemblyVisualizer.DependencyBrowser
             ViewModel = new DependencyBrowserWindowViewModel(assemblies);
 
             ViewModel.FillGraphRequest += FillGraphRequestHandler;
-            ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;
-            ViewModel.ShowInnerSearchRequest += ShowInnerSearchRequestHandler;
-            ViewModel.HideInnerSearchRequest += HideInnerSearchRequestHandler;
+            ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;            
             ViewModel.FocusSearchRequest += FocusSearchRequestHandler;
+
+            Loaded += new RoutedEventHandler(DependencyBrowserWindow_Loaded);           
+        }
+
+        private void DependencyBrowserWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            brdSearch.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);
         }
 
         public DependencyBrowserWindowViewModel ViewModel
@@ -59,26 +65,7 @@ namespace AssemblyVisualizer.DependencyBrowser
         {
             var animation = new DoubleAnimation(1, TimeSpan.FromSeconds(1));
             zoomControl.BeginAnimation(ZoomControl.ZoomProperty, animation);
-        }
-
-        private void ShowInnerSearchRequestHandler()
-        {
-            var animation = new DoubleAnimation(1, TimeSpan.FromMilliseconds(200));
-            brdSearch.Visibility = Visibility.Visible;
-            brdSearch.BeginAnimation(OpacityProperty, animation);
-        }
-
-        private void HideInnerSearchRequestHandler()
-        {
-            var animation = new DoubleAnimation(0, TimeSpan.FromMilliseconds(200));
-            animation.Completed += HideSearchAnimationCompletedHandler;
-            brdSearch.BeginAnimation(OpacityProperty, animation);
-        }
-
-        private void HideSearchAnimationCompletedHandler(object sender, EventArgs e)
-        {
-            brdSearch.Visibility = Visibility.Collapsed;
-        }
+        }  
 
         private void FocusSearchRequestHandler()
         {

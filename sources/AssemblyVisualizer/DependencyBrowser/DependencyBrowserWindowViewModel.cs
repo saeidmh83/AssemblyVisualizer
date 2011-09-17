@@ -23,6 +23,7 @@ namespace AssemblyVisualizer.DependencyBrowser
         private IEnumerable<AssemblyViewModel> _assemblyViewModels;
         private AssemblyGraph _assemblyGraph;
         private string _searchTerm;
+        private bool _isSearchVisible;
 
         public DependencyBrowserWindowViewModel(IEnumerable<AssemblyInfo> assemblies)
         {  
@@ -50,9 +51,7 @@ namespace AssemblyVisualizer.DependencyBrowser
         }
 
         public event Action FillGraphRequest;
-        public event Action OriginalSizeRequest;
-        public event Action ShowInnerSearchRequest;
-        public event Action HideInnerSearchRequest;
+        public event Action OriginalSizeRequest;        
         public event Action FocusSearchRequest;
 
         public IEnumerable<UserCommand> Commands { get; private set; }
@@ -75,12 +74,22 @@ namespace AssemblyVisualizer.DependencyBrowser
             {
                 _searchTerm = value;
                 OnPropertyChanged("SearchTerm");
-                OnPropertyChanged("IsSearchTermEmpty");
+                OnPropertyChanged("IsSearchTermFilled");
                 PerformSearch();
             }
         }
 
-        public bool IsSearchTermEmpty { get { return string.IsNullOrWhiteSpace(SearchTerm); } }        
+        public bool IsSearchVisible
+        {
+            get { return _isSearchVisible; }
+            set
+            {
+                _isSearchVisible = value;
+                OnPropertyChanged("IsSearchVisible");
+            }
+        }
+
+        public bool IsSearchTermFilled { get { return !string.IsNullOrWhiteSpace(SearchTerm); } }        
 
         public void SelectFoundAssemblies()
         {          
@@ -152,35 +161,15 @@ namespace AssemblyVisualizer.DependencyBrowser
 
         private void HideSearchCommandHandler()
         {
-            OnHideInnerSearchRequest();
+            IsSearchVisible = false;
             SearchTerm = string.Empty;
         }
 
         private void ShowSearchCommandHandler()
         {
-            OnShowInnerSearchRequest();
+            IsSearchVisible = true;
             OnFocusSearchRequest();
-        }
-
-        private void OnShowInnerSearchRequest()
-        {
-            var handler = ShowInnerSearchRequest;
-
-            if (handler != null)
-            {
-                handler();
-            }
-        }
-
-        private void OnHideInnerSearchRequest()
-        {
-            var handler = HideInnerSearchRequest;
-
-            if (handler != null)
-            {
-                handler();
-            }
-        }
+        }        
 
         private void OnFocusSearchRequest()
         {

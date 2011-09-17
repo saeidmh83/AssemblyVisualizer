@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AssemblyVisualizer.AssemblyBrowser;
 using AssemblyVisualizer.Model;
 
 #if Reflector
@@ -17,7 +18,6 @@ using Reflector.CodeModel;
 using ICSharpCode.ILSpy;
 using Mono.Cecil;
 using System.Windows;
-using AssemblyVisualizer.AssemblyBrowser;
 #endif
 
 namespace AssemblyVisualizer.HAL

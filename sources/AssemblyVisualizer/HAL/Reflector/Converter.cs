@@ -55,8 +55,16 @@ namespace AssemblyVisualizer.HAL.Reflector
             {
                 Name = assemblyDefinition.Name,
                 FullName = fullName,
-                ExportedTypesCount = typeDefinitions.Count(t => t.Visibility == TypeVisibility.Public),
-                InternalTypesCount = typeDefinitions.Count(t => t.Visibility == TypeVisibility.Private),
+                ExportedTypesCount = typeDefinitions.Count(
+                    t => t.Visibility == TypeVisibility.Public 
+                         || t.Visibility == TypeVisibility.NestedPublic
+                         || t.Visibility == TypeVisibility.NestedFamilyOrAssembly 
+                         || t.Visibility == TypeVisibility.NestedFamily),
+                InternalTypesCount = typeDefinitions.Count(
+                    t => t.Visibility == TypeVisibility.Private 
+                         || t.Visibility == TypeVisibility.NestedPrivate
+                         || t.Visibility == TypeVisibility.NestedFamilyAndAssembly 
+                         || t.Visibility == TypeVisibility.NestedAssembly),
                 Version = assemblyDefinition.Version
             };
 
@@ -72,10 +80,19 @@ namespace AssemblyVisualizer.HAL.Reflector
 
             return assemblyInfo;
         }
-
+        
         private IEnumerable<ITypeDeclaration> GetTypeDeclarations(IModule module)
         {
-            return module.Types.OfType<ITypeDeclaration>();
+            return module.Types
+                .OfType<ITypeDeclaration>()
+                .SelectMany(t => GetNestedTypesAndSelfRecursive(t));
+        }
+
+        private static IEnumerable<ITypeDeclaration> GetNestedTypesAndSelfRecursive(ITypeDeclaration type)
+        {
+            return new[] { type }.Concat(type.NestedTypes
+                .OfType<ITypeDeclaration>()
+                .SelectMany(nt => GetNestedTypesAndSelfRecursive(nt)));
         }
 
         public ModuleInfo Module(IModule module)
@@ -90,7 +107,7 @@ namespace AssemblyVisualizer.HAL.Reflector
                 Assembly = Assembly(module.Assembly)
             };
             _moduleCorrespondence.Add(module, moduleInfo);
-            moduleInfo.Types = module.Types.OfType<ITypeDeclaration>().Select(t => Type(t, moduleInfo));
+            moduleInfo.Types = GetTypeDeclarations(module).Select(t => Type(t, moduleInfo));
 
             return moduleInfo;
         }
@@ -148,8 +165,14 @@ namespace AssemblyVisualizer.HAL.Reflector
                 Events = type.Events.OfType<IEventDeclaration>().Select(e => Event(e)),
                 Properties = type.Properties.OfType<IPropertyDeclaration>().Select(p => Property(p)),
                 MembersCount = methods.Count() + type.Events.Count + type.Properties.Count + type.Fields.Count,
-                IsInternal = type.Visibility != TypeVisibility.Public,
-                IsPublic = type.Visibility == TypeVisibility.Public,
+                IsInternal = type.Visibility == TypeVisibility.Private 
+                             || type.Visibility == TypeVisibility.NestedPrivate
+                             || type.Visibility == TypeVisibility.NestedFamilyAndAssembly 
+                             || type.Visibility == TypeVisibility.NestedAssembly,
+                IsPublic = type.Visibility == TypeVisibility.Public 
+                           || type.Visibility == TypeVisibility.NestedPublic
+                           || type.Visibility == TypeVisibility.NestedFamilyOrAssembly 
+                           || type.Visibility == TypeVisibility.NestedFamily,
                 MemberReference = type,
                 IsEnum = IsEnum(type),
                 IsInterface = type.Interface,

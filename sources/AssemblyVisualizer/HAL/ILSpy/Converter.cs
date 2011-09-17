@@ -30,14 +30,22 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 return _assemblyCorrespondence[assemblyDefinition];
             }
 
-            var typeDefinitions = assemblyDefinition.Modules.SelectMany(m => m.Types).ToArray();
-
+            var typeDefinitions = assemblyDefinition.Modules.SelectMany(m => m.Types.SelectMany(t => GetNestedTypesAndSelfRecursive(t))).ToArray();
+            
             var assemblyInfo = new AssemblyInfo
             {
                 Name = assemblyDefinition.Name.Name,
                 FullName = assemblyDefinition.FullName,
-                ExportedTypesCount = typeDefinitions.Count(t => t.IsPublic),
-                InternalTypesCount = typeDefinitions.Count(t => t.IsNotPublic),
+                ExportedTypesCount = typeDefinitions.Count(
+                    t => t.IsPublic 
+                         || t.IsNestedPublic 
+                         || t.IsNestedFamilyOrAssembly 
+                         || t.IsNestedFamily),
+                InternalTypesCount = typeDefinitions.Count(
+                    t => t.IsNotPublic 
+                         || t.IsNestedAssembly 
+                         || t.IsNestedFamilyAndAssembly 
+                         || t.IsNestedPrivate),
                 Version = assemblyDefinition.Name.Version
             };
 
@@ -63,10 +71,17 @@ namespace AssemblyVisualizer.HAL.ILSpy
             {
                 Assembly = Assembly(moduleDefinition.Assembly)
             };
-            _moduleCorrespondence.Add(moduleDefinition, moduleInfo);
-            moduleInfo.Types = moduleDefinition.Types.Select(t => Type(t));
+            _moduleCorrespondence.Add(moduleDefinition, moduleInfo);            
+            
+            moduleInfo.Types = moduleDefinition.Types
+                .SelectMany(t => GetNestedTypesAndSelfRecursive(t).Select(type => Type(type)));
 
             return moduleInfo;
+        }
+
+        private static IEnumerable<TypeDefinition> GetNestedTypesAndSelfRecursive(TypeDefinition type)
+        {
+            return new[] { type }.Concat(type.NestedTypes.SelectMany(nt => GetNestedTypesAndSelfRecursive(nt)));            
         }
 
         public TypeInfo Type(object type)
@@ -118,8 +133,14 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 Methods = methods.Select(m => Method(m)),
                 Properties = typeDefinition.Properties.Select(p => Property(p)),
                 MembersCount = methods.Count() + typeDefinition.Events.Count + typeDefinition.Properties.Count + typeDefinition.Fields.Count,
-                IsInternal = typeDefinition.IsNotPublic,
-                IsPublic = typeDefinition.IsPublic,
+                IsInternal = typeDefinition.IsNotPublic 
+                             || typeDefinition.IsNestedAssembly 
+                             || typeDefinition.IsNestedFamilyAndAssembly 
+                             || typeDefinition.IsNestedPrivate,
+                IsPublic = typeDefinition.IsPublic 
+                           || typeDefinition.IsNestedPublic 
+                           || typeDefinition.IsNestedFamilyOrAssembly 
+                           || typeDefinition.IsNestedFamily,
                 MemberReference = typeDefinition,
                 IsEnum = typeDefinition.IsEnum,
                 IsInterface = typeDefinition.IsInterface,

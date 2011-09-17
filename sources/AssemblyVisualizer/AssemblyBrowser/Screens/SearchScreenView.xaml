@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:CommandsGroup="clr-namespace:AssemblyVisualizer.Common.CommandsGroup" mc:Ignorable="d"
              xmlns:Controls="clr-namespace:AssemblyVisualizer.Controls"
+             xmlns:Behaviors="clr-namespace:AssemblyVisualizer.Behaviors"
              d:DesignHeight="300" d:DesignWidth="300"
              Background="White">
     <UserControl.Resources>
@@ -131,7 +132,7 @@
                      FontSize="20"
                      PreviewKeyDown="SearchPreviewKeyDown"
                      Background="Transparent">
-                <TextBox.Style>
+                <!--<TextBox.Style>
                     <Style TargetType="{x:Type TextBox}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsSearchPerformed}" Value="False">
@@ -139,8 +140,18 @@
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                </TextBox.Style>
+                </TextBox.Style>-->
             </TextBox>
+            <TextBlock x:Name="txtClearSearch"
+                       Visibility="{Binding IsSearchTermFilled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Right"
+                       Margin="0, 0, 4, -18">
+                <Hyperlink Command="{Binding ClearSearchCommand}"
+                           Style="{StaticResource HyperlinkStyle}">
+                    <TextBlock Text="Clear search"/>
+                </Hyperlink>
+            </TextBlock>
         </Grid>
 
         <!--Search filters-->

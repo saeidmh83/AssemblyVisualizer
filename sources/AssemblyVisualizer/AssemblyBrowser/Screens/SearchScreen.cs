@@ -58,6 +58,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 			InitializeSearchTimer();
 
 			NavigateToHomePageCommand = new DelegateCommand(() => Process.Start(HomePageUri));
+            ClearSearchCommand = new DelegateCommand(ClearSearchCommandHandler);
 
 			InitializeSearchControl();
 		}
@@ -114,6 +115,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 		public event Action SearchFocusRequested;
 
 		public ICommand NavigateToHomePageCommand { get; private set; }
+        public ICommand ClearSearchCommand { get; private set; }
 
 		public bool IsSearchPerformed
 		{
@@ -138,7 +140,9 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 				_searchTimer.Start();
 				IsSearchPerformed = false;
 
+                OnPropertyChanged("SearchTerm");
 				OnPropertyChanged("IsSearchTermEmpty");
+                OnPropertyChanged("IsSearchTermFilled");
 			}
 		}
 
@@ -146,6 +150,11 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 		{
 			get { return string.IsNullOrEmpty(SearchTerm); }
 		}
+
+        public bool IsSearchTermFilled
+        {
+            get { return !IsSearchTermEmpty; }
+        }
 
 		public ObservableCollection<CommandsGroupViewModel> SearchControlGroups { get; private set; }
 
@@ -277,6 +286,11 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 		#endregion
 
 		#region // Command handlers
+
+        private void ClearSearchCommandHandler()
+        {
+            SearchTerm = string.Empty;
+        }
 
 		private void SortByName()
 		{

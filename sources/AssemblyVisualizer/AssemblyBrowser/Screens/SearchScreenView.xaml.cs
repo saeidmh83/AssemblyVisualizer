@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AssemblyVisualizer.Behaviors;
 
 namespace AssemblyVisualizer.AssemblyBrowser.Screens
 {
@@ -29,6 +30,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 		{
 			InitializeComponent();
 			Loaded += LoadedHandler;
+            Unloaded += UnloadedHandler;
 		}
 
 		private SearchScreen ViewModel
@@ -47,12 +49,17 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
                 if (!_isInitialized)
                 {
                     ViewModel.SearchFocusRequested += SearchFocusRequestedHandler;
-
                     _isInitialized = true;
                 }
             }            
             txtSearch.Focus();
-		}       
+            txtClearSearch.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);
+		}
+
+        private void UnloadedHandler(object sender, RoutedEventArgs e)
+        {
+            txtClearSearch.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.None);
+        }            
 
         private void SearchScreenView_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
@@ -85,6 +92,6 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 				NavigationCommands.BrowseBack.Execute(null, this);
 				e.Handled = true;
 			}
-		}
-	}
+		}        
+    }
 }

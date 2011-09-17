@@ -24,6 +24,8 @@ namespace AssemblyVisualizer.AncestryBrowser
 			InitializeComponent();		
 			
 			ViewModel = new AncestryBrowserWindowViewModel(typeInfo);
+
+            WindowManager.AddAncestryBrowser(this);
 		}
 		
 		public AncestryBrowserWindowViewModel ViewModel
@@ -38,9 +40,16 @@ namespace AssemblyVisualizer.AncestryBrowser
 			}
 		}
 
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            WindowManager.RemoveAncestryBrowser(this);
+        }
+
         private void SearchExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             txtSearch.Focus();            
-        }
+        }        
 	}
 }

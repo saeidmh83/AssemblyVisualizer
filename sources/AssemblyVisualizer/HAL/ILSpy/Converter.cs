@@ -21,6 +21,13 @@ namespace AssemblyVisualizer.HAL.ILSpy
         private Dictionary<ModuleDefinition, ModuleInfo> _moduleCorrespondence = new Dictionary<ModuleDefinition, ModuleInfo>();
         private Dictionary<TypeDefinition, TypeInfo> _typeCorrespondence = new Dictionary<TypeDefinition, TypeInfo>();
 
+        public void ClearCache()
+        {
+            _assemblyCorrespondence.Clear();
+            _moduleCorrespondence.Clear();
+            _typeCorrespondence.Clear();
+        }
+
         public AssemblyInfo Assembly(object assembly)
         {
             var assemblyDefinition = assembly as AssemblyDefinition;

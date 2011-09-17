@@ -30,14 +30,14 @@ namespace AssemblyVisualizer.AssemblyBrowser
 		{
 			InitializeComponent();
 
-			ViewModel = new AssemblyBrowserWindowViewModel(assemblyDefinitions, Dispatcher);
-
-			WindowManager.AddAssemblyBrowser(this);
+			ViewModel = new AssemblyBrowserWindowViewModel(assemblyDefinitions, Dispatcher);			
 
 			CommandBindings.Add(new CommandBinding(NavigationCommands.BrowseForward,
 			                                       (s, e) => ViewModel.NavigateForwardCommand.Execute(null)));
 			CommandBindings.Add(new CommandBinding(NavigationCommands.BrowseBack,
 												   (s, e) => ViewModel.NavigateBackCommand.Execute(null)));
+
+            WindowManager.AddAssemblyBrowser(this);
 		}
 
 		public AssemblyBrowserWindowViewModel ViewModel

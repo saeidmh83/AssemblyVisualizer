@@ -20,6 +20,13 @@ namespace AssemblyVisualizer.HAL.Reflector
         private Dictionary<IModule, ModuleInfo> _moduleCorrespondence = new Dictionary<IModule, ModuleInfo>();
         private Dictionary<ITypeDeclaration, TypeInfo> _typeCorrespondence = new Dictionary<ITypeDeclaration, TypeInfo>();
 
+        public void ClearCache()
+        {
+            _assemblyCorrespondence.Clear();
+            _moduleCorrespondence.Clear();
+            _typeCorrespondence.Clear();
+        }
+
         public AssemblyInfo Assembly(object assembly)
         {
             var assemblyDefinition = assembly as IAssembly;

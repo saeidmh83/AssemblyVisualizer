@@ -33,5 +33,10 @@ namespace AssemblyVisualizer.HAL
         {
             return _converter.Type(type);
         }
+
+        public static void ClearCache()
+        {
+            _converter.ClearCache();
+        }
     }
 }

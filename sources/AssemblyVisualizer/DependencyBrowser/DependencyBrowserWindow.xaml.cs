@@ -35,6 +35,8 @@ namespace AssemblyVisualizer.DependencyBrowser
 
             Loaded += LoadedHandler;  
             Unloaded += UnloadedHandler;
+
+            WindowManager.AddDependencyBrowser(this);
         }
 
         private void LoadedHandler(object sender, RoutedEventArgs e)
@@ -58,6 +60,13 @@ namespace AssemblyVisualizer.DependencyBrowser
             {
                 DataContext = value;
             }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+
+            WindowManager.RemoveDependencyBrowser(this);
         }
 
         private void FillGraphRequestHandler()

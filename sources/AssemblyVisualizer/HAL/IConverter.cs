@@ -14,5 +14,6 @@ namespace AssemblyVisualizer.HAL
     {
         AssemblyInfo Assembly(object assembly);
         TypeInfo Type(object type);
+        void ClearCache();
     }
 }

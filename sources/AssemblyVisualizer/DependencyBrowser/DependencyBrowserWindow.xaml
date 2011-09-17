@@ -204,6 +204,8 @@
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Command="{Binding ShowSearchCommand}" Key="F" Modifiers="Control"/>
+        <KeyBinding Command="{Binding BrowseCommand}" Key="B" Modifiers="Control"/>
+        <KeyBinding Command="{Binding ClearSelectionCommand}" Key="C" Modifiers="Control"/>
     </Window.InputBindings>
     <Grid UseLayoutRounding="True"
           TextOptions.TextFormattingMode="Display">
@@ -286,6 +288,39 @@
                            Visibility="{Binding IsSearchTermFilled, Converter={StaticResource boolVisibilityConverter}}">                   
                 </TextBlock>
             </Grid>
+        </Border>
+
+        <!--Help-->
+        <Border Background="{StaticResource QuestionMarkDrawing}"
+                Width="20"
+                Height="20"                    
+                ToolTipService.InitialShowDelay="0"
+                Margin="14, 0, 0, 16"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom">
+            <Border.ToolTip>
+                <TextBlock Margin="4">
+                    <Run FontWeight="Bold"
+                         Text="Wheel: "/>
+                    <Run Text="Zoom in / out"/>
+                    <LineBreak/>
+                    <Run FontWeight="Bold"
+                         Text="ALT + Drag: "/>
+                    <Run Text="Zoom box"/>
+                    <LineBreak/>
+                    <Run FontWeight="Bold"
+                         Text="CTRL + F: "/>
+                    <Run Text="Search in Graph"/>    
+                    <LineBreak/>
+                     <Run FontWeight="Bold"
+                             Text="CTRL + B: "/>
+                    <Run Text="Browse selection"/>
+                    <LineBreak/>
+                     <Run FontWeight="Bold"
+                             Text="CTRL + C: "/>
+                    <Run Text="Clear selection"/>
+                </TextBlock>
+            </Border.ToolTip>
         </Border>
     </Grid>
 </Window>

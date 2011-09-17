@@ -14,16 +14,13 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using AssemblyVisualizer.Model;
 using System.Windows.Media.Animation;
+using AssemblyVisualizer.Model;
 using AssemblyVisualizer.Controls.ZoomControl;
 using AssemblyVisualizer.Behaviors;
 
 namespace AssemblyVisualizer.DependencyBrowser
-{
-    /// <summary>
-    /// Interaction logic for DependencyBrowserWindow.xaml
-    /// </summary>
+{    
     partial class DependencyBrowserWindow : Window
     {
         public DependencyBrowserWindow(IEnumerable<AssemblyInfo> assemblies)

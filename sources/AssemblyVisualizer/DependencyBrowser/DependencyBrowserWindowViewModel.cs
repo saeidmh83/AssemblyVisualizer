@@ -40,13 +40,15 @@ namespace AssemblyVisualizer.DependencyBrowser
 
             HideSearchCommand = new DelegateCommand(HideSearchCommandHandler);
             ShowSearchCommand = new DelegateCommand(ShowSearchCommandHandler);
+            BrowseCommand = new DelegateCommand(BrowseCommandHandler);
+            ClearSelectionCommand = new DelegateCommand(ClearSelectionCommandHandler);
             Commands = new ObservableCollection<UserCommand>
 			           	{
 			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
 			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
                             new UserCommand(Resources.SearchInGraph, ShowSearchCommand),
-                            new UserCommand(Resources.Browse, BrowseCommandHandler),
-                            new UserCommand(Resources.ClearSelection, ClearSelectionCommandHandler)
+                            new UserCommand(Resources.Browse, BrowseCommand),
+                            new UserCommand(Resources.ClearSelection, ClearSelectionCommand)
 			           	};
         }
 
@@ -58,6 +60,8 @@ namespace AssemblyVisualizer.DependencyBrowser
 
         public ICommand HideSearchCommand { get; private set; }
         public ICommand ShowSearchCommand { get; private set; }
+        public ICommand BrowseCommand { get; private set; }
+        public ICommand ClearSelectionCommand { get; private set; }
 
         public AssemblyGraph Graph
         {
@@ -149,7 +153,7 @@ namespace AssemblyVisualizer.DependencyBrowser
                 .Where(a => a.IsSelected)
                 .Select(a => a.AssemblyInfo);
             Services.BrowseAssemblies(selectedAssemblies);            
-        }
+        }        
 
         private void ClearSelectionCommandHandler()
         {

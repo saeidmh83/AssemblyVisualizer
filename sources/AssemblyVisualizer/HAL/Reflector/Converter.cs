@@ -29,6 +29,11 @@ namespace AssemblyVisualizer.HAL.Reflector
 
         public AssemblyInfo Assembly(object assembly)
         {
+            if (assembly == null)
+            {
+                return null;
+            }
+
             var assemblyDefinition = assembly as IAssembly;
 
             if (_assemblyCorrespondence.ContainsKey(assemblyDefinition))
@@ -36,7 +41,11 @@ namespace AssemblyVisualizer.HAL.Reflector
                 return _assemblyCorrespondence[assemblyDefinition];
             }
 
-            var typeDefinitions = assemblyDefinition.Modules.OfType<IModule>().SelectMany(GetTypeDeclarations).ToArray();
+            var typeDefinitions = assemblyDefinition.Modules
+                .OfType<IModule>()
+                .SelectMany(GetTypeDeclarations)
+                .Distinct()
+                .ToArray();
 
             string publicKeyToken;
             if (assemblyDefinition.PublicKeyToken == null || assemblyDefinition.PublicKeyToken.Length == 0)
@@ -76,7 +85,14 @@ namespace AssemblyVisualizer.HAL.Reflector
             };
 
             _assemblyCorrespondence.Add(assemblyDefinition, assemblyInfo);
-            assemblyInfo.Modules = assemblyDefinition.Modules.OfType<IModule>().Select(m => Module(m));
+            assemblyInfo.Modules = assemblyDefinition.Modules.OfType<IModule>().Select(m => Module(m)).ToArray();
+            foreach (var module in assemblyInfo.Modules)
+            {
+                if (module.Assembly == null)
+                {
+                    module.Assembly = assemblyInfo;
+                }
+            }
 
             assemblyInfo.ReferencedAssemblies = assemblyDefinition.Modules
                 .OfType<IModule>()
@@ -109,11 +125,9 @@ namespace AssemblyVisualizer.HAL.Reflector
                 return _moduleCorrespondence[module];
             }
 
-            var moduleInfo = new ModuleInfo
-            {
-                Assembly = Assembly(module.Assembly)
-            };
+            var moduleInfo = new ModuleInfo();
             _moduleCorrespondence.Add(module, moduleInfo);
+            moduleInfo.Assembly = Assembly(module.Assembly);
             moduleInfo.Types = GetTypeDeclarations(module).Select(t => Type(t, moduleInfo));
 
             return moduleInfo;

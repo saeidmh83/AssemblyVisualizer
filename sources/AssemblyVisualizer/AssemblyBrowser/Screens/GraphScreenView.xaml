@@ -122,7 +122,7 @@
                 </Style.Triggers>
             </Style>
         </ResourceDictionary>
-    </UserControl.Resources>
+    </UserControl.Resources>   
     <Grid x:Name="grdMain">
         <!--Members popup-->
         <Border x:Name="detailsPopupTarget"
@@ -268,11 +268,13 @@
         </Border>
 
         <!--Assemblies-->
-        <Border VerticalAlignment="Bottom"
+        <Border x:Name="assemblyList"
+                VerticalAlignment="Bottom"
                 HorizontalAlignment="Right"
                 Background="White"
                 CornerRadius="8"
-                Margin="0, 0, 12, 8">
+                Margin="0, 0, 12, 8"
+                Visibility="{Binding IsAssemblyListVisible, Converter={StaticResource boolVisibilityConverter}}">
             <ItemsControl ItemsSource="{Binding Assemblies}"/>
         </Border>        
         
@@ -301,8 +303,14 @@
                         <Run Text="Search in Graph"/>
                         <LineBreak/>
                         <Run FontWeight="Bold"
+                             Text="CTRL + A: "/>
+                        <Run Text="Toggle assembly list"/>
+                        <LineBreak/>
+                        <Run FontWeight="Bold"
                              Text="F3: "/>
                         <Run Text="Back to Main Search"/>
+                         
+                        
                     </TextBlock>
                 </Border.ToolTip>
             </Border>

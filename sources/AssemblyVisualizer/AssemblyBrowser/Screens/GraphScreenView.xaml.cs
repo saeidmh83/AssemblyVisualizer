@@ -53,11 +53,13 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 			ViewModel.FocusSearchRequest += FocusSearchRequestHandler;
            
             brdSearch.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);
+            assemblyList.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);
 		}
 
         private void UnloadedHandler(object sender, RoutedEventArgs e)
         {           
             brdSearch.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.None);
+            assemblyList.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.None);
         }
 
 		private void HideSearchAnimationCompletedHandler(object sender, EventArgs e)

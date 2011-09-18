@@ -30,14 +30,32 @@ namespace AssemblyVisualizer.HAL.ILSpy
 
         public AssemblyInfo Assembly(object assembly)
         {
+            if (assembly == null)
+            {
+                return null;
+            }
+
             var assemblyDefinition = assembly as AssemblyDefinition;
 
+
+            if (assemblyDefinition.Name.Name == "mscorlib")
+            { 
+                var mscorlib = _assemblyCorrespondence.Keys.Where(a => a.Name.Name == "mscorlib").FirstOrDefault();
+                if (mscorlib != null && mscorlib.FullName == assemblyDefinition.FullName)
+                {
+                    return _assemblyCorrespondence[mscorlib];
+                }
+            }            
+            
             if (_assemblyCorrespondence.ContainsKey(assemblyDefinition))
             {
                 return _assemblyCorrespondence[assemblyDefinition];
             }
 
-            var typeDefinitions = assemblyDefinition.Modules.SelectMany(m => m.Types.SelectMany(t => GetNestedTypesAndSelfRecursive(t))).ToArray();
+            var typeDefinitions = assemblyDefinition.Modules
+                .SelectMany(m => m.Types.SelectMany(t => GetNestedTypesAndSelfRecursive(t)))
+                .Distinct()
+                .ToArray();
             
             var assemblyInfo = new AssemblyInfo
             {
@@ -57,7 +75,15 @@ namespace AssemblyVisualizer.HAL.ILSpy
             };
 
             _assemblyCorrespondence.Add(assemblyDefinition, assemblyInfo);
-            assemblyInfo.Modules = assemblyDefinition.Modules.Select(m => Module(m));
+            assemblyInfo.Modules = assemblyDefinition.Modules.Select(m => Module(m)).ToArray();
+            foreach (var module in assemblyInfo.Modules)
+            {
+                if (module.Assembly == null)
+                {
+                    module.Assembly = assemblyInfo;
+                }
+            }
+            
             assemblyInfo.ReferencedAssemblies = assemblyDefinition.Modules
                 .SelectMany(m => m.AssemblyReferences
                     .Select(r => m.AssemblyResolver.Resolve(r))
@@ -74,11 +100,9 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 return _moduleCorrespondence[moduleDefinition];
             }
 
-            var moduleInfo = new ModuleInfo
-            {
-                Assembly = Assembly(moduleDefinition.Assembly)
-            };
-            _moduleCorrespondence.Add(moduleDefinition, moduleInfo);            
+            var moduleInfo = new ModuleInfo();            
+            _moduleCorrespondence.Add(moduleDefinition, moduleInfo);
+            moduleInfo.Assembly = Assembly(moduleDefinition.Assembly);
             
             moduleInfo.Types = moduleDefinition.Types
                 .SelectMany(t => GetNestedTypesAndSelfRecursive(t).Select(type => Type(type)));
@@ -175,8 +199,7 @@ namespace AssemblyVisualizer.HAL.ILSpy
             }
 
             _typeCorrespondence.Add(typeDefinition, typeInfo);
-
-            typeInfo.Module = Module(typeDefinition.Module);
+            typeInfo.Module = Module(typeDefinition.Module);            
 
             return typeInfo;
         }

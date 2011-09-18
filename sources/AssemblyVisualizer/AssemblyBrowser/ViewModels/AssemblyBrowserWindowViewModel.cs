@@ -90,6 +90,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 			NavigateBackCommand = new DelegateCommand(NavigateBackCommandHandler);
 			NavigateForwardCommand = new DelegateCommand(NavigateForwardCommandHandler);
 			ShowInnerSearchCommand = new DelegateCommand(ShowInnerSearchCommandHandler);
+            ToggleAssembliesCommand = new DelegateCommand(ToggleAssembliesCommandHandler);
 
 			RefreshNavigationCommands();			
 
@@ -103,6 +104,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 		public ICommand NavigateBackCommand { get; private set; }
 		public ICommand NavigateForwardCommand { get; private set; }
 		public ICommand ShowInnerSearchCommand { get; private set; }
+        public ICommand ToggleAssembliesCommand { get; private set; }
 
 		public Screen Screen
 		{
@@ -202,8 +204,11 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 					{
 						var currentAssembly = assembly;
 
-						var assemblyTypes = currentAssembly.AssemblyInfo.Modules
-							.SelectMany(m => m.Types)
+                        var typeDefinitions = currentAssembly.AssemblyInfo.Modules
+                            .SelectMany(m => m.Types).ToArray();
+                        var distinctTypeDefinitions = typeDefinitions.Distinct().ToArray();
+
+						var assemblyTypes = distinctTypeDefinitions
 							.Select(t => new TypeViewModel(t, this))
 							.ToList();
 						
@@ -492,6 +497,11 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 				Screen.ShowInnerSearch();
 			}
 		}
+
+        private void ToggleAssembliesCommandHandler()
+        {
+            Screen.ToggleAssembliesVisibility();
+        }
 
 		#endregion
 	}

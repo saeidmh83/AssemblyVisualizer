@@ -28,7 +28,8 @@
     <Window.InputBindings>
         <KeyBinding Command="NavigationCommands.BrowseBack" Key="Left" Modifiers="Control"/>
         <KeyBinding Command="NavigationCommands.BrowseForward" Key="Right" Modifiers="Control"/>
-        <KeyBinding Command="{Binding ShowInnerSearchCommand}" Key="F" Modifiers="Control"/>
+        <KeyBinding Command="{Binding ShowInnerSearchCommand}" Key="F" Modifiers="Control"/>        
+        <KeyBinding Command="{Binding ToggleAssembliesCommand}" Key="A" Modifiers="Control"/>       
     </Window.InputBindings>
     <Window.CommandBindings>
         <CommandBinding Command="Search" Executed="SearchExecuted"/>

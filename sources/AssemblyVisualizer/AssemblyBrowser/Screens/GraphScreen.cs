@@ -26,12 +26,13 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 		private IEnumerable<TypeViewModel> _types;
 		private readonly UserCommand _toggleColorizeUserCommand;
         private bool _isSearhVisible;
+        private bool _isAssemblyListVisible = true;
 
 		public GraphScreen(AssemblyBrowserWindowViewModel windowViewModel) : base(windowViewModel)
 		{
 			PinCommand = new DelegateCommand(PinCommandHandler);
 			HideSearchCommand = new DelegateCommand(HideSearchCommandHandler);
-			ShowSearchCommand = new DelegateCommand(ShowSearchCommandHandler);
+			ShowSearchCommand = new DelegateCommand(ShowSearchCommandHandler);            
 
 			_toggleColorizeUserCommand = new UserCommand(WindowViewModel.IsColorized
 			                                             	? Resources.Decolorize
@@ -49,7 +50,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 
 		public ICommand PinCommand { get; private set; }
 		public ICommand HideSearchCommand { get; private set; }
-		public ICommand ShowSearchCommand { get; private set; }
+		public ICommand ShowSearchCommand { get; private set; }        
 
 		public ObservableCollection<UserCommand> Commands { get; private set; }
 
@@ -75,6 +76,19 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
             {
                 _isSearhVisible = value;
                 OnPropertyChanged("IsSearchVisible");
+            }
+        }
+
+        public bool IsAssemblyListVisible
+        {
+            get
+            {
+                return _isAssemblyListVisible;
+            }
+            set
+            {
+                _isAssemblyListVisible = value;
+                OnPropertyChanged("IsAssemblyListVisible");
             }
         }
 
@@ -151,6 +165,11 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 			ShowSearchCommand.Execute(null);
 		}
 
+        public override void ToggleAssembliesVisibility()
+        {
+            IsAssemblyListVisible = !IsAssemblyListVisible;
+        }   
+
 		public void ShowDetails(TypeViewModel type)
 		{
 			TypeForDetails = type;
@@ -225,7 +244,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 		{
             IsSearchVisible = true;
 			OnFocusSearchRequest();
-		}
+		}            
 
 		private void ToggleColorizeCommandHandler()
 		{

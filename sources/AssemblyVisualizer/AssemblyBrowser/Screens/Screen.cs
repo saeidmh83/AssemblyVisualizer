@@ -38,5 +38,9 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 		public virtual void ShowInnerSearch()
 		{
 		}
+
+        public virtual void ToggleAssembliesVisibility()
+        { 
+        }
 	}
 }

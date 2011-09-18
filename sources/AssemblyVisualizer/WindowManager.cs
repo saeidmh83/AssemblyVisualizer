@@ -46,6 +46,7 @@ namespace AssemblyVisualizer
 		{
 			_assemblyBrowsers.Remove(window);
             ClearCacheIfPossible();
+            GC.Collect();
 		}
 
         public static void AddAncestryBrowser(AncestryBrowserWindow window)
@@ -57,6 +58,7 @@ namespace AssemblyVisualizer
         {
             _ancestryBrowsers.Remove(window);
             ClearCacheIfPossible();
+            GC.Collect();
         }
 
         public static void AddDependencyBrowser(DependencyBrowserWindow window)
@@ -68,6 +70,7 @@ namespace AssemblyVisualizer
         {
             _dependencyBrowsers.Remove(window);
             ClearCacheIfPossible();
+            GC.Collect();
         }
 
         private static void ClearCacheIfPossible()

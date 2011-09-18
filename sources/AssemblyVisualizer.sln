@@ -6,11 +6,17 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		ILSpy Debug|Any CPU = ILSpy Debug|Any CPU
+		Reflector Debug|Any CPU = Reflector Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{6ADE1DC4-9429-40A8-B0C3-B4575486E141}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6ADE1DC4-9429-40A8-B0C3-B4575486E141}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6ADE1DC4-9429-40A8-B0C3-B4575486E141}.ILSpy Debug|Any CPU.ActiveCfg = ILSpy Debug|Any CPU
+		{6ADE1DC4-9429-40A8-B0C3-B4575486E141}.ILSpy Debug|Any CPU.Build.0 = ILSpy Debug|Any CPU
+		{6ADE1DC4-9429-40A8-B0C3-B4575486E141}.Reflector Debug|Any CPU.ActiveCfg = Reflector Debug|Any CPU
+		{6ADE1DC4-9429-40A8-B0C3-B4575486E141}.Reflector Debug|Any CPU.Build.0 = Reflector Debug|Any CPU
 		{6ADE1DC4-9429-40A8-B0C3-B4575486E141}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6ADE1DC4-9429-40A8-B0C3-B4575486E141}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

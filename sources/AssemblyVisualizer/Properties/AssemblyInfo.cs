@@ -16,7 +16,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Assembly Visualizer")]
-[assembly: AssemblyCopyright("Copyright 2011")]
+[assembly: AssemblyCopyright("Copyright 2011 Denis Markelov")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

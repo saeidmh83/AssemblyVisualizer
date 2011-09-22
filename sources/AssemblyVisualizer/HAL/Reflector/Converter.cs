@@ -343,40 +343,16 @@ namespace AssemblyVisualizer.HAL.Reflector
             return methodInfo;
         }
 
-        public PropertyInfo Property(IPropertyDeclaration propertyDefinition)
+        public PropertyInfo Property(IPropertyDeclaration propertyDeclaration)
         {
-            var getMethod = propertyDefinition.GetMethod == null ? null : propertyDefinition.GetMethod.Resolve();
-            var setMethod = propertyDefinition.SetMethod == null ? null : propertyDefinition.SetMethod.Resolve();
+            var getMethod = propertyDeclaration.GetMethod == null ? null : propertyDeclaration.GetMethod.Resolve();
+            var setMethod = propertyDeclaration.SetMethod == null ? null : propertyDeclaration.SetMethod.Resolve();
 
             var propertyInfo = new PropertyInfo
             {
-                Text = propertyDefinition.ToString(),
-                Name = propertyDefinition.Name,
-                FullName = propertyDefinition.Name,
-                IsPublic = getMethod != null
-                           && getMethod.Visibility == MethodVisibility.Public
-                           || setMethod != null
-                           && setMethod.Visibility == MethodVisibility.Public,
-                IsProtected = getMethod != null
-                              && getMethod.Visibility == MethodVisibility.Family
-                              || setMethod != null
-                              && setMethod.Visibility == MethodVisibility.Family,
-                IsInternal = getMethod != null
-                             && getMethod.Visibility == MethodVisibility.Assembly
-                             || setMethod != null
-                             && setMethod.Visibility == MethodVisibility.Assembly,
-                IsPrivate = getMethod != null
-                            && getMethod.Visibility == MethodVisibility.Private
-                            || setMethod != null
-                            && setMethod.Visibility == MethodVisibility.Private,
-                IsProtectedOrInternal = getMethod != null
-                                        && getMethod.Visibility == MethodVisibility.FamilyOrAssembly
-                                        || setMethod != null
-                                        && setMethod.Visibility == MethodVisibility.FamilyOrAssembly,
-                IsProtectedAndInternal = getMethod != null
-                                         && getMethod.Visibility == MethodVisibility.FamilyAndAssembly
-                                         || setMethod != null
-                                         && setMethod.Visibility == MethodVisibility.FamilyAndAssembly,
+                Text = propertyDeclaration.ToString(),
+                Name = propertyDeclaration.Name,
+                FullName = propertyDeclaration.Name,                
                 IsVirtual = getMethod != null && getMethod.Virtual
                             || setMethod != null && setMethod.Virtual,
                 IsOverride = getMethod != null
@@ -389,12 +365,54 @@ namespace AssemblyVisualizer.HAL.Reflector
                            || setMethod != null && setMethod.Static,
                 IsFinal = getMethod != null && getMethod.Final
                           || setMethod != null && setMethod.Final,
-                MemberReference = propertyDefinition
+                MemberReference = propertyDeclaration
             };
+            AdjustPropertyVisibility(propertyInfo, propertyDeclaration);
 
             propertyInfo.Icon = Images.Images.GetPropertyIcon(propertyInfo);
 
             return propertyInfo;
+        }
+
+        private void AdjustPropertyVisibility(PropertyInfo propertyInfo, IPropertyDeclaration propertyDeclaration)
+        {
+            var firstAccessor = propertyDeclaration.GetMethod == null ? null : propertyDeclaration.GetMethod.Resolve();
+            var secondAccessor = propertyDeclaration.SetMethod == null ? null : propertyDeclaration.SetMethod.Resolve();
+            if (firstAccessor == null)
+            {
+                firstAccessor = secondAccessor;
+            }
+            else if (secondAccessor == null)
+            {
+                secondAccessor = firstAccessor;
+            }
+
+            if (firstAccessor.Visibility == MethodVisibility.Public || secondAccessor.Visibility == MethodVisibility.Public)
+            {
+                propertyInfo.IsPublic = true;
+                return;
+            }
+            if (firstAccessor.Visibility == MethodVisibility.Family || secondAccessor.Visibility == MethodVisibility.Family)
+            {
+                propertyInfo.IsProtected = true;
+                return;
+            }
+            if (firstAccessor.Visibility == MethodVisibility.FamilyOrAssembly || secondAccessor.Visibility == MethodVisibility.FamilyOrAssembly)
+            {
+                propertyInfo.IsProtectedOrInternal = true;
+                return;
+            }
+            if (firstAccessor.Visibility == MethodVisibility.Assembly || secondAccessor.Visibility == MethodVisibility.Assembly)
+            {
+                propertyInfo.IsInternal = true;
+                return;
+            }
+            if (firstAccessor.Visibility == MethodVisibility.FamilyAndAssembly || secondAccessor.Visibility == MethodVisibility.FamilyAndAssembly)
+            {
+                propertyInfo.IsProtectedAndInternal = true;
+                return;
+            }
+            propertyInfo.IsPrivate = true;
         }
     }
 }

@@ -300,31 +300,7 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 Text = PropertyTreeNode.GetText(propertyDefinition, MainWindow.Instance.CurrentLanguage) as string,
                 Name = propertyDefinition.Name,
                 FullName = propertyDefinition.FullName,
-                Icon = PropertyTreeNode.GetIcon(propertyDefinition),
-                IsPublic = propertyDefinition.GetMethod != null
-                           && propertyDefinition.GetMethod.IsPublic
-                           || propertyDefinition.SetMethod != null
-                           && propertyDefinition.SetMethod.IsPublic,
-                IsProtected = propertyDefinition.GetMethod != null
-                              && propertyDefinition.GetMethod.IsFamily
-                              || propertyDefinition.SetMethod != null
-                              && propertyDefinition.SetMethod.IsFamily,
-                IsInternal = propertyDefinition.GetMethod != null
-                             && propertyDefinition.GetMethod.IsAssembly
-                             || propertyDefinition.SetMethod != null
-                             && propertyDefinition.SetMethod.IsAssembly,
-                IsPrivate = propertyDefinition.GetMethod != null
-                            && propertyDefinition.GetMethod.IsPrivate
-                            || propertyDefinition.SetMethod != null
-                            && propertyDefinition.SetMethod.IsPrivate,
-                IsProtectedOrInternal = propertyDefinition.GetMethod != null
-                                        && propertyDefinition.GetMethod.IsFamilyOrAssembly
-                                        || propertyDefinition.SetMethod != null
-                                        && propertyDefinition.SetMethod.IsFamilyOrAssembly,
-                IsProtectedAndInternal = propertyDefinition.GetMethod != null
-                                         && propertyDefinition.GetMethod.IsFamilyAndAssembly
-                                         || propertyDefinition.SetMethod != null
-                                         && propertyDefinition.SetMethod.IsFamilyAndAssembly,
+                Icon = PropertyTreeNode.GetIcon(propertyDefinition),                
                 IsVirtual = propertyDefinition.GetMethod != null && propertyDefinition.GetMethod.IsVirtual
                             || propertyDefinition.SetMethod != null && propertyDefinition.SetMethod.IsVirtual,
                 IsOverride = propertyDefinition.GetMethod != null
@@ -339,8 +315,50 @@ namespace AssemblyVisualizer.HAL.ILSpy
                             || propertyDefinition.SetMethod != null && propertyDefinition.SetMethod.IsFinal,
                 MemberReference = propertyDefinition
             };
+            AdjustPropertyVisibility(propertyInfo, propertyDefinition);
 
             return propertyInfo;
+        }
+
+        private void AdjustPropertyVisibility(PropertyInfo propertyInfo, PropertyDefinition propertyDefinition)
+        {
+            var firstAccessor = propertyDefinition.GetMethod;
+            var secondAccessor = propertyDefinition.SetMethod;
+            if (firstAccessor == null)
+            {
+                firstAccessor = secondAccessor;
+            }
+            else if (secondAccessor == null)
+            {
+                secondAccessor = firstAccessor;                     
+            }
+
+            if (firstAccessor.IsPublic || secondAccessor.IsPublic)
+            {
+                propertyInfo.IsPublic = true;
+                return;
+            }
+            if (firstAccessor.IsFamily || secondAccessor.IsFamily)
+            {
+                propertyInfo.IsProtected = true;
+                return;
+            }
+            if (firstAccessor.IsFamilyOrAssembly || secondAccessor.IsFamilyOrAssembly)
+            {
+                propertyInfo.IsProtectedOrInternal = true;
+                return;
+            }
+            if (firstAccessor.IsAssembly || secondAccessor.IsAssembly)
+            {
+                propertyInfo.IsInternal = true;
+                return;
+            }
+            if (firstAccessor.IsFamilyAndAssembly || secondAccessor.IsFamilyAndAssembly)
+            {
+                propertyInfo.IsProtectedAndInternal = true;
+                return;
+            }
+            propertyInfo.IsPrivate = true;
         }
     }
 }

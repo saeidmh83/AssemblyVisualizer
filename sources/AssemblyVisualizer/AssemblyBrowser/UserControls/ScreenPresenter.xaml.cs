@@ -17,7 +17,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.UserControls
 	/// Interaction logic for CachingScreenPresenter.xaml
 	/// </summary>
 	partial class ScreenPresenter : UserControl
-	{
+	{    
 		#region // Dependency properties
 
 		public FrameworkElement SearchView
@@ -53,6 +53,13 @@ namespace AssemblyVisualizer.AssemblyBrowser.UserControls
 				screenPresenter.cpGraph.Content = view;
 			}
 
+            if (e.NewValue.GetType() == typeof(GraphScreen)
+                && e.OldValue == null)
+            {
+                screenPresenter.HideSearch(true);
+                return;
+            }
+
 			if (e.NewValue == null || e.OldValue == null)
 			{
 				return;
@@ -62,7 +69,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.UserControls
 				&& e.OldValue.GetType() == typeof(GraphScreen))
 			{
 				screenPresenter.ShowSearch();
-			}
+			}            
 		}
 
 		#endregion
@@ -80,11 +87,13 @@ namespace AssemblyVisualizer.AssemblyBrowser.UserControls
 			cpSearch.BeginAnimation(OpacityProperty, animation);
 		}
 
-		private void HideSearch()
+		private void HideSearch(bool instant)
 		{
-			var animation = new DoubleAnimation(0, TimeSpan.FromMilliseconds(350));
+            var animationLength = instant ? 0 : 350;
+
+			var animation = new DoubleAnimation(0, TimeSpan.FromMilliseconds(animationLength));
 			animation.Completed += HideSearchCompletedHandler;
-			cpSearch.BeginAnimation(OpacityProperty, animation);
+			cpSearch.BeginAnimation(OpacityProperty, animation);            
 		}
 
 		private void ShowSearchCompletedHandler(object sender, EventArgs e)
@@ -102,7 +111,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.UserControls
 
 		private void LayoutFinishedHandler()
 		{
-			HideSearch();
+			HideSearch(false);
 		}
 	}
 }

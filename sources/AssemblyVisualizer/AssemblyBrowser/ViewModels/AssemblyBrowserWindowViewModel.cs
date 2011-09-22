@@ -74,18 +74,24 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 
 		#region // .ctor
 
+        public AssemblyBrowserWindowViewModel(IEnumerable<AssemblyInfo> assemblyDefinitions,
+                                              Dispatcher dispatcher)
+            : this(assemblyDefinitions, null, dispatcher)
+        { 
+        }        
+
 		public AssemblyBrowserWindowViewModel(IEnumerable<AssemblyInfo> assemblyDefinitions,
+                                              TypeInfo type,
 											  Dispatcher dispatcher)
 		{
 			_dispatcher = dispatcher;
 
 			_assemblies = new ObservableCollection<AssemblyViewModel>(
-								assemblyDefinitions.Select(a => new AssemblyViewModel(a, this)));
-
-			_searchScreen = new SearchScreen(this);
-			Screen = _searchScreen;
+								assemblyDefinitions.Select(a => new AssemblyViewModel(a, this)));		
 
 			OnAssembliesChanged();
+
+            
 
 			NavigateBackCommand = new DelegateCommand(NavigateBackCommandHandler);
 			NavigateForwardCommand = new DelegateCommand(NavigateForwardCommandHandler);
@@ -95,6 +101,18 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 			RefreshNavigationCommands();			
 
 			IsColorized = true;
+
+            _searchScreen = new SearchScreen(this);
+
+            if (type == null)
+            {
+                Screen = _searchScreen;
+            }
+            else
+            { 
+                var typeViewModel = Types.Single(t => t.TypeInfo == type);
+                CurrentNavigationItem = new NavigationItem(typeViewModel);
+            }
 		}
 
 		#endregion
@@ -354,7 +372,10 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 		private void OnAssembliesChanged()
 		{
 			UpdateInternalTypeCollections();
-			_searchScreen.NotifyAssembliesChanged();
+            if (_searchScreen != null)
+            {
+                _searchScreen.NotifyAssembliesChanged();
+            }
 			RefreshColorization();
 			CleanUpNavigationHistory();
 		}

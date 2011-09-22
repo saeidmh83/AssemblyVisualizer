@@ -11,6 +11,7 @@ using Reflector;
 using Reflector.CodeModel;
 using AssemblyVisualizer.AncestryBrowser;
 using AssemblyVisualizer.DependencyBrowser;
+using AssemblyVisualizer.AssemblyBrowser;
 
 namespace AssemblyVisualizer.HAL.Reflector
 {
@@ -30,7 +31,8 @@ namespace AssemblyVisualizer.HAL.Reflector
             this._commandBarManager = (ICommandBarManager)serviceProvider.GetService(typeof(ICommandBarManager));
             _commandBarManager.CommandBars["Browser.Assembly"].Items.AddButton("Browse Assembly", BrowseAssemblyHandler);
             _commandBarManager.CommandBars["Browser.Assembly"].Items.AddButton("Browse Dependencies", BrowseDependenciesHandler);
-            _commandBarManager.CommandBars["Browser.TypeDeclaration"].Items.AddButton("Browse Ancestry", BrowseAncestryHandler);            
+            _commandBarManager.CommandBars["Browser.TypeDeclaration"].Items.AddButton("Browse Ancestry", BrowseAncestryHandler);
+            _commandBarManager.CommandBars["Browser.TypeDeclaration"].Items.AddButton("Visualize Descendants", VisualizeDescendantsHandler);
         }
 
         public static IAssemblyManager AssemblyManager
@@ -65,6 +67,17 @@ namespace AssemblyVisualizer.HAL.Reflector
             }
         }
 
+        private void VisualizeDescendantsHandler(object sender, EventArgs e)
+        {
+            var item = _assemblyBrowser.ActiveItem as ITypeDeclaration;
+            var type = HAL.Converter.Type(item);
+            var assembly = type.Module.Assembly;
+
+            var window = new AssemblyBrowserWindow(new [] { assembly }, type);
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(window);
+            window.Show();
+        }
+
         private void BrowseAncestryHandler(object sender, EventArgs e)
         {
             var item = _assemblyBrowser.ActiveItem as ITypeDeclaration;
@@ -81,7 +94,7 @@ namespace AssemblyVisualizer.HAL.Reflector
             var window = new DependencyBrowserWindow(new [] { HAL.Converter.Assembly(item) });
             System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(window);
             window.Show();
-        }
+        }        
 
         public void Unload()
         {

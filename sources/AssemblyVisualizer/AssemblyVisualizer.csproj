@@ -328,6 +328,7 @@
     <Compile Include="Controls\ZoomControl\ZoomControlModes.cs" />
     <Compile Include="Controls\ZoomControl\ZoomViewModifierMode.cs" />
     <Compile Include="HAL\ILSpy\BrowseDependenciesContextMenuEntry.cs" />
+    <Compile Include="HAL\ILSpy\VisualizeDescendantsContextMenuEntry.cs" />
     <Compile Include="HAL\Reflector\Converter.cs" />
     <Compile Include="HAL\Reflector\Package.cs" />
     <Compile Include="Images\AccessOverlayIcon.cs" />
@@ -471,7 +472,7 @@
     <Resource Include="Images\SuperTypes.png" />
     <Resource Include="Images\ViewCode.png" />
     <Resource Include="Images\VirtualMethod.png" />
-  </ItemGroup>  
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

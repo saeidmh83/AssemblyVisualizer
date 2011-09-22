@@ -10,10 +10,6 @@
     <Grid>
         <ContentPresenter x:Name="cpGraph"/>
         <ContentPresenter x:Name="cpSearch"
-                          Content="{Binding SearchView, ElementName=userControl}">
-            <ContentPresenter.RenderTransform>
-                <TranslateTransform x:Name="searchTransform"/>
-            </ContentPresenter.RenderTransform>
-        </ContentPresenter>
+                          Content="{Binding SearchView, ElementName=userControl}"/> 
     </Grid>
 </UserControl>

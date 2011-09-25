@@ -129,8 +129,8 @@
   <data name="BackToSearch" xml:space="preserve">
     <value>Back to Search</value>
   </data>
-  <data name="Browse" xml:space="preserve">
-    <value>Browse</value>
+  <data name="BrowseSelected" xml:space="preserve">
+    <value>Browse Selected</value>
   </data>
   <data name="CannotNavigateBack" xml:space="preserve">
     <value>Cannot navigate back</value>
@@ -139,7 +139,7 @@
     <value>Cannot navigate forward</value>
   </data>
   <data name="ClearSelection" xml:space="preserve">
-    <value>Clear selection</value>
+    <value>Clear Selection</value>
   </data>
   <data name="CollapseAll" xml:space="preserve">
     <value>Collapse all</value>

@@ -97,11 +97,11 @@ namespace AssemblyVisualizer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Browse.
+        ///   Looks up a localized string similar to Browse Selected.
         /// </summary>
-        internal static string Browse {
+        internal static string BrowseSelected {
             get {
-                return ResourceManager.GetString("Browse", resourceCulture);
+                return ResourceManager.GetString("BrowseSelected", resourceCulture);
             }
         }
         
@@ -124,7 +124,7 @@ namespace AssemblyVisualizer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Clear selection.
+        ///   Looks up a localized string similar to Clear Selection.
         /// </summary>
         internal static string ClearSelection {
             get {

@@ -61,7 +61,7 @@
                                     Background="{StaticResource RightArrowDrawing}"
                                     Style="{StaticResource ImageButtonStyle}"
                                     Visibility="{Binding CanVisualize, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    ToolTip="Visualize"/>
+                                    ToolTip="Visualize Descendants"/>
 
                             <Button VerticalAlignment="Center"                                                                      
                                     Command="{Binding BrowseAncestryCommand}" 

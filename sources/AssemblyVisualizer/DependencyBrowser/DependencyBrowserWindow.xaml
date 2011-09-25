@@ -11,7 +11,7 @@
         Height="600" 
         Width="800"
         MinHeight="200"
-        MinWidth="460">
+        MinWidth="500">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -359,7 +359,7 @@
                     <LineBreak/>
                      <Run FontWeight="Bold"
                              Text="CTRL + B: "/>
-                    <Run Text="Browse selection"/>
+                    <Run Text="Browse selected"/>
                     <LineBreak/>
                      <Run FontWeight="Bold"
                              Text="CTRL + C: "/>

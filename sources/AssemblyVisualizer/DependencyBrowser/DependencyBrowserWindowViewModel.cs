@@ -47,7 +47,7 @@ namespace AssemblyVisualizer.DependencyBrowser
 			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
 			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
                             new UserCommand(Resources.SearchInGraph, ShowSearchCommand),
-                            new UserCommand(Resources.Browse, BrowseCommand),
+                            new UserCommand(Resources.BrowseSelected, BrowseCommand),
                             new UserCommand(Resources.ClearSelection, ClearSelectionCommand)
 			           	};
         }

@@ -214,6 +214,7 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding Name}" 
+                                           ToolTip="{Binding FullName}"
                                            VerticalAlignment="Center"
                                            FontSize="18"
                                            Foreground="{Binding CaptionBrush}"

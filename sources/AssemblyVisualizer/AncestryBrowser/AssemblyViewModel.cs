@@ -29,6 +29,7 @@ namespace AssemblyVisualizer.AncestryBrowser
         }
 
         public string Name { get { return _assemblyInfo.Name; } }
+        public string FullName { get { return _assemblyInfo.FullName; } }
         public IEnumerable<TypeViewModel> Types { get { return _types; } }
         public Brush BackgroundBrush { get; set; }
         public Brush CaptionBrush { get; set; }

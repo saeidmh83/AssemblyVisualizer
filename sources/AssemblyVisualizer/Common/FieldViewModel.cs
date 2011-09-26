@@ -14,19 +14,6 @@ namespace AssemblyVisualizer.Common
         public FieldViewModel(FieldInfo fieldInfo) : base(fieldInfo)
         {
             _fieldInfo = fieldInfo;
-        }
-
-        public override ImageSource Icon
-        {
-            get { return _fieldInfo.Icon; }
-        }
-
-        public override string Text
-        {
-            get
-            {
-                return _fieldInfo.Text;
-            }
-        }        
+        }               
     }
 }

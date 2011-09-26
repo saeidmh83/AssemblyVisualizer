@@ -16,19 +16,6 @@ namespace AssemblyVisualizer.Common
 			_propertyInfo = propertyInfo;
 		}
 
-		public override ImageSource Icon
-		{
-			get { return _propertyInfo.Icon; }
-		}
-
-		public override string Text
-		{
-			get
-			{
-				return _propertyInfo.Text;
-			}
-		}
-
         public bool IsVirtual
         {
             get

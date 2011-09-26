@@ -15,9 +15,18 @@ namespace AssemblyVisualizer.Common
 	abstract class MemberViewModel : ViewModelBase
 	{
         private string _toolTip;
-        private MemberInfo _memberInfo;
+        private MemberInfo _memberInfo;  
 
-        public bool IsMarked { get; set; }
+        public MemberViewModel(MemberInfo memberInfo)
+        {
+            _memberInfo = memberInfo;
+
+            JumpCommand = new DelegateCommand(JumpCommandHandler);
+        }
+
+        public bool IsMarked { get; set; }        
+        public ICommand JumpCommand { get; private set; }
+
         public virtual string ToolTip
         {
             get
@@ -28,21 +37,27 @@ namespace AssemblyVisualizer.Common
                 }
                 return _toolTip;
             }
-            set 
+            set
             {
                 _toolTip = value;
             }
-        }        
-		public abstract ImageSource Icon { get; }
-		public abstract string Text { get; }
-        public ICommand JumpCommand { get; private set; }
+        }
 
-        public MemberViewModel(MemberInfo memberInfo)
+        public virtual string Text
         {
-            _memberInfo = memberInfo;
+            get
+            {
+                return _memberInfo.Text;
+            }
+        }
 
-            JumpCommand = new DelegateCommand(JumpCommandHandler);
-        }            
+        public virtual ImageSource Icon
+        {
+            get
+            {
+                return _memberInfo.Icon;
+            }
+        }        
 
         public MemberInfo MemberInfo 
         {

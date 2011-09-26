@@ -14,20 +14,7 @@ namespace AssemblyVisualizer.Common
 		public MethodViewModel(MethodInfo methodInfo) : base(methodInfo)
 		{
 			_methodInfo = methodInfo;           
-		}
-
-		public override ImageSource Icon
-		{
-			get { return _methodInfo.Icon; }
-		}
-
-		public override string Text
-		{
-			get
-			{
-                return _methodInfo.Text;
-			}
-		}
+		}	
 
         public bool IsVirtual
         {

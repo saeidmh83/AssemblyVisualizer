@@ -14,19 +14,6 @@ namespace AssemblyVisualizer.Common
 		public EventViewModel(EventInfo eventInfo) : base(eventInfo)
 		{
 			_eventInfo = eventInfo;
-		}
-
-		public override ImageSource Icon
-		{
-			get { return _eventInfo.Icon; }
-		}
-
-		public override string Text
-		{
-			get
-			{
-				return _eventInfo.Text;
-			}
-		}          
+		}	
 	}
 }

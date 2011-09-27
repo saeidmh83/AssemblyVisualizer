@@ -249,7 +249,7 @@
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Command="{Binding ShowSearchCommand}" Key="F" Modifiers="Control"/>
-        <KeyBinding Command="{Binding BrowseCommand}" Key="B" Modifiers="Control"/>
+        <KeyBinding Command="{Binding BrowseSelectedCommand}" Key="B" Modifiers="Control"/>
         <KeyBinding Command="{Binding ClearSelectionCommand}" Key="C" Modifiers="Control"/>
         <KeyBinding Command="{Binding RemoveSelectedCommand}" Key="R" Modifiers="Control"/>
     </Window.InputBindings>

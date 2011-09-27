@@ -37,15 +37,22 @@ namespace AssemblyVisualizer.HAL.ILSpy
 
             var assemblyDefinition = assembly as AssemblyDefinition;
 
-
             if (assemblyDefinition.Name.Name == "mscorlib")
-            { 
-                var mscorlib = _assemblyCorrespondence.Keys.Where(a => a.Name.Name == "mscorlib").FirstOrDefault();
+            {
+                var mscorlib = _assemblyCorrespondence.Keys.Where(a => a.FullName == assemblyDefinition.FullName).FirstOrDefault();
                 if (mscorlib != null && mscorlib.FullName == assemblyDefinition.FullName)
                 {
                     return _assemblyCorrespondence[mscorlib];
                 }
-            }            
+            }
+            if (assemblyDefinition.Name.Name == "Microsoft.VisualC")
+            {
+                var visualc = _assemblyCorrespondence.Keys.Where(a => a.FullName == assemblyDefinition.FullName).FirstOrDefault();
+                if (visualc != null)
+                {
+                    return _assemblyCorrespondence[visualc];
+                }
+            }
             
             if (_assemblyCorrespondence.ContainsKey(assemblyDefinition))
             {

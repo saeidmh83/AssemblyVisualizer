@@ -189,6 +189,9 @@
   <data name="Public" xml:space="preserve">
     <value>Public</value>
   </data>
+  <data name="RemoveSelected" xml:space="preserve">
+    <value>Remove Selected</value>
+  </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
   </data>

@@ -26,42 +26,46 @@ namespace AssemblyVisualizer.DependencyBrowser
         private bool _isSearchVisible;
 
         public DependencyBrowserWindowViewModel(IEnumerable<AssemblyInfo> assemblies)
-        {  
+        {
             _assemblies = assemblies.ToList();
             var inputAssemblyViewModels = assemblies
                 .Select(a => AssemblyViewModel.Create(a))
                 .ToList();
-            foreach(var vm in inputAssemblyViewModels)
+            foreach (var vm in inputAssemblyViewModels)
             {
                 vm.IsMarked = true;
+                vm.IsRoot = true;
             }
             _assemblyGraph = CreateGraph(inputAssemblyViewModels);
             _assemblyViewModels = _assemblyGraph.Vertices.ToList();
 
             HideSearchCommand = new DelegateCommand(HideSearchCommandHandler);
             ShowSearchCommand = new DelegateCommand(ShowSearchCommandHandler);
-            BrowseCommand = new DelegateCommand(BrowseCommandHandler);
+            BrowseSelectedCommand = new DelegateCommand(BrowseCommandHandler);
             ClearSelectionCommand = new DelegateCommand(ClearSelectionCommandHandler);
+            RemoveSelectedCommand = new DelegateCommand(RemoveSelectedCommandHandler);
             Commands = new ObservableCollection<UserCommand>
 			           	{
 			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
 			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
                             new UserCommand(Resources.SearchInGraph, ShowSearchCommand),
-                            new UserCommand(Resources.BrowseSelected, BrowseCommand),
-                            new UserCommand(Resources.ClearSelection, ClearSelectionCommand)
+                            new UserCommand(Resources.BrowseSelected, BrowseSelectedCommand),
+                            new UserCommand(Resources.RemoveSelected, RemoveSelectedCommand),
+                            new UserCommand(Resources.ClearSelection, ClearSelectionCommand)                            
 			           	};
         }
 
         public event Action FillGraphRequest;
-        public event Action OriginalSizeRequest;        
+        public event Action OriginalSizeRequest;
         public event Action FocusSearchRequest;
 
         public IEnumerable<UserCommand> Commands { get; private set; }
 
         public ICommand HideSearchCommand { get; private set; }
         public ICommand ShowSearchCommand { get; private set; }
-        public ICommand BrowseCommand { get; private set; }
+        public ICommand BrowseSelectedCommand { get; private set; }
         public ICommand ClearSelectionCommand { get; private set; }
+        public ICommand RemoveSelectedCommand { get; private set; }
 
         public AssemblyGraph Graph
         {
@@ -93,10 +97,10 @@ namespace AssemblyVisualizer.DependencyBrowser
             }
         }
 
-        public bool IsSearchTermFilled { get { return !string.IsNullOrWhiteSpace(SearchTerm); } }        
+        public bool IsSearchTermFilled { get { return !string.IsNullOrWhiteSpace(SearchTerm); } }
 
         public void SelectFoundAssemblies()
-        {          
+        {
             foreach (var assembly in _assemblyViewModels
                 .Where(a => a.IsFound))
             {
@@ -152,14 +156,27 @@ namespace AssemblyVisualizer.DependencyBrowser
             var selectedAssemblies = _assemblyViewModels
                 .Where(a => a.IsSelected)
                 .Select(a => a.AssemblyInfo);
-            Services.BrowseAssemblies(selectedAssemblies);            
-        }        
+            Services.BrowseAssemblies(selectedAssemblies);
+        }
 
         private void ClearSelectionCommandHandler()
         {
             foreach (var assemblyViewModel in _assemblyViewModels)
             {
                 assemblyViewModel.IsSelected = false;
+            }
+        }
+
+        private void RemoveSelectedCommandHandler()
+        {
+            SelectUnreachableAssemblies();
+            var assembliesToRemove = _assemblyViewModels.Where(a => a.IsSelected).ToArray();
+            Graph.RemoveVertexIf(a => a.IsSelected);
+
+            foreach (var assembly in assembliesToRemove)
+            {
+                assembly.IsSelected = false;
+                assembly.IsRemoved = true;
             }
         }
 
@@ -173,7 +190,7 @@ namespace AssemblyVisualizer.DependencyBrowser
         {
             IsSearchVisible = true;
             OnFocusSearchRequest();
-        }        
+        }
 
         private void OnFocusSearchRequest()
         {
@@ -188,13 +205,13 @@ namespace AssemblyVisualizer.DependencyBrowser
         private static AssemblyGraph CreateGraph(IEnumerable<AssemblyViewModel> assemblies)
         {
             var graph = new AssemblyGraph(true);
-            
+
             foreach (var assembly in assemblies)
             {
                 if (!graph.ContainsVertex(assembly))
                 {
                     graph.AddVertex(assembly);
-                }                              
+                }
                 AddReferencesRecursive(graph, assembly);
             }
 
@@ -225,9 +242,45 @@ namespace AssemblyVisualizer.DependencyBrowser
                 graph.AddEdge(edge);
                 if (!refAssembly.IsProcessed)
                 {
-                   AddReferencesRecursive(graph, refAssembly);
+                    AddReferencesRecursive(graph, refAssembly);
                 }
             }
-        }        
+        }
+
+        private void SelectUnreachableAssemblies()
+        {
+            foreach (var assembly in _assemblyViewModels)
+            {
+                assembly.IsProcessed = false;
+            }
+
+            var roots = _assemblyViewModels.Where(
+                a => a.IsRoot && !a.IsSelected && !a.IsRemoved).ToList();
+            foreach (var root in roots)
+            {
+                ProcessRec(root);
+            }
+            foreach (var assembly in _assemblyViewModels)
+            {
+                if (!assembly.IsRemoved && !assembly.IsProcessed
+                    && !assembly.IsRoot && !assembly.IsSelected)
+                {
+                    assembly.IsSelected = true;
+                }
+            }
+        }
+
+        private void ProcessRec(AssemblyViewModel assembly)
+        {
+            assembly.IsProcessed = true;
+            foreach (var refAssembly in assembly.ReferencedAssemblies)
+            {
+                if (!refAssembly.IsRemoved && !refAssembly.IsProcessed
+                    && !refAssembly.IsRoot && !refAssembly.IsSelected)
+                {
+                    ProcessRec(refAssembly);
+                }
+            }
+        }
     }
 }

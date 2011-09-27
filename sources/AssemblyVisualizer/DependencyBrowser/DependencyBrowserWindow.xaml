@@ -11,7 +11,7 @@
         Height="600" 
         Width="800"
         MinHeight="200"
-        MinWidth="500">
+        MinWidth="600">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -251,6 +251,7 @@
         <KeyBinding Command="{Binding ShowSearchCommand}" Key="F" Modifiers="Control"/>
         <KeyBinding Command="{Binding BrowseCommand}" Key="B" Modifiers="Control"/>
         <KeyBinding Command="{Binding ClearSelectionCommand}" Key="C" Modifiers="Control"/>
+        <KeyBinding Command="{Binding RemoveSelectedCommand}" Key="R" Modifiers="Control"/>
     </Window.InputBindings>
     <Grid UseLayoutRounding="True"
           TextOptions.TextFormattingMode="Display">
@@ -357,9 +358,13 @@
                          Text="CTRL + F: "/>
                     <Run Text="Search in Graph"/>    
                     <LineBreak/>
-                     <Run FontWeight="Bold"
+                    <Run FontWeight="Bold"
                              Text="CTRL + B: "/>
                     <Run Text="Browse selected"/>
+                    <LineBreak/>
+                    <Run FontWeight="Bold"
+                             Text="CTRL + B: "/>
+                    <Run Text="Remove selected"/>
                     <LineBreak/>
                      <Run FontWeight="Bold"
                              Text="CTRL + C: "/>

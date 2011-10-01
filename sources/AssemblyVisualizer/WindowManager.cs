@@ -10,6 +10,7 @@ using AssemblyVisualizer.AssemblyBrowser;
 using AssemblyVisualizer.AncestryBrowser;
 using AssemblyVisualizer.DependencyBrowser;
 using AssemblyVisualizer.HAL;
+using System.Windows;
 
 namespace AssemblyVisualizer
 {
@@ -39,7 +40,7 @@ namespace AssemblyVisualizer
 
 		public static void AddAssemblyBrowser(AssemblyBrowserWindow window)
 		{
-			_assemblyBrowsers.Add(window);
+			_assemblyBrowsers.Add(window);            
 		}
 
 		public static void RemoveAssemblyBrowser(AssemblyBrowserWindow window)
@@ -51,7 +52,7 @@ namespace AssemblyVisualizer
 
         public static void AddAncestryBrowser(AncestryBrowserWindow window)
         {
-            _ancestryBrowsers.Add(window);
+            _ancestryBrowsers.Add(window);            
         }
 
         public static void RemoveAncestryBrowser(AncestryBrowserWindow window)
@@ -63,7 +64,7 @@ namespace AssemblyVisualizer
 
         public static void AddDependencyBrowser(DependencyBrowserWindow window)
         {
-            _dependencyBrowsers.Add(window);
+            _dependencyBrowsers.Add(window);            
         }
 
         public static void RemoveDependencyBrowser(DependencyBrowserWindow window)
@@ -81,6 +82,6 @@ namespace AssemblyVisualizer
             {
                 Converter.ClearCache();
             }
-        }
+        }        
 	}
 }

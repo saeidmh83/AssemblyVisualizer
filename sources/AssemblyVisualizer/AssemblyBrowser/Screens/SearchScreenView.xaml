@@ -131,16 +131,7 @@
                      Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}" 
                      FontSize="20"
                      PreviewKeyDown="SearchPreviewKeyDown"
-                     Background="Transparent">
-                <!--<TextBox.Style>
-                    <Style TargetType="{x:Type TextBox}">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsSearchPerformed}" Value="False">
-                                <Setter Property="BorderBrush" Value="#4db74a"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>-->
+                     Background="Transparent">                
             </TextBox>
             <TextBlock x:Name="txtClearSearch"
                        Visibility="{Binding IsSearchTermFilled, Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -152,21 +143,39 @@
                     <TextBlock Text="Clear search"/>
                 </Hyperlink>
             </TextBlock>
+            <TextBlock VerticalAlignment="Bottom"
+                       HorizontalAlignment="Left"
+                       Margin="4, 0, 0, -18"
+                       Foreground="Gray">
+                <Run Text="Items count:"/>
+                <TextBlock Text="{Binding ItemsCount}"
+                           FontWeight="Bold"/>
+            </TextBlock>
+                       
         </Grid>
 
         <!--Search filters-->
-        <ItemsControl ItemsSource="{Binding SearchControlGroups}"
-                      Grid.Row="1"
-                      Margin="20, 0, 4, 0">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <CommandsGroup:CommandsGroupView Commands="{Binding Commands}"
-                                                    Header="{Binding Header}"
-                                                    Margin="0, 4"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-
+        <StackPanel Grid.Row="1"
+                    Margin="20, 0, 4, 0">
+            <ItemsControl ItemsSource="{Binding SearchControlGroups}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <CommandsGroup:CommandsGroupView Commands="{Binding Commands}"
+                                                        Header="{Binding Header}"
+                                                        Margin="0, 4"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <StackPanel>
+                <TextBlock Text="Generated"
+                           Foreground="Gray"
+                           FontSize="14"
+                           Margin="0, 0, 0, 3"/>
+                <CheckBox Content="Lambdas"
+                          IsChecked="{Binding ShowAnonymousMethodTypes}"
+                          Margin="0, 1"/>
+            </StackPanel>
+        </StackPanel>
         <!--Search results-->
         <ItemsControl ItemsSource="{Binding SearchResults}"
                       Grid.Row="1"

@@ -49,6 +49,8 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 		private SearchMode _searchMode = SearchMode.All;
 		private SortingMode _sortingMode = SortingMode.DescendantsCount;
 		private TypeVisibility _typeVisibilityFilter = TypeVisibility.Any;
+        private bool _showAnonymousMethodTypes;
+        private IList<TypeViewModel> _searchResults;
 		
 		#region // .ctor
 
@@ -156,12 +158,31 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
             get { return !IsSearchTermEmpty; }
         }
 
+        public bool ShowAnonymousMethodTypes
+        {
+            get
+            {
+                return _showAnonymousMethodTypes;
+            }
+            set
+            {
+                _showAnonymousMethodTypes = value;
+                OnPropertyChanged("ShowAnonymousMethodTypes");
+                TriggerSearch();
+            }
+        }
+
 		public ObservableCollection<CommandsGroupViewModel> SearchControlGroups { get; private set; }
 
 		public IEnumerable<TypeViewModel> SearchResults
 		{
 			get
 			{
+                if (_searchResults != null)
+                {
+                    return _searchResults;
+                }
+
 				var results = WindowViewModel.Types;
 
 				if (!string.IsNullOrWhiteSpace(SearchTerm))
@@ -192,6 +213,12 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 						break;
 				}
 
+                if (!_showAnonymousMethodTypes)
+                {
+                    results = results.Where(
+                        t => t.Name.IndexOf("<>c__DisplayClass", StringComparison.InvariantCulture) == -1);
+                }
+
 				switch (_sortingMode)
 				{
 					case SortingMode.DescendantsCount:
@@ -214,9 +241,18 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
                     results = results.Select(ClearSearchTerm);
                 }
 
-				return results;
+                _searchResults = results.ToList();
+                return _searchResults;
 			}
 		}
+
+        public int ItemsCount
+        {
+            get
+            {
+                return SearchResults.Count();
+            }
+        }
 
 		#region // Public methods
 
@@ -271,7 +307,9 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 
 		private void TriggerSearch()
 		{
+            _searchResults = null;
 			OnPropertyChanged("SearchResults");
+            OnPropertyChanged("ItemsCount");
 		}
 
 		private void OnSearchFocusRequested()

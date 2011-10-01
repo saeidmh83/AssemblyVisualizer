@@ -1,7 +1,6 @@
 # Assembly Visualizer 
 
-*Assembly Visualizer* is a plugin for .NET decompilers, currently supporting ILSpy and Reflector.    
-Its intention is to visualize data that can be obtained using these applications.
+*Assembly Visualizer* is a data visualization plugin for .NET decompilers, currently supporting ILSpy and Reflector.    
 
 Website: http://visualizer.denismarkelov.com    
 Copyright 2011 Denis Markelov    
@@ -18,7 +17,8 @@ Licensed under the Microsoft Public License
 ### Assembly browser
     
 Type hierarchies visualizer, starting from the superclass.    
-Usage: 'Browse Assembly' context menu item for assemblies.
+Usage: 'Browse Assembly' context menu item for assemblies, 
+'Visualize Descendants' context menu item for types.
 
 ### Ancestry browser
     

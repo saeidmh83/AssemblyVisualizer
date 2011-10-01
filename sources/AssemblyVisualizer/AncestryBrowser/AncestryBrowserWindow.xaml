@@ -29,11 +29,30 @@
                         <Grid>
                             <Expander IsExpanded="{Binding IsExpanded}">
                                 <Expander.Header>
-                                    <TextBlock Text="{Binding Name}"
-                                               FontSize="16"
-                                               FontWeight="Bold"                               
-                                               ToolTip="{Binding FullName}"
-                                               Margin="0, 6"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontSize="16"
+                                                   FontWeight="Bold"                               
+                                                   ToolTip="{Binding FullName}"
+                                                   Margin="0, 6"/>
+                                        <Button x:Name="btnNavigate"
+                                                Grid.Column="1"
+                                                VerticalAlignment="Center"                                                                      
+                                                Command="{Binding NavigateCommand}" 
+                                                Margin="6, 0"
+                                                Width="24"
+                                                Height="24"
+                                                MinWidth="0"
+                                                MinHeight="0"
+                                                Background="{StaticResource RightArrowBlueDrawing}"
+                                                Style="{StaticResource ImageButtonStyle}"
+                                                ToolTip="Jump"
+                                                Visibility="Collapsed"/>
+                                    </Grid>
                                 </Expander.Header>
                                 <ItemsControl ItemsSource="{Binding Members}"
                                           Margin="4, 3">
@@ -86,6 +105,9 @@
                     <DataTrigger Binding="{Binding IsLast}" Value="True">
                         <Setter TargetName="brdConnectionArrow" Property="Visibility" Value="Collapsed"/>
                     </DataTrigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter TargetName="btnNavigate" Property="Visibility" Value="Visible"/>
+                    </Trigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
         </ResourceDictionary>

@@ -13,6 +13,7 @@ using AssemblyVisualizer.Common;
 using AssemblyVisualizer.Properties;
 using AssemblyVisualizer.Model;
 using AssemblyVisualizer.HAL;
+using System.Windows.Input;
 
 namespace AssemblyVisualizer.AncestryBrowser
 {
@@ -55,8 +56,12 @@ namespace AssemblyVisualizer.AncestryBrowser
                 .OrderBy(m => m.Name)               
                 .Select(m => new MethodViewModel(m))
                 .OfType<MemberViewModel>()
-                .ToArray();   
+                .ToArray();
+
+            NavigateCommand = new DelegateCommand(NavigateCommandHandler);
         }
+
+        public ICommand NavigateCommand { get; private set; }
 
         public IEnumerable<MemberViewModel> Members 
         {
@@ -250,6 +255,11 @@ namespace AssemblyVisualizer.AncestryBrowser
                     }
                 }
             }         
+        }
+
+        private void NavigateCommandHandler()
+        {
+            Services.JumpTo(_typeInfo.MemberReference);
         }
 
         private static string GetFullName(string typeNamespace, string typeName)

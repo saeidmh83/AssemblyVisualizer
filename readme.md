@@ -17,7 +17,7 @@ Licensed under the Microsoft Public License
 ### Assembly browser
     
 Type hierarchies visualizer, starting from the superclass.    
-Usage: 'Browse Assembly' context menu item for assemblies, 
+Usage: 'Browse Assembly' context menu item for assemblies,    
 'Visualize Descendants' context menu item for types.
 
 ### Ancestry browser

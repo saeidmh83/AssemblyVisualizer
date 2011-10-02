@@ -8,18 +8,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows;
 using ICSharpCode.ILSpy;
-using ICSharpCode.ILSpy.TreeNodes;
 using ICSharpCode.TreeView;
-using AssemblyVisualizer.Properties;
-using AssemblyVisualizer.Model;
-using AssemblyVisualizer.AssemblyBrowser;
+using ICSharpCode.ILSpy.TreeNodes;
+using AssemblyVisualizer.TypeBrowser;
 
 namespace AssemblyVisualizer.HAL.ILSpy
 {
-    [ExportContextMenuEntry(Header = "Visualize Descendants")]
-    sealed class VisualizeDescendantsContextMenuEntry : IContextMenuEntry
+    [ExportContextMenuEntry(Header = "Browse Type")]
+    sealed class MyAnalyzerContextMenuEntry : IContextMenuEntry
     {
         public bool IsVisible(SharpTreeNode[] selectedNodes)
         {
@@ -36,16 +33,15 @@ namespace AssemblyVisualizer.HAL.ILSpy
         {
             var typeDefinition = selectedNodes
                 .OfType<TypeTreeNode>()
-                .Single().TypeDefinition;
-            var type = HAL.Converter.Type(typeDefinition);
-            var assembly = type.Module.Assembly;
+                .Single().TypeDefinition;            
 
-            var window = new AssemblyBrowserWindow(new [] { assembly }, type)
+            var window = new TypeBrowserWindow(typeDefinition)
             {
                 Owner = MainWindow.Instance
             };
             window.Show();
         }
-    }    
+    }
 }
+
 #endif

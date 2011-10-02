@@ -241,6 +241,11 @@ namespace AssemblyVisualizer.HAL.ILSpy
             return eventInfo;
         }
 
+        public FieldInfo Field(object field)
+        {
+            return Field(field as FieldDefinition);
+        }
+
         public FieldInfo Field(FieldDefinition fieldDefinition)
         {
             var fieldInfo = new FieldInfo
@@ -263,6 +268,11 @@ namespace AssemblyVisualizer.HAL.ILSpy
             };
 
             return fieldInfo;
+        }
+
+        public MethodInfo Method(object method)
+        {
+            return Method(method as MethodDefinition);
         }
 
         public MethodInfo Method(MethodDefinition methodDefinition)
@@ -298,6 +308,11 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 return false;
             }
             return methodDefinition.IsVirtual && !methodDefinition.IsNewSlot;
+        }
+
+        public PropertyInfo Property(object property)
+        {
+            return Property(property as PropertyDefinition);
         }
 
         public PropertyInfo Property(PropertyDefinition propertyDefinition)

@@ -11,6 +11,7 @@ using AssemblyVisualizer.AncestryBrowser;
 using AssemblyVisualizer.DependencyBrowser;
 using AssemblyVisualizer.HAL;
 using System.Windows;
+using AssemblyVisualizer.TypeBrowser;
 
 namespace AssemblyVisualizer
 {
@@ -22,6 +23,8 @@ namespace AssemblyVisualizer
             new List<AncestryBrowserWindow>();
         private static readonly IList<DependencyBrowserWindow> _dependencyBrowsers =
             new List<DependencyBrowserWindow>();
+        private static readonly IList<TypeBrowserWindow> _typeBrowsers =
+            new List<TypeBrowserWindow>();
 
 		public static IList<AssemblyBrowserWindow> AssemblyBrowsers
 		{
@@ -36,6 +39,11 @@ namespace AssemblyVisualizer
         public static IList<DependencyBrowserWindow> DependencyBrowsers
         {
             get { return _dependencyBrowsers; }
+        }
+
+        public static IList<TypeBrowserWindow> TypeBrowsers
+        {
+            get { return _typeBrowsers; }
         }
 
 		public static void AddAssemblyBrowser(AssemblyBrowserWindow window)
@@ -74,11 +82,24 @@ namespace AssemblyVisualizer
             GC.Collect();
         }
 
+        public static void AddTypeBrowser(TypeBrowserWindow window)
+        {
+            _typeBrowsers.Add(window);
+        }
+
+        public static void RemoveTypeBrowser(TypeBrowserWindow window)
+        {
+            _typeBrowsers.Remove(window);
+            ClearCacheIfPossible();
+            GC.Collect();
+        }
+
         private static void ClearCacheIfPossible()
         {
             if (AssemblyBrowsers.Count == 0
                 && AncestryBrowsers.Count == 0
-                && DependencyBrowsers.Count == 0)
+                && DependencyBrowsers.Count == 0
+                && TypeBrowsers.Count == 0)
             {
                 Converter.ClearCache();
             }

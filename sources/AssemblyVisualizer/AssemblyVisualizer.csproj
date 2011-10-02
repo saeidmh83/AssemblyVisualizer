@@ -125,6 +125,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HAL\ILSpy\BrowseTypeContextMenuEntry.cs" />
+    <Compile Include="TypeBrowser\AnalyzerEngine.cs" />
+    <Compile Include="TypeBrowser\MemberGraph.cs" />
+    <Compile Include="TypeBrowser\TypeBrowserWindow.xaml.cs">
+      <DependentUpon>TypeBrowserWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="AncestryBrowser\AssemblyViewModel.cs" />
     <Compile Include="AncestryBrowser\MemberOptions.cs" />
     <Compile Include="Behaviors\VisibilityAnimation.cs" />
@@ -360,6 +366,10 @@
     <Compile Include="WindowManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="TypeBrowser\TypeBrowserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="AssemblyBrowser\AssemblyBrowserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -473,6 +483,7 @@
     <Resource Include="Images\ViewCode.png" />
     <Resource Include="Images\VirtualMethod.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

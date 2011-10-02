@@ -414,6 +414,21 @@ namespace AssemblyVisualizer.HAL.Reflector
             }
             propertyInfo.IsPrivate = true;
         }
+
+        public MethodInfo Method(object method)
+        {
+            return Method(method as IMethodDeclaration);
+        }
+
+        public FieldInfo Field(object field)
+        {
+            return Field(field as IFieldDeclaration);
+        }
+
+        public PropertyInfo Property(object property)
+        {
+            return Property(property as IPropertyDeclaration);
+        }
     }
 }
 

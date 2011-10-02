@@ -34,6 +34,21 @@ namespace AssemblyVisualizer.HAL
             return _converter.Type(type);
         }
 
+        public static MethodInfo Method(object method)
+        {
+            return _converter.Method(method);
+        }
+
+        public static FieldInfo Field(object field)
+        {
+            return _converter.Field(field);
+        }
+
+        public static PropertyInfo Property(object property)
+        {
+            return _converter.Property(property);
+        }
+
         public static void ClearCache()
         {
             _converter.ClearCache();

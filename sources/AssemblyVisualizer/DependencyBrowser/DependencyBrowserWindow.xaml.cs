@@ -68,7 +68,7 @@ namespace AssemblyVisualizer.DependencyBrowser
 
             WindowManager.RemoveDependencyBrowser(this);
         }
-
+           
         private void FillGraphRequestHandler()
         {
             zoomControl.ZoomToFill();
@@ -76,7 +76,7 @@ namespace AssemblyVisualizer.DependencyBrowser
 
         private void OriginalSizeRequestHandler()
         {
-            var animation = new DoubleAnimation(1, TimeSpan.FromSeconds(1));
+            var animation = new DoubleAnimation(1, TimeSpan.FromSeconds(0.5));
             zoomControl.BeginAnimation(ZoomControl.ZoomProperty, animation);
         }  
 

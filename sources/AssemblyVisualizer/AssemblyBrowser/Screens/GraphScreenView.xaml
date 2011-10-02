@@ -107,7 +107,7 @@
                                Value="InEdge" />
                         </MultiTrigger.Conditions>
                         <Setter Property="Foreground"
-                        Value="DarkGreen" />
+                        Value="#FF9900" />
                     </MultiTrigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>

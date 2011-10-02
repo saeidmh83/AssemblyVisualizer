@@ -16,8 +16,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Mono.Cecil;
-using AssemblyVisualizer.Common;
-using AssemblyVisualizer.HAL;
+using System.Windows.Media.Animation;
+using AssemblyVisualizer.Controls.ZoomControl;
 
 namespace AssemblyVisualizer.TypeBrowser
 {
@@ -29,10 +29,24 @@ namespace AssemblyVisualizer.TypeBrowser
         public TypeBrowserWindow(TypeDefinition typeDefinition)
         {
             InitializeComponent();
-            WindowManager.AddTypeBrowser(this);
-            
-            graphLayout.Graph = CreateGraph(typeDefinition);
+            ViewModel = new TypeBrowserWindowViewModel(typeDefinition);
 
+            ViewModel.FillGraphRequest += FillGraphRequestHandler;
+            ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;    
+
+            WindowManager.AddTypeBrowser(this); 
+        }
+
+        public TypeBrowserWindowViewModel ViewModel
+        {
+            get
+            {
+                return DataContext as TypeBrowserWindowViewModel;
+            }
+            set
+            {
+                DataContext = value;
+            }
         }
 
         protected override void OnClosed(EventArgs e)
@@ -40,116 +54,18 @@ namespace AssemblyVisualizer.TypeBrowser
             base.OnClosed(e);
 
             WindowManager.RemoveTypeBrowser(this);
-        }
-
-        private Dictionary<MemberReference, MemberViewModel> _members = new Dictionary<MemberReference, MemberViewModel>();
-
-        private MemberGraph CreateGraph(TypeDefinition typeDefinition)
+        }        
+                
+        private void FillGraphRequestHandler()
         {
-            var graph = new MemberGraph(true);
-
-            var list = new List<TypeDefinition>();
-            var currentType = typeDefinition;
-            list.Add(typeDefinition);
-            while (currentType.BaseType != null)
-            {
-                var t = currentType.BaseType.Resolve();
-                list.Add(t);
-                currentType = t;
-            }
-
-            foreach (var type in list)
-            {
-                foreach (var method in type.Methods.Where(m => !m.Name.StartsWith("<")))
-                {
-                    var mvm = GetVMOrCreate(method);
-                    if (!graph.ContainsVertex(mvm))
-                    {
-                        graph.AddVertex(mvm);
-                    }
-
-                    var uses = AnalyzerEngine.GetUsedMethods(method).Where(m => list.Contains(m.DeclaringType) && !m.Name.StartsWith("<")).ToArray();
-                    foreach (var usage in uses)
-                    {
-                        var vm = GetVMOrCreate(usage);
-                        if (!graph.ContainsVertex(vm))
-                        {
-                            graph.AddVertex(vm);
-                        }
-                        graph.AddEdge(new Controls.Graph.QuickGraph.Edge<MemberViewModel>(mvm, vm));
-                    }
-
-                    var usesf = AnalyzerEngine.GetUsedFields(method).Where(m => list.Contains(m.DeclaringType) && !m.Name.StartsWith("CS$")).ToArray();
-                    foreach (var usage in usesf)
-                    {
-                        var vm = GetVMOrCreate(usage);
-                        if (!graph.ContainsVertex(vm))
-                        {
-                            graph.AddVertex(vm);
-                        }
-                        graph.AddEdge(new Controls.Graph.QuickGraph.Edge<MemberViewModel>(mvm, vm));
-                    }
-
-                }
-            }
-
-            return graph;
+            zoomControl.ZoomToFill();
         }
 
-        private MemberViewModel GetVMOrCreate(MemberReference reference)
+        private void OriginalSizeRequestHandler()
         {
-            if (_members.ContainsKey(reference))
-            {
-                return _members[reference];
-            }
-
-            if (reference is FieldDefinition)
-            {
-                var info = Converter.Field(reference);
-                var vm = new FieldViewModel(info);
-                _members.Add(reference, vm);
-                return vm;
-            }            
-
-            if (reference is MethodDefinition)
-            {
-                var methodDef = reference as MethodDefinition;
-                if (IsAccessor(methodDef))
-                {
-                    var prop = GetAccessorProperty(methodDef);
-                    var pinfo = Converter.Property(prop);
-                    
-                    if (!_members.ContainsKey(prop))
-                    { 
-                        var pvm = new PropertyViewModel(pinfo);
-                        _members.Add(prop, pvm);
-                    }
-
-                    return _members[prop];
-                }
-
-                var info = Converter.Method(reference);
-                var vm = new MethodViewModel(info);
-                _members.Add(reference, vm);
-                return vm;
-            }
-
-
-            throw new Exception("error");
-        }
-
-        private bool IsAccessor(MethodDefinition methodDefinition)
-        {
-            return (methodDefinition.IsSpecialName && (methodDefinition.Name.StartsWith("get_") || methodDefinition.Name.StartsWith("set_")));
-        }
-
-        private PropertyDefinition GetAccessorProperty(MethodDefinition methodDefinition)
-        {
-            var type = methodDefinition.DeclaringType;
-            var propName = methodDefinition.Name.Substring(4);
-            var prop = type.Properties.Single(p => p.Name == propName);
-            return prop;
-        }
+            var animation = new DoubleAnimation(1, TimeSpan.FromSeconds(0.5));
+            zoomControl.BeginAnimation(ZoomControl.ZoomProperty, animation);
+        }  
     }
 }
 #endif

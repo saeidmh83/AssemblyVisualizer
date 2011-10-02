@@ -6,7 +6,7 @@
         xmlns:Graph="clr-namespace:AssemblyVisualizer.Controls.Graph" 
         xmlns:TypeBrowser="clr-namespace:AssemblyVisualizer.TypeBrowser"
         xmlns:Converters="clr-namespace:AssemblyVisualizer.Controls.Graph.Converters"        
-        Title="Window1" 
+        Title="{Binding Title}" 
         Height="600" Width="800" 
         MinWidth="600" MinHeight="400" >
     <Window.Resources>
@@ -26,121 +26,49 @@
                             <ContentPresenter Content="{TemplateBinding Vertex}" >
                                 <ContentPresenter.ContentTemplate>
                                     <DataTemplate>
-                                        <Button Style="{StaticResource LooklessButtonStyle}"
-                                                    Command="{Binding JumpCommand}"
-                                                    Cursor="Hand"
-                                                    Background="Transparent"
-                                                    HorizontalAlignment="Left">
-                                            <Grid Margin="0, 2"
-                                                          Grid.Column="1"
-                                                          ToolTip="{Binding ToolTip}">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <Image Source="{Binding Icon}"
-                                                               Margin="0, 0, 6, 0"                    
-                                                               Stretch="Uniform"
-                                                               Width="16"
-                                                               Height="16"/>
-                                                <TextBlock x:Name="txtMemberName"
-                                                                   Text="{Binding Text}"
-                                                                   Grid.Column="1" />
-                                            </Grid>
-                                        </Button>
-                                        <!--<Grid x:Name="grid">
-                                            <Border x:Name="brd"                                                    
-                                                        CornerRadius="10">
-                                                <Border.Background>
-                                                    <SolidColorBrush x:Name="brdSelectionBrush" Color="Transparent"/>
-                                                </Border.Background>
-                                                <Border CornerRadius="10">
-                                                    <Border.Background>
-                                                        <SolidColorBrush x:Name="brdSearchBrush" Color="Transparent"/>
-                                                    </Border.Background>
-                                                    <TextBlock x:Name="txtName"
-                                                                   Text="{Binding Name}"
-                                                                   ToolTip="{Binding FullName}"
-                                                                   ToolTipService.InitialShowDelay="2600"
-                                                                   FontSize="16"
-                                                                   Margin="4"/>
-                                                </Border>
-                                            </Border>
+                                        <Grid x:Name="grid"
+                                              Margin="0, 2"                                                  
+                                              ToolTip="{Binding ToolTip}"
+                                              Background="Transparent">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition />
+                                            </Grid.ColumnDefinitions>
+                                            <Image Source="{Binding Icon}"
+                                                   Margin="0, 0, 6, 0"                    
+                                                   Stretch="Uniform"
+                                                   Width="16"
+                                                   Height="16"/>
+                                            <TextBlock x:Name="txtMemberName"
+                                                       Text="{Binding Text}"
+                                                       Grid.Column="1" />
                                             <Border Background="White"
-                                                        CornerRadius="8"
-                                                        x:Name="commandsPanel"
-                                                        Visibility="Collapsed"
-                                                        HorizontalAlignment="Right"
-                                                        VerticalAlignment="Center">
+                                                    Grid.ColumnSpan="2"
+                                                    CornerRadius="8"
+                                                    x:Name="commandsPanel"
+                                                    Visibility="Collapsed"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Center">
                                                 <StackPanel Orientation="Horizontal">
                                                     <Button x:Name="btnSelection"
                                                             VerticalAlignment="Center"                                                                      
-                                                            Command="{Binding ToggleSelectionCommand}" 
+                                                            Command="{Binding JumpCommand}" 
                                                             Margin="4, 0"
                                                             Width="16"
                                                             Height="16"
                                                             MinWidth="0"
                                                             MinHeight="0"
-                                                            Background="{StaticResource BluePlusDrawing}"
+                                                            Background="{StaticResource RightArrowBlueDrawing}"
                                                             Style="{StaticResource ImageButtonStyle}"
-                                                            ToolTip="Select"/>
+                                                            ToolTip="Jump"/>
                                                 </StackPanel>
                                             </Border>
                                         </Grid>
                                         <DataTemplate.Triggers>
-                                            <DataTrigger Binding="{Binding IsMarked}" Value="True">
-                                                <Setter TargetName="txtName" Property="Foreground" Value="DarkGreen"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
-                                                <Setter TargetName="btnSelection" Property="ToolTip" Value="Deselect"/>
-                                                <Setter TargetName="btnSelection" Property="Background" Value="{StaticResource BlueMinusDrawing}"/>
-                                                <DataTrigger.EnterActions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <ColorAnimation Storyboard.TargetName="brdSelectionBrush"
-                                                                                Storyboard.TargetProperty="Color"
-                                                                                To="Orange"
-                                                                                Duration="0:0:0.3"/>
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </DataTrigger.EnterActions>
-                                                <DataTrigger.ExitActions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <ColorAnimation Storyboard.TargetName="brdSelectionBrush"
-                                                                                Storyboard.TargetProperty="Color"
-                                                                                To="Transparent"
-                                                                                Duration="0:0:0.3"/>
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </DataTrigger.ExitActions>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsFound}" Value="True">
-                                                <DataTrigger.EnterActions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <ColorAnimation Storyboard.TargetName="brdSearchBrush"
-                                                                                Storyboard.TargetProperty="Color"
-                                                                                To="Yellow"
-                                                                                Duration="0:0:0.3"/>
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </DataTrigger.EnterActions>
-                                                <DataTrigger.ExitActions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <ColorAnimation Storyboard.TargetName="brdSearchBrush"
-                                                                                Storyboard.TargetProperty="Color"
-                                                                                To="Transparent"
-                                                                                Duration="0:0:0.3"/>
-                                                        </Storyboard>
-                                                    </BeginStoryboard>
-                                                </DataTrigger.ExitActions>
-                                            </DataTrigger>
                                             <Trigger SourceName="grid" Property="IsMouseOver" Value="True">
                                                 <Setter TargetName="commandsPanel" Property="Visibility" Value="Visible"/>
                                             </Trigger>
-                                        </DataTemplate.Triggers>-->
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ContentPresenter.ContentTemplate>
                             </ContentPresenter>
@@ -240,7 +168,7 @@
                                Value="InEdge" />
                         </MultiTrigger.Conditions>
                         <Setter Property="Foreground"
-                        Value="DarkGreen" />
+                        Value="#FF9900" />
                     </MultiTrigger>
                     <MultiTrigger>
                         <MultiTrigger.Conditions>
@@ -266,8 +194,9 @@
             </Style>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <Grid>
+        <!--Main Content-->
         <ZoomControl:ZoomControl x:Name="zoomControl"
                                  Grid.Row="1"
                                  ZoomBoxOpacity="0.5"
@@ -275,10 +204,36 @@
                                  RequireCtrlForZoom="False"                                  
                                  TextOptions.TextFormattingMode="Ideal">
             <TypeBrowser:MemberGraphLayout x:Name="graphLayout"                                             
-                                             Margin="10"  
-                                             LayoutAlgorithmType="LinLog"
-                                             OverlapRemovalAlgorithmType="FSA"
-                                             HighlightAlgorithmType="Simple"/>
+                                           Margin="10" 
+                                           Graph="{Binding Graph}"
+                                           LayoutAlgorithmType="LinLog"
+                                           OverlapRemovalAlgorithmType="FSA"
+                                           HighlightAlgorithmType="Simple"/>
         </ZoomControl:ZoomControl>
+
+        <!--Commands-->
+        <ItemsControl ItemsSource="{Binding Commands}"
+                      Margin="4"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Top">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border Background="White"
+                        CornerRadius="8">
+                        <TextBlock Margin="8, 4">
+                        <Hyperlink Command="{Binding Command}"
+                                   Style="{StaticResource HyperlinkStyle}">
+                            <TextBlock Text="{Binding Text}"/>
+                        </Hyperlink>
+                    </TextBlock>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </Window>

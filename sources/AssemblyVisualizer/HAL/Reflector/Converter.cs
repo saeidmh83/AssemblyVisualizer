@@ -429,6 +429,12 @@ namespace AssemblyVisualizer.HAL.Reflector
         {
             return Property(property as IPropertyDeclaration);
         }
+
+        public EventInfo Event(object ev)
+        {
+            return Event(ev as EventDeclaration);
+        }
+
     }
 }
 

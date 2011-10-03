@@ -98,7 +98,7 @@ namespace AssemblyVisualizer.TypeBrowser
                         graph.AddEdge(new Controls.Graph.QuickGraph.Edge<MemberViewModel>(mvm, vm));
                     }
 
-                    var usesf = AnalyzerEngine.GetUsedFields(method).Where(m => list.Contains(m.DeclaringType) && !m.Name.StartsWith("CS$")).ToArray();
+                    var usesf = AnalyzerEngine.GetUsedFields(method).Where(m => list.Contains(m.DeclaringType) && !m.Name.StartsWith("CS$") && !m.Name.EndsWith("k__BackingField")).ToArray();
                     foreach (var usage in usesf)
                     {
                         var vm = GetViewModel(usage);
@@ -124,6 +124,19 @@ namespace AssemblyVisualizer.TypeBrowser
 
             if (memberReference is FieldDefinition)
             {
+                var ev = GetEventForBackingField(memberReference as FieldDefinition);
+                if (ev != null)
+                {
+                    var einfo = Converter.Event(ev);
+
+                    if (!_viewModelsDictionary.ContainsKey(ev))
+                    {
+                        var evm = new EventViewModel(einfo);
+                        _viewModelsDictionary.Add(ev, evm);
+                    }
+
+                    return _viewModelsDictionary[ev];
+                }
                 var info = Converter.Field(memberReference);
                 var vm = new FieldViewModel(info);
                 _viewModelsDictionary.Add(memberReference, vm);
@@ -133,7 +146,7 @@ namespace AssemblyVisualizer.TypeBrowser
             if (memberReference is MethodDefinition)
             {
                 var methodDef = memberReference as MethodDefinition;
-                if (IsAccessor(methodDef))
+                if (IsPropertyAccessor(methodDef))
                 {
                     var prop = GetAccessorProperty(methodDef);
                     var pinfo = Converter.Property(prop);
@@ -145,6 +158,19 @@ namespace AssemblyVisualizer.TypeBrowser
                     }
 
                     return _viewModelsDictionary[prop];
+                }
+                if (IsEventAccessor(methodDef))
+                {
+                    var ev = GetAccessorEvent(methodDef);
+                    var einfo = Converter.Event(ev);
+
+                    if (!_viewModelsDictionary.ContainsKey(ev))
+                    {
+                        var evm = new EventViewModel(einfo);
+                        _viewModelsDictionary.Add(ev, evm);
+                    }
+
+                    return _viewModelsDictionary[ev];
                 }
 
                 var info = Converter.Method(memberReference);
@@ -176,10 +202,21 @@ namespace AssemblyVisualizer.TypeBrowser
             }
         }
 
-        private static bool IsAccessor(MethodDefinition methodDefinition)
+        private static bool IsPropertyAccessor(MethodDefinition methodDefinition)
         {
             return (methodDefinition.IsSpecialName
                     && (methodDefinition.Name.IndexOf("get_") != -1 || methodDefinition.Name.IndexOf("set_") != -1));
+        }
+
+        private static bool IsEventAccessor(MethodDefinition methodDefinition)
+        {
+            return (methodDefinition.IsSpecialName
+                    && (methodDefinition.Name.IndexOf("add_") != -1 || methodDefinition.Name.IndexOf("remove_") != -1));
+        }
+
+        private static EventDefinition GetEventForBackingField(FieldDefinition fieldDefinition)
+        {
+            return fieldDefinition.DeclaringType.Events.FirstOrDefault(e => e.Name == fieldDefinition.Name && e.EventType == fieldDefinition.FieldType);
         }
 
         private static PropertyDefinition GetAccessorProperty(MethodDefinition methodDefinition)
@@ -187,6 +224,13 @@ namespace AssemblyVisualizer.TypeBrowser
             var type = methodDefinition.DeclaringType;
             var prop = type.Properties.Single(p => p.GetMethod == methodDefinition || p.SetMethod == methodDefinition);
             return prop;
+        }
+
+        private static EventDefinition GetAccessorEvent(MethodDefinition methodDefinition)
+        {
+            var type = methodDefinition.DeclaringType;
+            var ev = type.Events.Single(p => p.AddMethod == methodDefinition || p.RemoveMethod == methodDefinition);
+            return ev;
         }
     }
 }

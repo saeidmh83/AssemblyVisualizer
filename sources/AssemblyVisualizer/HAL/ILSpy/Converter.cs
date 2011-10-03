@@ -220,6 +220,11 @@ namespace AssemblyVisualizer.HAL.ILSpy
             return string.Format("{0}.{1}", typeNamespace, typeName);
         }
 
+        public EventInfo Event(object ev)
+        {
+            return Event(ev as EventDefinition);
+        }
+
         public EventInfo Event(EventDefinition eventDefinition)
         {
             var eventInfo = new EventInfo

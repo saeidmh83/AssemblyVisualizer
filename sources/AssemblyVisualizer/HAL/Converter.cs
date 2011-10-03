@@ -49,6 +49,11 @@ namespace AssemblyVisualizer.HAL
             return _converter.Property(property);
         }
 
+        public static EventInfo Event(object ev)
+        {
+            return _converter.Event(ev);
+        }
+
         public static void ClearCache()
         {
             _converter.ClearCache();

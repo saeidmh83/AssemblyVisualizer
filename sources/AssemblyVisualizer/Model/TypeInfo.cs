@@ -34,6 +34,7 @@ namespace AssemblyVisualizer.Model
         public ModuleInfo Module { get; set; }
 
         public IEnumerable<MethodInfo> Methods { get; set; }
+        public IEnumerable<MethodInfo> Accessors { get; set; }
         public IEnumerable<PropertyInfo> Properties { get; set; }
         public IEnumerable<EventInfo> Events { get; set; }
         public IEnumerable<FieldInfo> Fields { get; set; }

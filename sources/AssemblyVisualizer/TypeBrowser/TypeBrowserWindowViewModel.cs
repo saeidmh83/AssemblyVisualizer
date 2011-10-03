@@ -2,38 +2,37 @@
 // This code is distributed under Microsoft Public License 
 // (for details please see \docs\Ms-PL)
 
-#if ILSpy
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AssemblyVisualizer.Infrastructure;
 using AssemblyVisualizer.Common;
-using Mono.Cecil;
 using AssemblyVisualizer.HAL;
 using System.Collections.ObjectModel;
 using AssemblyVisualizer.Properties;
+using AssemblyVisualizer.Model;
 
 namespace AssemblyVisualizer.TypeBrowser
 {
     class TypeBrowserWindowViewModel : ViewModelBase
     {
-        private Dictionary<MemberReference, MemberViewModel> _viewModelsDictionary = new Dictionary<MemberReference, MemberViewModel>();
+        private Dictionary<MemberInfo, MemberViewModel> _viewModelsDictionary = new Dictionary<MemberInfo, MemberViewModel>();
         private MemberGraph _graph;
-        private TypeDefinition _typeDefinition;
+        private TypeInfo _typeInfo;
 
-        public TypeBrowserWindowViewModel(TypeDefinition typeDefinition)
+        public TypeBrowserWindowViewModel(TypeInfo typeInfo)
         {
-            _typeDefinition = typeDefinition;
+            _typeInfo = typeInfo;
 
             Commands = new ObservableCollection<UserCommand>
 			           	{
 			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
 			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
                             //new UserCommand(Resources.SearchInGraph, ShowSearchCommand),                                                    
-			           	};        
+			           	};
 
-            Graph = CreateGraph(typeDefinition);
+            Graph = CreateGraph(typeInfo);
         }
 
         public event Action FillGraphRequest;
@@ -48,7 +47,7 @@ namespace AssemblyVisualizer.TypeBrowser
             {
                 return _graph;
             }
-            set 
+            set
             {
                 _graph = value;
                 OnPropertyChanged("Graph");
@@ -59,127 +58,122 @@ namespace AssemblyVisualizer.TypeBrowser
         {
             get
             {
-                return _typeDefinition.Name;
+                return _typeInfo.Name;
             }
         }
 
-        private MemberGraph CreateGraph(TypeDefinition typeDefinition)
+        private MemberGraph CreateGraph(TypeInfo typeInfo)
         {
             var graph = new MemberGraph(true);
 
-            var list = new List<TypeDefinition>();
-            var currentType = typeDefinition;
-            list.Add(typeDefinition);
+            var hierarchy = new List<TypeInfo>();
+            var currentType = typeInfo;
+            hierarchy.Add(typeInfo);
             while (currentType.BaseType != null)
             {
-                var t = currentType.BaseType.Resolve();
-                list.Add(t);
+                var t = currentType.BaseType;
+                hierarchy.Add(t);
                 currentType = t;
             }
 
-            foreach (var type in list)
+            foreach (var type in hierarchy)
             {
-                foreach (var method in type.Methods.Where(m => !m.Name.StartsWith("<")))
+                foreach (var method in type.Methods.Where(m => !m.Name.StartsWith("<")).Concat(type.Accessors))
                 {
-                    var mvm = GetViewModel(method);
+                    var mvm = GetViewModelForMethod(method);
                     if (!graph.ContainsVertex(mvm))
                     {
                         graph.AddVertex(mvm);
                     }
 
-                    var uses = AnalyzerEngine.GetUsedMethods(method).Where(m => list.Contains(m.DeclaringType) && !m.Name.StartsWith("<")).ToArray();
-                    foreach (var usage in uses)
+                    var usedMethods = Helper.GetUsedMethods(method.MemberReference)
+                        .Where(m => hierarchy.Any(t => t.FullName == m.DeclaringType.FullName) && !m.Name.StartsWith("<"))
+                        .ToArray();
+                    foreach (var usedMethod in usedMethods)
                     {
-                        var vm = GetViewModel(usage);
+                        var vm = GetViewModelForMethod(usedMethod);
+                        if (!graph.ContainsVertex(vm))
+                        {
+                            graph.AddVertex(vm);
+                        }
+                        graph.AddEdge(new Controls.Graph.QuickGraph.Edge<MemberViewModel>(mvm, vm));
+                    }                   
+
+                    var usedFields = Helper.GetUsedFields(method.MemberReference)
+                        .Where(m => hierarchy.Contains(m.DeclaringType) && !m.Name.StartsWith("CS$") && !m.Name.EndsWith("k__BackingField"))
+                        .ToArray();
+                    foreach (var usedField in usedFields)
+                    {
+                        var vm = GetViewModelForField(usedField);
                         if (!graph.ContainsVertex(vm))
                         {
                             graph.AddVertex(vm);
                         }
                         graph.AddEdge(new Controls.Graph.QuickGraph.Edge<MemberViewModel>(mvm, vm));
                     }
-
-                    var usesf = AnalyzerEngine.GetUsedFields(method).Where(m => list.Contains(m.DeclaringType) && !m.Name.StartsWith("CS$") && !m.Name.EndsWith("k__BackingField")).ToArray();
-                    foreach (var usage in usesf)
-                    {
-                        var vm = GetViewModel(usage);
-                        if (!graph.ContainsVertex(vm))
-                        {
-                            graph.AddVertex(vm);
-                        }
-                        graph.AddEdge(new Controls.Graph.QuickGraph.Edge<MemberViewModel>(mvm, vm));
-                    }
-
                 }
             }
 
             return graph;
         }
 
-        private MemberViewModel GetViewModel(MemberReference memberReference)
+        private MemberViewModel GetViewModelForField(FieldInfo fieldInfo)
+        {  
+            if (_viewModelsDictionary.ContainsKey(fieldInfo))
+            {
+                return _viewModelsDictionary[fieldInfo];
+            }
+
+            var eventInfo = Helper.GetEventForBackingField(fieldInfo.MemberReference);
+            if (eventInfo != null)
+            {
+                if (_viewModelsDictionary.ContainsKey(eventInfo))
+                {
+                    return _viewModelsDictionary[eventInfo];
+                }
+                var evm = new EventViewModel(eventInfo);
+                _viewModelsDictionary.Add(eventInfo, evm);
+                return evm;
+            }
+
+            var vm = new FieldViewModel(fieldInfo);
+            _viewModelsDictionary.Add(fieldInfo, vm);
+            return vm;
+        }
+
+        private MemberViewModel GetViewModelForMethod(MethodInfo methodInfo)
         {
-            if (_viewModelsDictionary.ContainsKey(memberReference))
+            if (_viewModelsDictionary.ContainsKey(methodInfo))
             {
-                return _viewModelsDictionary[memberReference];
+                return _viewModelsDictionary[methodInfo];
             }
 
-            if (memberReference is FieldDefinition)
+            if (IsPropertyAccessor(methodInfo))
             {
-                var ev = GetEventForBackingField(memberReference as FieldDefinition);
-                if (ev != null)
+                var propertyInfo = Helper.GetAccessorProperty(methodInfo.MemberReference);
+                if (_viewModelsDictionary.ContainsKey(propertyInfo))
                 {
-                    var einfo = Converter.Event(ev);
-
-                    if (!_viewModelsDictionary.ContainsKey(ev))
-                    {
-                        var evm = new EventViewModel(einfo);
-                        _viewModelsDictionary.Add(ev, evm);
-                    }
-
-                    return _viewModelsDictionary[ev];
+                    return _viewModelsDictionary[propertyInfo];
                 }
-                var info = Converter.Field(memberReference);
-                var vm = new FieldViewModel(info);
-                _viewModelsDictionary.Add(memberReference, vm);
-                return vm;
+                var pvm = new PropertyViewModel(propertyInfo);
+                _viewModelsDictionary.Add(propertyInfo, pvm);
+                return pvm;
             }
-
-            if (memberReference is MethodDefinition)
+            if (IsEventAccessor(methodInfo))
             {
-                var methodDef = memberReference as MethodDefinition;
-                if (IsPropertyAccessor(methodDef))
+                var eventInfo = Helper.GetAccessorEvent(methodInfo.MemberReference);
+                if (_viewModelsDictionary.ContainsKey(eventInfo))
                 {
-                    var prop = GetAccessorProperty(methodDef);
-                    var pinfo = Converter.Property(prop);
-
-                    if (!_viewModelsDictionary.ContainsKey(prop))
-                    {
-                        var pvm = new PropertyViewModel(pinfo);
-                        _viewModelsDictionary.Add(prop, pvm);
-                    }
-
-                    return _viewModelsDictionary[prop];
+                    return _viewModelsDictionary[eventInfo];
                 }
-                if (IsEventAccessor(methodDef))
-                {
-                    var ev = GetAccessorEvent(methodDef);
-                    var einfo = Converter.Event(ev);
-
-                    if (!_viewModelsDictionary.ContainsKey(ev))
-                    {
-                        var evm = new EventViewModel(einfo);
-                        _viewModelsDictionary.Add(ev, evm);
-                    }
-
-                    return _viewModelsDictionary[ev];
-                }
-
-                var info = Converter.Method(memberReference);
-                var vm = new MethodViewModel(info);
-                _viewModelsDictionary.Add(memberReference, vm);
-                return vm;
+                var evm = new EventViewModel(eventInfo);
+                _viewModelsDictionary.Add(eventInfo, evm);
+                return evm;
             }
-
-            throw new Exception("Invalid member reference");
+            
+            var vm = new MethodViewModel(methodInfo);
+            _viewModelsDictionary.Add(methodInfo, vm);
+            return vm;
         }
 
         private void OnFillGraphRequest()
@@ -202,36 +196,16 @@ namespace AssemblyVisualizer.TypeBrowser
             }
         }
 
-        private static bool IsPropertyAccessor(MethodDefinition methodDefinition)
+        private static bool IsPropertyAccessor(MethodInfo method)
         {
-            return (methodDefinition.IsSpecialName
-                    && (methodDefinition.Name.IndexOf("get_") != -1 || methodDefinition.Name.IndexOf("set_") != -1));
+            return (method.IsSpecialName
+                    && (method.Name.IndexOf("get_") != -1 || method.Name.IndexOf("set_") != -1));
         }
 
-        private static bool IsEventAccessor(MethodDefinition methodDefinition)
+        private static bool IsEventAccessor(MethodInfo method)
         {
-            return (methodDefinition.IsSpecialName
-                    && (methodDefinition.Name.IndexOf("add_") != -1 || methodDefinition.Name.IndexOf("remove_") != -1));
-        }
-
-        private static EventDefinition GetEventForBackingField(FieldDefinition fieldDefinition)
-        {
-            return fieldDefinition.DeclaringType.Events.FirstOrDefault(e => e.Name == fieldDefinition.Name && e.EventType == fieldDefinition.FieldType);
-        }
-
-        private static PropertyDefinition GetAccessorProperty(MethodDefinition methodDefinition)
-        {
-            var type = methodDefinition.DeclaringType;
-            var prop = type.Properties.Single(p => p.GetMethod == methodDefinition || p.SetMethod == methodDefinition);
-            return prop;
-        }
-
-        private static EventDefinition GetAccessorEvent(MethodDefinition methodDefinition)
-        {
-            var type = methodDefinition.DeclaringType;
-            var ev = type.Events.Single(p => p.AddMethod == methodDefinition || p.RemoveMethod == methodDefinition);
-            return ev;
+            return (method.IsSpecialName
+                    && (method.Name.IndexOf("add_") != -1 || method.Name.IndexOf("remove_") != -1));
         }
     }
 }
-#endif

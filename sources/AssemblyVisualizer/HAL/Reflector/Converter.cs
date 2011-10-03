@@ -19,12 +19,20 @@ namespace AssemblyVisualizer.HAL.Reflector
         private Dictionary<IAssembly, AssemblyInfo> _assemblyCorrespondence = new Dictionary<IAssembly, AssemblyInfo>();
         private Dictionary<IModule, ModuleInfo> _moduleCorrespondence = new Dictionary<IModule, ModuleInfo>();
         private Dictionary<ITypeDeclaration, TypeInfo> _typeCorrespondence = new Dictionary<ITypeDeclaration, TypeInfo>();
+        private Dictionary<IFieldDeclaration, FieldInfo> _fieldCorrespondence = new Dictionary<IFieldDeclaration, FieldInfo>();
+        private Dictionary<IMethodDeclaration, MethodInfo> _methodCorrespondence = new Dictionary<IMethodDeclaration, MethodInfo>();
+        private Dictionary<IPropertyDeclaration, PropertyInfo> _propertyCorrespondence = new Dictionary<IPropertyDeclaration, PropertyInfo>();
+        private Dictionary<IEventDeclaration, EventInfo> _eventCorrespondence = new Dictionary<IEventDeclaration, EventInfo>();
 
         public void ClearCache()
         {
             _assemblyCorrespondence.Clear();
             _moduleCorrespondence.Clear();
             _typeCorrespondence.Clear();
+            _fieldCorrespondence.Clear();
+            _methodCorrespondence.Clear();
+            _propertyCorrespondence.Clear();
+            _eventCorrespondence.Clear();
         }
 
         public AssemblyInfo Assembly(object assembly)
@@ -177,7 +185,8 @@ namespace AssemblyVisualizer.HAL.Reflector
                    .Where(m => !m.Name.Contains("get_")
                                && !m.Name.Contains("set_")
                                && !m.Name.Contains("add_")
-                               && !m.Name.Contains("remove_"));
+                               && !m.Name.Contains("remove_"))
+                   .ToArray();
 
             var typeInfo = new TypeInfo
             {
@@ -203,8 +212,9 @@ namespace AssemblyVisualizer.HAL.Reflector
             };
             typeInfo.FullName = GetFullName(type.Namespace, typeInfo.Name);
             typeInfo.Methods = methods.Select(m => Method(m, typeInfo));
+            typeInfo.Accessors = type.Methods.OfType<IMethodDeclaration>().Except(methods).Select(m => Method(m, typeInfo));
             typeInfo.Fields = type.Fields.OfType<IFieldDeclaration>().Select(f => Field(f, typeInfo));
-
+            
             foreach (var eventInfo in typeInfo.Events)
             {
                 eventInfo.DeclaringType = typeInfo;
@@ -248,6 +258,11 @@ namespace AssemblyVisualizer.HAL.Reflector
 
         public EventInfo Event(IEventDeclaration eventDeclaration)
         {
+            if (_eventCorrespondence.ContainsKey(eventDeclaration))
+            {
+                return _eventCorrespondence[eventDeclaration];
+            }
+
             var addMethod = eventDeclaration.AddMethod.Resolve();
 
             var eventInfo = new EventInfo
@@ -264,6 +279,7 @@ namespace AssemblyVisualizer.HAL.Reflector
                 IsStatic = addMethod.Static,
                 MemberReference = eventDeclaration
             };
+            _eventCorrespondence.Add(eventDeclaration, eventInfo);
 
             eventInfo.Text = eventInfo.Text.Substring(eventInfo.Text.LastIndexOf('.') + 1);
             eventInfo.Name = eventInfo.Name.Substring(eventInfo.Name.LastIndexOf('.') + 1);
@@ -275,6 +291,11 @@ namespace AssemblyVisualizer.HAL.Reflector
 
         public FieldInfo Field(IFieldDeclaration fieldDefinition, TypeInfo type)
         {
+            if (_fieldCorrespondence.ContainsKey(fieldDefinition))
+            {
+                return _fieldCorrespondence[fieldDefinition];
+            }
+
             var fieldInfo = new FieldInfo
             {
                 Text = fieldDefinition.ToString(),
@@ -293,6 +314,7 @@ namespace AssemblyVisualizer.HAL.Reflector
                 MemberReference = fieldDefinition,
                 DeclaringType = type
             };
+            _fieldCorrespondence.Add(fieldDefinition, fieldInfo);
 
             fieldInfo.Text = fieldInfo.Text.Substring(fieldInfo.Text.LastIndexOf('.') + 1);
             fieldInfo.Name = fieldInfo.Name.Substring(fieldInfo.Name.LastIndexOf('.') + 1);
@@ -304,6 +326,11 @@ namespace AssemblyVisualizer.HAL.Reflector
 
         public MethodInfo Method(IMethodDeclaration method, TypeInfo type)
         {
+            if (_methodCorrespondence.ContainsKey(method))
+            {
+                return _methodCorrespondence[method];
+            }
+
             var methodInfo = new MethodInfo
             {
                 Text = method.ToString(),
@@ -323,6 +350,7 @@ namespace AssemblyVisualizer.HAL.Reflector
                 MemberReference = method,
                 DeclaringType = type
             };
+            _methodCorrespondence.Add(method, methodInfo);
 
             if (method.Overrides.Count > 0)
             {
@@ -345,6 +373,11 @@ namespace AssemblyVisualizer.HAL.Reflector
 
         public PropertyInfo Property(IPropertyDeclaration propertyDeclaration)
         {
+            if (_propertyCorrespondence.ContainsKey(propertyDeclaration))
+            {
+                return _propertyCorrespondence[propertyDeclaration];
+            }
+
             var getMethod = propertyDeclaration.GetMethod == null ? null : propertyDeclaration.GetMethod.Resolve();
             var setMethod = propertyDeclaration.SetMethod == null ? null : propertyDeclaration.SetMethod.Resolve();
 
@@ -368,6 +401,8 @@ namespace AssemblyVisualizer.HAL.Reflector
                 MemberReference = propertyDeclaration
             };
             AdjustPropertyVisibility(propertyInfo, propertyDeclaration);
+
+            _propertyCorrespondence.Add(propertyDeclaration, propertyInfo);
 
             propertyInfo.Icon = Images.Images.GetPropertyIcon(propertyInfo);
 
@@ -417,7 +452,10 @@ namespace AssemblyVisualizer.HAL.Reflector
 
         public MethodInfo Method(object method)
         {
-            return Method(method as IMethodDeclaration);
+            /*var methodDeclaration = method as IMethodDeclaration;
+
+            return Method(methodDeclaration, );*/
+            throw new NotImplementedException();
         }
 
         public FieldInfo Field(object field)

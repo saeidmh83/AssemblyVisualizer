@@ -20,12 +20,20 @@ namespace AssemblyVisualizer.HAL.ILSpy
         private Dictionary<AssemblyDefinition, AssemblyInfo> _assemblyCorrespondence = new Dictionary<AssemblyDefinition, AssemblyInfo>();
         private Dictionary<ModuleDefinition, ModuleInfo> _moduleCorrespondence = new Dictionary<ModuleDefinition, ModuleInfo>();
         private Dictionary<TypeDefinition, TypeInfo> _typeCorrespondence = new Dictionary<TypeDefinition, TypeInfo>();
+        private Dictionary<FieldDefinition, FieldInfo> _fieldCorrespondence = new Dictionary<FieldDefinition, FieldInfo>();
+        private Dictionary<MethodDefinition, MethodInfo> _methodCorrespondence = new Dictionary<MethodDefinition, MethodInfo>();
+        private Dictionary<PropertyDefinition, PropertyInfo> _propertyCorrespondence = new Dictionary<PropertyDefinition, PropertyInfo>();
+        private Dictionary<EventDefinition, EventInfo> _eventCorrespondence = new Dictionary<EventDefinition, EventInfo>();
 
         public void ClearCache()
         {
             _assemblyCorrespondence.Clear();
             _moduleCorrespondence.Clear();
             _typeCorrespondence.Clear();
+            _fieldCorrespondence.Clear();
+            _methodCorrespondence.Clear();
+            _propertyCorrespondence.Clear();
+            _eventCorrespondence.Clear();
         }
 
         public AssemblyInfo Assembly(object assembly)
@@ -158,7 +166,8 @@ namespace AssemblyVisualizer.HAL.ILSpy
             }
 
             var methods = typeDefinition.Methods
-                    .Where(m => !m.IsGetter && !m.IsSetter && !m.IsAddOn && !m.IsRemoveOn);
+                    .Where(m => !m.IsGetter && !m.IsSetter && !m.IsAddOn && !m.IsRemoveOn)
+                    .ToArray();
 
             var typeInfo = new TypeInfo
             {
@@ -169,6 +178,7 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 Events = typeDefinition.Events.Select(e => Event(e)),
                 Fields = typeDefinition.Fields.Select(f => Field(f)),
                 Methods = methods.Select(m => Method(m)),
+                Accessors = typeDefinition.Methods.Except(methods).Select(m => Method(m)),
                 Properties = typeDefinition.Properties.Select(p => Property(p)),
                 MembersCount = methods.Count() + typeDefinition.Events.Count + typeDefinition.Properties.Count + typeDefinition.Fields.Count,
                 IsInternal = typeDefinition.IsNotPublic 
@@ -186,6 +196,8 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 IsSealed = typeDefinition.IsSealed,
                 IsAbstract = typeDefinition.IsAbstract
             };
+            _typeCorrespondence.Add(typeDefinition, typeInfo);
+
             typeInfo.FullName = GetFullName(typeDefinition.Namespace, typeInfo.Name);
 
             foreach (var eventInfo in typeInfo.Events)
@@ -193,6 +205,10 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 eventInfo.DeclaringType = typeInfo;
             }
             foreach (var methodInfo in typeInfo.Methods)
+            {
+                methodInfo.DeclaringType = typeInfo;
+            }
+            foreach (var methodInfo in typeInfo.Accessors)
             {
                 methodInfo.DeclaringType = typeInfo;
             }
@@ -204,8 +220,7 @@ namespace AssemblyVisualizer.HAL.ILSpy
             {
                 propertyInfo.DeclaringType = typeInfo;
             }
-
-            _typeCorrespondence.Add(typeDefinition, typeInfo);
+            
             typeInfo.Module = Module(typeDefinition.Module);            
 
             return typeInfo;
@@ -227,6 +242,11 @@ namespace AssemblyVisualizer.HAL.ILSpy
 
         public EventInfo Event(EventDefinition eventDefinition)
         {
+            if (_eventCorrespondence.ContainsKey(eventDefinition))
+            {
+                return _eventCorrespondence[eventDefinition];
+            }
+
             var eventInfo = new EventInfo
             {
                 Text = EventTreeNode.GetText(eventDefinition, MainWindow.Instance.CurrentLanguage) as string,
@@ -242,6 +262,7 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 IsStatic = eventDefinition.AddMethod.IsStatic,
                 MemberReference = eventDefinition
             };
+            _eventCorrespondence.Add(eventDefinition, eventInfo);
 
             return eventInfo;
         }
@@ -253,6 +274,11 @@ namespace AssemblyVisualizer.HAL.ILSpy
 
         public FieldInfo Field(FieldDefinition fieldDefinition)
         {
+            if (_fieldCorrespondence.ContainsKey(fieldDefinition))
+            {
+                return _fieldCorrespondence[fieldDefinition];
+            }
+
             var fieldInfo = new FieldInfo
             {
                 Text = fieldDefinition.Name,
@@ -271,6 +297,7 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 IsSpecialName = fieldDefinition.IsSpecialName,
                 MemberReference = fieldDefinition
             };
+            _fieldCorrespondence.Add(fieldDefinition, fieldInfo);
 
             return fieldInfo;
         }
@@ -282,6 +309,11 @@ namespace AssemblyVisualizer.HAL.ILSpy
 
         public MethodInfo Method(MethodDefinition methodDefinition)
         {
+            if (_methodCorrespondence.ContainsKey(methodDefinition))
+            {
+                return _methodCorrespondence[methodDefinition];
+            }
+
             var methodInfo = new MethodInfo
             {
                 Text = MethodTreeNode.GetText(methodDefinition, MainWindow.Instance.CurrentLanguage) as string,
@@ -299,8 +331,9 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 IsOverride = IsOverride(methodDefinition),
                 IsStatic = methodDefinition.IsStatic,
                 IsFinal = methodDefinition.IsFinal,
-                MemberReference = methodDefinition
+                MemberReference = methodDefinition               
             };
+            _methodCorrespondence.Add(methodDefinition, methodInfo);
 
             return methodInfo;
         }
@@ -322,6 +355,11 @@ namespace AssemblyVisualizer.HAL.ILSpy
 
         public PropertyInfo Property(PropertyDefinition propertyDefinition)
         {
+            if (_propertyCorrespondence.ContainsKey(propertyDefinition))
+            {
+                return _propertyCorrespondence[propertyDefinition];
+            }
+
             var propertyInfo = new PropertyInfo
             {
                 Text = PropertyTreeNode.GetText(propertyDefinition, MainWindow.Instance.CurrentLanguage) as string,
@@ -343,6 +381,8 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 MemberReference = propertyDefinition
             };
             AdjustPropertyVisibility(propertyInfo, propertyDefinition);
+
+            _propertyCorrespondence.Add(propertyDefinition, propertyInfo);
 
             return propertyInfo;
         }

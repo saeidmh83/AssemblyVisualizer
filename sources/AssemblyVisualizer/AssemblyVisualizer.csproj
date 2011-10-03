@@ -125,8 +125,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HAL\Helper.cs" />
     <Compile Include="HAL\ILSpy\BrowseTypeContextMenuEntry.cs" />
-    <Compile Include="TypeBrowser\AnalyzerEngine.cs" />
+    <Compile Include="HAL\ILSpy\ModelHelper.cs" />
+    <Compile Include="HAL\Reflector\ModelHelper.cs" />
     <Compile Include="TypeBrowser\MemberGraph.cs" />
     <Compile Include="TypeBrowser\TypeBrowserWindow.xaml.cs">
       <DependentUpon>TypeBrowserWindow.xaml</DependentUpon>

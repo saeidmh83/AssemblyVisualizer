@@ -2,7 +2,6 @@
 // This code is distributed under Microsoft Public License 
 // (for details please see \docs\Ms-PL)
 
-#if ILSpy
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,21 +14,18 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using Mono.Cecil;
 using System.Windows.Media.Animation;
 using AssemblyVisualizer.Controls.ZoomControl;
+using AssemblyVisualizer.Model;
 
 namespace AssemblyVisualizer.TypeBrowser
-{
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
+{   
     partial class TypeBrowserWindow : Window
     {
-        public TypeBrowserWindow(TypeDefinition typeDefinition)
+        public TypeBrowserWindow(TypeInfo typeInfo)
         {
             InitializeComponent();
-            ViewModel = new TypeBrowserWindowViewModel(typeDefinition);
+            ViewModel = new TypeBrowserWindowViewModel(typeInfo);
 
             ViewModel.FillGraphRequest += FillGraphRequestHandler;
             ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;    
@@ -68,4 +64,3 @@ namespace AssemblyVisualizer.TypeBrowser
         }  
     }
 }
-#endif

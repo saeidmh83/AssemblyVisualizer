@@ -35,7 +35,7 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 .OfType<TypeTreeNode>()
                 .Single().TypeDefinition;            
 
-            var window = new TypeBrowserWindow(typeDefinition)
+            var window = new TypeBrowserWindow(HAL.Converter.Type(typeDefinition))
             {
                 Owner = MainWindow.Instance
             };

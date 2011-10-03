@@ -26,16 +26,16 @@ namespace AssemblyVisualizer.AssemblyBrowser
 	/// </summary>
 	partial class AssemblyBrowserWindow : Window
 	{
-        public AssemblyBrowserWindow(IEnumerable<AssemblyInfo> assemblyDefinitions)
-            : this(assemblyDefinitions, null)
+        public AssemblyBrowserWindow(IEnumerable<AssemblyInfo> assemblies)
+            : this(assemblies, null)
         { 
         }
 
-		public AssemblyBrowserWindow(IEnumerable<AssemblyInfo> assemblyDefinitions, TypeInfo typeDefinition)
+		public AssemblyBrowserWindow(IEnumerable<AssemblyInfo> assemblies, TypeInfo typeInfo)
 		{
 			InitializeComponent();
 
-			ViewModel = new AssemblyBrowserWindowViewModel(assemblyDefinitions, typeDefinition, Dispatcher);			
+			ViewModel = new AssemblyBrowserWindowViewModel(assemblies, typeInfo, Dispatcher);			
 
 			CommandBindings.Add(new CommandBinding(NavigationCommands.BrowseForward,
 			                                       (s, e) => ViewModel.NavigateForwardCommand.Execute(null)));

@@ -325,7 +325,7 @@ namespace AssemblyVisualizer.HAL.Reflector
         }
 
         public MethodInfo Method(IMethodDeclaration method, TypeInfo type)
-        {
+        {       
             if (_methodCorrespondence.ContainsKey(method))
             {
                 return _methodCorrespondence[method];
@@ -452,10 +452,10 @@ namespace AssemblyVisualizer.HAL.Reflector
 
         public MethodInfo Method(object method)
         {
-            /*var methodDeclaration = method as IMethodDeclaration;
-
-            return Method(methodDeclaration, );*/
-            throw new NotImplementedException();
+            var methodDeclaration = method as IMethodDeclaration;
+            var typeDeclaration = methodDeclaration.DeclaringType as ITypeDeclaration;
+            var typeInfo = Type(typeDeclaration);
+            return Method(methodDeclaration, typeInfo);            
         }
 
         public FieldInfo Field(object field)
@@ -472,7 +472,6 @@ namespace AssemblyVisualizer.HAL.Reflector
         {
             return Event(ev as EventDeclaration);
         }
-
     }
 }
 

@@ -9,7 +9,7 @@ using System.Text;
 using AssemblyVisualizer.Model;
 using AssemblyVisualizer.Infrastructure;
 
-namespace AssemblyVisualizer.TypeBrowser
+namespace AssemblyVisualizer.InteractionBrowser
 {
     class TypeViewModel : ViewModelBase
     {

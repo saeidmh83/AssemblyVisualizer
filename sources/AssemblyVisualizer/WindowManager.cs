@@ -11,7 +11,7 @@ using AssemblyVisualizer.AncestryBrowser;
 using AssemblyVisualizer.DependencyBrowser;
 using AssemblyVisualizer.HAL;
 using System.Windows;
-using AssemblyVisualizer.TypeBrowser;
+using AssemblyVisualizer.InteractionBrowser;
 
 namespace AssemblyVisualizer
 {
@@ -23,8 +23,8 @@ namespace AssemblyVisualizer
             new List<AncestryBrowserWindow>();
         private static readonly IList<DependencyBrowserWindow> _dependencyBrowsers =
             new List<DependencyBrowserWindow>();
-        private static readonly IList<TypeBrowserWindow> _typeBrowsers =
-            new List<TypeBrowserWindow>();
+        private static readonly IList<InteractionBrowserWindow> _interactionBrowsers =
+            new List<InteractionBrowserWindow>();
 
 		public static IList<AssemblyBrowserWindow> AssemblyBrowsers
 		{
@@ -41,9 +41,9 @@ namespace AssemblyVisualizer
             get { return _dependencyBrowsers; }
         }
 
-        public static IList<TypeBrowserWindow> TypeBrowsers
+        public static IList<InteractionBrowserWindow> InteractionBrowsers
         {
-            get { return _typeBrowsers; }
+            get { return _interactionBrowsers; }
         }
 
 		public static void AddAssemblyBrowser(AssemblyBrowserWindow window)
@@ -82,14 +82,14 @@ namespace AssemblyVisualizer
             GC.Collect();
         }
 
-        public static void AddTypeBrowser(TypeBrowserWindow window)
+        public static void AddInteractionBrowser(InteractionBrowserWindow window)
         {
-            _typeBrowsers.Add(window);
+            _interactionBrowsers.Add(window);
         }
 
-        public static void RemoveTypeBrowser(TypeBrowserWindow window)
+        public static void RemoveInteractionBrowser(InteractionBrowserWindow window)
         {
-            _typeBrowsers.Remove(window);
+            _interactionBrowsers.Remove(window);
             ClearCacheIfPossible();
             GC.Collect();
         }
@@ -99,7 +99,7 @@ namespace AssemblyVisualizer
             if (AssemblyBrowsers.Count == 0
                 && AncestryBrowsers.Count == 0
                 && DependencyBrowsers.Count == 0
-                && TypeBrowsers.Count == 0)
+                && InteractionBrowsers.Count == 0)
             {
                 Converter.ClearCache();
             }

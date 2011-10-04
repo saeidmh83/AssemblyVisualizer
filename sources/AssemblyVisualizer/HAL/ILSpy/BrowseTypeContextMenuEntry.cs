@@ -11,7 +11,7 @@ using System.Text;
 using ICSharpCode.ILSpy;
 using ICSharpCode.TreeView;
 using ICSharpCode.ILSpy.TreeNodes;
-using AssemblyVisualizer.TypeBrowser;
+using AssemblyVisualizer.InteractionBrowser;
 
 namespace AssemblyVisualizer.HAL.ILSpy
 {
@@ -35,7 +35,7 @@ namespace AssemblyVisualizer.HAL.ILSpy
                 .Select(n => HAL.Converter.Type(n.TypeDefinition))
                 .ToArray();            
 
-            var window = new TypeBrowserWindow(types)
+            var window = new InteractionBrowserWindow(types)
             {
                 Owner = MainWindow.Instance
             };

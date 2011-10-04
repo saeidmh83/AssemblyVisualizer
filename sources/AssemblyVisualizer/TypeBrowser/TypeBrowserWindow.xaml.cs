@@ -19,23 +19,23 @@ using AssemblyVisualizer.Controls.ZoomControl;
 using AssemblyVisualizer.Model;
 using AssemblyVisualizer.Behaviors;
 
-namespace AssemblyVisualizer.TypeBrowser
+namespace AssemblyVisualizer.InteractionBrowser
 {   
-    partial class TypeBrowserWindow : Window
+    partial class InteractionBrowserWindow : Window
     {
-        public TypeBrowserWindow(IEnumerable<TypeInfo> types)
+        public InteractionBrowserWindow(IEnumerable<TypeInfo> types)
         {
             InitializeComponent();
 
             Loaded += new RoutedEventHandler(LoadedHandler);
             Unloaded += new RoutedEventHandler(UnloadedHandler);
 
-            ViewModel = new TypeBrowserWindowViewModel(types);
+            ViewModel = new InteractionBrowserWindowViewModel(types);
 
             ViewModel.FillGraphRequest += FillGraphRequestHandler;
             ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;    
 
-            WindowManager.AddTypeBrowser(this); 
+            WindowManager.AddInteractionBrowser(this); 
         }
 
         private void LoadedHandler(object sender, RoutedEventArgs e)
@@ -48,11 +48,11 @@ namespace AssemblyVisualizer.TypeBrowser
             gridTypeSelector.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.None);
         }
 
-        public TypeBrowserWindowViewModel ViewModel
+        public InteractionBrowserWindowViewModel ViewModel
         {
             get
             {
-                return DataContext as TypeBrowserWindowViewModel;
+                return DataContext as InteractionBrowserWindowViewModel;
             }
             set
             {
@@ -64,7 +64,7 @@ namespace AssemblyVisualizer.TypeBrowser
         {
             base.OnClosed(e);
 
-            WindowManager.RemoveTypeBrowser(this);
+            WindowManager.RemoveInteractionBrowser(this);
         }        
                 
         private void FillGraphRequestHandler()

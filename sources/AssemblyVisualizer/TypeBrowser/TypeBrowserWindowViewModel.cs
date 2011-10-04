@@ -14,9 +14,9 @@ using AssemblyVisualizer.Properties;
 using AssemblyVisualizer.Model;
 using System.Windows.Input;
 
-namespace AssemblyVisualizer.TypeBrowser
+namespace AssemblyVisualizer.InteractionBrowser
 {
-    class TypeBrowserWindowViewModel : ViewModelBase
+    class InteractionBrowserWindowViewModel : ViewModelBase
     {
         private Dictionary<MemberInfo, MemberViewModel> _viewModelsDictionary = new Dictionary<MemberInfo, MemberViewModel>();
         private MemberGraph _graph;
@@ -25,7 +25,7 @@ namespace AssemblyVisualizer.TypeBrowser
         private IDictionary<TypeInfo, TypeViewModel> _viewModelCorrespondence = new Dictionary<TypeInfo, TypeViewModel>();
         private bool _isTypeSelectionVisible = true;
 
-        public TypeBrowserWindowViewModel(IEnumerable<TypeInfo> types)
+        public InteractionBrowserWindowViewModel(IEnumerable<TypeInfo> types)
         {
             _types = types;
 

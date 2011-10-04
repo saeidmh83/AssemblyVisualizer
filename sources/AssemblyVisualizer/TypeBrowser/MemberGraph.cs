@@ -10,7 +10,7 @@ using AssemblyVisualizer.Controls.Graph.GraphSharp.Layout;
 using AssemblyVisualizer.Controls.Graph.QuickGraph;
 using AssemblyVisualizer.Common;
 
-namespace AssemblyVisualizer.TypeBrowser
+namespace AssemblyVisualizer.InteractionBrowser
 {
     class MemberGraph : BidirectionalGraph<MemberViewModel, Edge<MemberViewModel>>
     {

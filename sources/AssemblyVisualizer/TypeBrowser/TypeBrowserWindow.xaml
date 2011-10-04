@@ -17,6 +17,8 @@
                 <ResourceDictionary Source="..\Common\ControlStylesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
+            <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter"/>
+            
             <!--Vertex style-->
             <Style TargetType="{x:Type Graph:VertexControl}">
                 <Setter Property="Template">
@@ -235,5 +237,66 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        
+        <!--Type selector-->
+        
+        <Grid x:Name="gridTypeSelector"
+              Visibility="{Binding IsTypeSelectionVisible, Converter={StaticResource BoolVisibilityConverter}}"
+              Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Select types to visualize"
+                       HorizontalAlignment="Center"
+                       Margin="0, 10"
+                       FontSize="24"
+                       Foreground="Gray"/>
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Auto"
+                          Grid.Row="1"
+                          HorizontalAlignment="Center">
+                <ItemsControl ItemsSource="{Binding Hierarchies}"
+                              Margin="10, 5">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <ItemsControl ItemsSource="{Binding}"
+                                          Margin="6, 0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding IsSelected}">
+                                            <CheckBox.Content>
+                                                <TextBlock Text="{Binding Name}"
+                                                           Foreground="Gray"
+                                                           FontSize="16"/>
+                                            </CheckBox.Content>
+                                        </CheckBox>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            
+            <StackPanel Orientation="Horizontal"
+                        Grid.Row="2"
+                        HorizontalAlignment="Center"
+                        Margin="0, 10">
+                <Button Content="Apply"
+                        Command="{Binding ApplySelectionCommand}"
+                        Margin="4"/>
+                <Button Content="Hide"
+                        Command="{Binding HideSelectionViewCommand}"
+                        Margin="4"/>
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </Window>

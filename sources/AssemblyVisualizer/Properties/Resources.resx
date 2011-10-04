@@ -162,6 +162,9 @@
   <data name="FillGraph" xml:space="preserve">
     <value>Fill Graph</value>
   </data>
+  <data name="InteractionBrowser" xml:space="preserve">
+    <value>Interaction Browser</value>
+  </data>
   <data name="Interfaces" xml:space="preserve">
     <value>Interfaces</value>
   </data>
@@ -197,6 +200,9 @@
   </data>
   <data name="SearchInGraph" xml:space="preserve">
     <value>Search in Graph</value>
+  </data>
+  <data name="SelectTypes" xml:space="preserve">
+    <value>Select Types</value>
   </data>
   <data name="SortBy" xml:space="preserve">
     <value>Sort by</value>

@@ -12,6 +12,7 @@ using AssemblyVisualizer.HAL;
 using System.Collections.ObjectModel;
 using AssemblyVisualizer.Properties;
 using AssemblyVisualizer.Model;
+using System.Windows.Input;
 
 namespace AssemblyVisualizer.TypeBrowser
 {
@@ -19,20 +20,29 @@ namespace AssemblyVisualizer.TypeBrowser
     {
         private Dictionary<MemberInfo, MemberViewModel> _viewModelsDictionary = new Dictionary<MemberInfo, MemberViewModel>();
         private MemberGraph _graph;
-        private TypeInfo _typeInfo;
+        private IEnumerable<TypeInfo> _types;
+        private IEnumerable<IEnumerable<TypeViewModel>> _hierarchies;
+        private IDictionary<TypeInfo, TypeViewModel> _viewModelCorrespondence = new Dictionary<TypeInfo, TypeViewModel>();
+        private bool _isTypeSelectionVisible = true;
 
-        public TypeBrowserWindowViewModel(TypeInfo typeInfo)
+        public TypeBrowserWindowViewModel(IEnumerable<TypeInfo> types)
         {
-            _typeInfo = typeInfo;
+            _types = types;
 
             Commands = new ObservableCollection<UserCommand>
 			           	{
 			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
 			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
+                            new UserCommand(Resources.SelectTypes, ShowSelectionViewCommandHandler)
                             //new UserCommand(Resources.SearchInGraph, ShowSearchCommand),                                                    
 			           	};
+            ApplySelectionCommand = new DelegateCommand(ApplySelectionCommandHandler);
+            HideSelectionViewCommand = new DelegateCommand(HideSelectionViewCommandHandler);
 
-            Graph = CreateGraph(typeInfo);
+            _hierarchies = types
+                .Select(GetHierarchy)
+                .Select(h => h.Select(GetViewModelForType).ToArray())
+                .ToArray();            
         }
 
         public event Action FillGraphRequest;
@@ -40,6 +50,22 @@ namespace AssemblyVisualizer.TypeBrowser
         //public event Action FocusSearchRequest;
 
         public IEnumerable<UserCommand> Commands { get; private set; }
+
+        public ICommand ApplySelectionCommand { get; private set; }
+        public ICommand HideSelectionViewCommand { get; private set; }
+
+        public IEnumerable<IEnumerable<TypeViewModel>> Hierarchies
+        {
+            get
+            {
+                return _hierarchies;
+            }
+            set
+            {
+                _hierarchies = value;
+                OnPropertyChanged("Hierarchies");
+            }
+        }
 
         public MemberGraph Graph
         {
@@ -54,18 +80,40 @@ namespace AssemblyVisualizer.TypeBrowser
             }
         }
 
+        public bool IsTypeSelectionVisible
+        {
+            get
+            {
+                return _isTypeSelectionVisible;
+            }
+            set
+            {
+                _isTypeSelectionVisible = value;
+                OnPropertyChanged("IsTypeSelectionVisible");
+            }
+        }
+
         public string Title
         {
             get
             {
-                return _typeInfo.Name;
+                return Resources.InteractionBrowser;
             }
         }
 
-        private MemberGraph CreateGraph(TypeInfo typeInfo)
+        private TypeViewModel GetViewModelForType(TypeInfo typeInfo)
         {
-            var graph = new MemberGraph(true);
+            if (_viewModelCorrespondence.ContainsKey(typeInfo))
+            {
+                return _viewModelCorrespondence[typeInfo];
+            }
+            var viewModel = new TypeViewModel(typeInfo);
+            _viewModelCorrespondence.Add(typeInfo, viewModel);
+            return viewModel;
+        }
 
+        private List<TypeInfo> GetHierarchy(TypeInfo typeInfo)
+        {
             var hierarchy = new List<TypeInfo>();
             var currentType = typeInfo;
             hierarchy.Add(typeInfo);
@@ -75,8 +123,14 @@ namespace AssemblyVisualizer.TypeBrowser
                 hierarchy.Add(t);
                 currentType = t;
             }
+            return hierarchy;
+        }
 
-            foreach (var type in hierarchy)
+        private MemberGraph CreateGraph(IEnumerable<TypeInfo> types)
+        {
+            var graph = new MemberGraph(true);            
+
+            foreach (var type in types)
             {
                 foreach (var method in type.Methods.Where(m => !m.Name.StartsWith("<")).Concat(type.Accessors))
                 {
@@ -87,7 +141,7 @@ namespace AssemblyVisualizer.TypeBrowser
                     }
 
                     var usedMethods = Helper.GetUsedMethods(method.MemberReference)
-                        .Where(m => hierarchy.Any(t => t.FullName == m.DeclaringType.FullName) && !m.Name.StartsWith("<"))
+                        .Where(m => types.Any(t => t.FullName == m.DeclaringType.FullName) && !m.Name.StartsWith("<"))
                         .ToArray();
                     foreach (var usedMethod in usedMethods)
                     {
@@ -100,7 +154,7 @@ namespace AssemblyVisualizer.TypeBrowser
                     }                   
 
                     var usedFields = Helper.GetUsedFields(method.MemberReference)
-                        .Where(m => hierarchy.Contains(m.DeclaringType) && !m.Name.StartsWith("CS$") && !m.Name.EndsWith("k__BackingField"))
+                        .Where(m => types.Contains(m.DeclaringType) && !m.Name.StartsWith("CS$") && !m.Name.EndsWith("k__BackingField"))
                         .ToArray();
                     foreach (var usedField in usedFields)
                     {
@@ -184,6 +238,26 @@ namespace AssemblyVisualizer.TypeBrowser
             {
                 handler();
             }
+        }
+
+        private void ApplySelectionCommandHandler()
+        {
+            IsTypeSelectionVisible = false;
+            var types = _hierarchies
+                .SelectMany(h => h.Where(t => t.IsSelected).Select(t => t.TypeInfo))
+                .Distinct()
+                .ToArray();
+            Graph = CreateGraph(types);
+        }
+
+        private void HideSelectionViewCommandHandler()
+        {
+            IsTypeSelectionVisible = false;
+        }
+
+        private void ShowSelectionViewCommandHandler()
+        {
+            IsTypeSelectionVisible = true;
         }
 
         private void OnOriginalSizeRequest()

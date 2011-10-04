@@ -17,20 +17,35 @@ using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using AssemblyVisualizer.Controls.ZoomControl;
 using AssemblyVisualizer.Model;
+using AssemblyVisualizer.Behaviors;
 
 namespace AssemblyVisualizer.TypeBrowser
 {   
     partial class TypeBrowserWindow : Window
     {
-        public TypeBrowserWindow(TypeInfo typeInfo)
+        public TypeBrowserWindow(IEnumerable<TypeInfo> types)
         {
             InitializeComponent();
-            ViewModel = new TypeBrowserWindowViewModel(typeInfo);
+
+            Loaded += new RoutedEventHandler(LoadedHandler);
+            Unloaded += new RoutedEventHandler(UnloadedHandler);
+
+            ViewModel = new TypeBrowserWindowViewModel(types);
 
             ViewModel.FillGraphRequest += FillGraphRequestHandler;
             ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;    
 
             WindowManager.AddTypeBrowser(this); 
+        }
+
+        private void LoadedHandler(object sender, RoutedEventArgs e)
+        {
+            gridTypeSelector.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);
+        }
+
+        private void UnloadedHandler(object sender, RoutedEventArgs e)
+        {
+            gridTypeSelector.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.None);
         }
 
         public TypeBrowserWindowViewModel ViewModel

@@ -366,6 +366,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="TypeBrowser\TypeBrowserWindowViewModel.cs" />
+    <Compile Include="TypeBrowser\TypeViewModel.cs" />
     <Compile Include="WindowManager.cs" />
   </ItemGroup>
   <ItemGroup>

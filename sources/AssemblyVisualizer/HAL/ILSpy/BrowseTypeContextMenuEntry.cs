@@ -20,8 +20,7 @@ namespace AssemblyVisualizer.HAL.ILSpy
     {
         public bool IsVisible(SharpTreeNode[] selectedNodes)
         {
-            return (selectedNodes.Count() == 1)
-                   && (selectedNodes.Single() is TypeTreeNode);
+            return (selectedNodes.All(n => n is TypeTreeNode));
         }
 
         public bool IsEnabled(SharpTreeNode[] selectedNodes)
@@ -31,11 +30,12 @@ namespace AssemblyVisualizer.HAL.ILSpy
 
         public void Execute(SharpTreeNode[] selectedNodes)
         {
-            var typeDefinition = selectedNodes
+            var types = selectedNodes
                 .OfType<TypeTreeNode>()
-                .Single().TypeDefinition;            
+                .Select(n => HAL.Converter.Type(n.TypeDefinition))
+                .ToArray();            
 
-            var window = new TypeBrowserWindow(HAL.Converter.Type(typeDefinition))
+            var window = new TypeBrowserWindow(types)
             {
                 Owner = MainWindow.Instance
             };

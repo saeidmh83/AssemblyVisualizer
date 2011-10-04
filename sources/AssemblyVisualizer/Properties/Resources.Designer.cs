@@ -196,6 +196,15 @@ namespace AssemblyVisualizer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interaction Browser.
+        /// </summary>
+        internal static string InteractionBrowser {
+            get {
+                return ResourceManager.GetString("InteractionBrowser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interfaces.
         /// </summary>
         internal static string Interfaces {
@@ -300,6 +309,15 @@ namespace AssemblyVisualizer.Properties {
         internal static string SearchInGraph {
             get {
                 return ResourceManager.GetString("SearchInGraph", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select Types.
+        /// </summary>
+        internal static string SelectTypes {
+            get {
+                return ResourceManager.GetString("SelectTypes", resourceCulture);
             }
         }
         

@@ -197,6 +197,11 @@
         </ResourceDictionary>
     </Window.Resources>
 
+    <Window.InputBindings>
+        <KeyBinding Key="T" Modifiers="Control" Command="{Binding ToggleSelectionViewCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding ToggleSelectionViewCommand}"/>
+        <KeyBinding Key="Enter" Command="{Binding ApplySelectionCommand}"/>
+    </Window.InputBindings>
     <Grid>
         <!--Main Content-->
         <ZoomControl:ZoomControl x:Name="zoomControl"
@@ -237,9 +242,49 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        
-        <!--Type selector-->
-        
+
+        <!--Help-->
+        <Border Background="{StaticResource QuestionMarkDrawing}"
+                Width="20"
+                Height="20"                    
+                ToolTipService.InitialShowDelay="0"
+                Margin="14, 0, 0, 16"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom">
+            <Border.ToolTip>
+                <TextBlock Margin="4">
+                        <Run FontWeight="Bold"
+                             Text="Wheel: "/>
+                        <Run Text="Zoom in / out"/>
+                        <LineBreak/>
+                        <Run FontWeight="Bold"
+                             Text="ALT + Drag: "/>
+                        <Run Text="Zoom box"/>
+                        <LineBreak/>
+                        <!--<Run FontWeight="Bold"
+                             Text="CTRL + F: "/>
+                        <Run Text="Search in Graph"/>
+                        <LineBreak/>
+                        <Run FontWeight="Bold"
+                             Text="CTRL + A: "/>
+                        <Run Text="Toggle assembly list"/>
+                        <LineBreak/>
+                        <Run FontWeight="Bold"
+                             Text="F3: "/>
+                        <Run Text="Back to Main Search"/>-->
+                        <Run FontWeight="Bold"
+                             Text="CTRL + T, ESCAPE: "/>
+                        <LineBreak />
+                        <Run Text="Toggle type selection view"/>     
+                        <LineBreak/>
+                        <Run FontWeight="Bold"
+                             Text="Enter: "/>
+                        <Run Text="Apply selection"/>
+                </TextBlock>
+            </Border.ToolTip>
+        </Border>
+
+        <!--Type selector-->        
         <Grid x:Name="gridTypeSelector"
               Visibility="{Binding IsTypeSelectionVisible, Converter={StaticResource BoolVisibilityConverter}}"
               Background="White">
@@ -298,5 +343,7 @@
             </StackPanel>
 
         </Grid>
+
+        
     </Grid>
 </Window>

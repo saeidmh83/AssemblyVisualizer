@@ -129,9 +129,9 @@
     <Compile Include="HAL\ILSpy\BrowseTypeContextMenuEntry.cs" />
     <Compile Include="HAL\ILSpy\ModelHelper.cs" />
     <Compile Include="HAL\Reflector\ModelHelper.cs" />
-    <Compile Include="TypeBrowser\MemberGraph.cs" />
-    <Compile Include="TypeBrowser\TypeBrowserWindow.xaml.cs">
-      <DependentUpon>TypeBrowserWindow.xaml</DependentUpon>
+    <Compile Include="InteractionBrowser\MemberGraph.cs" />
+    <Compile Include="InteractionBrowser\InteractionBrowserWindow.xaml.cs">
+      <DependentUpon>InteractionBrowserWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="AncestryBrowser\AssemblyViewModel.cs" />
     <Compile Include="AncestryBrowser\MemberOptions.cs" />
@@ -365,12 +365,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TypeBrowser\TypeBrowserWindowViewModel.cs" />
-    <Compile Include="TypeBrowser\TypeViewModel.cs" />
+    <Compile Include="InteractionBrowser\InteractionBrowserWindowViewModel.cs" />
+    <Compile Include="InteractionBrowser\TypeViewModel.cs" />
     <Compile Include="WindowManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="TypeBrowser\TypeBrowserWindow.xaml">
+    <Page Include="InteractionBrowser\InteractionBrowserWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -29,20 +29,26 @@ namespace AssemblyVisualizer.InteractionBrowser
         {
             _types = types;
 
+            ApplySelectionCommand = new DelegateCommand(ApplySelectionCommandHandler);
+            ShowSelectionViewCommand = new DelegateCommand(ShowSelectionViewCommandHandler);
+            HideSelectionViewCommand = new DelegateCommand(HideSelectionViewCommandHandler);
+            ToggleSelectionViewCommand = new DelegateCommand(ToggleSelectionViewCommandHandler);
             Commands = new ObservableCollection<UserCommand>
 			           	{
 			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
 			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
-                            new UserCommand(Resources.SelectTypes, ShowSelectionViewCommandHandler)
+                            new UserCommand(Resources.SelectTypes, ShowSelectionViewCommand)
                             //new UserCommand(Resources.SearchInGraph, ShowSearchCommand),                                                    
-			           	};
-            ApplySelectionCommand = new DelegateCommand(ApplySelectionCommandHandler);
-            HideSelectionViewCommand = new DelegateCommand(HideSelectionViewCommandHandler);
+			           	};            
 
             _hierarchies = types
                 .Select(GetHierarchy)
                 .Select(h => h.Select(GetViewModelForType).ToArray())
-                .ToArray();            
+                .ToArray();
+            foreach (var hierarchy in _hierarchies)
+            {
+                hierarchy.First().IsSelected = true;
+            }
         }
 
         public event Action FillGraphRequest;
@@ -52,7 +58,9 @@ namespace AssemblyVisualizer.InteractionBrowser
         public IEnumerable<UserCommand> Commands { get; private set; }
 
         public ICommand ApplySelectionCommand { get; private set; }
+        public ICommand ShowSelectionViewCommand { get; private set; }
         public ICommand HideSelectionViewCommand { get; private set; }
+        public ICommand ToggleSelectionViewCommand { get; private set; }
 
         public IEnumerable<IEnumerable<TypeViewModel>> Hierarchies
         {
@@ -242,6 +250,10 @@ namespace AssemblyVisualizer.InteractionBrowser
 
         private void ApplySelectionCommandHandler()
         {
+            if (!IsTypeSelectionVisible)
+            {
+                return;
+            }
             IsTypeSelectionVisible = false;
             var types = _hierarchies
                 .SelectMany(h => h.Where(t => t.IsSelected).Select(t => t.TypeInfo))
@@ -258,6 +270,11 @@ namespace AssemblyVisualizer.InteractionBrowser
         private void ShowSelectionViewCommandHandler()
         {
             IsTypeSelectionVisible = true;
+        }
+
+        private void ToggleSelectionViewCommandHandler()
+        {
+            IsTypeSelectionVisible = !IsTypeSelectionVisible;
         }
 
         private void OnOriginalSizeRequest()

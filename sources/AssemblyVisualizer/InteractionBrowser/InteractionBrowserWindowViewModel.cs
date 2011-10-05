@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using AssemblyVisualizer.Properties;
 using AssemblyVisualizer.Model;
 using System.Windows.Input;
+using AssemblyVisualizer.Controls.Graph.QuickGraph;
 
 namespace AssemblyVisualizer.InteractionBrowser
 {
@@ -59,6 +60,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                 foreach (var type in hierarchy)
                 {
                     type.IsSelected = true;
+                    type.ShowInternals = true;
                 }
             }
 
@@ -155,13 +157,20 @@ namespace AssemblyVisualizer.InteractionBrowser
             return hierarchy;
         }
 
-        private MemberGraph CreateGraph(IEnumerable<TypeInfo> types)
+        private MemberGraph CreateGraph(IEnumerable<TypeViewModel> typeViewModels)
         {
             var graph = new MemberGraph(true);            
 
-            foreach (var type in types)
+            foreach (var typeViewModel in typeViewModels)
             {
-                foreach (var method in type.Methods.Where(m => !m.Name.StartsWith("<")).Concat(type.Accessors))
+                var type = typeViewModel.TypeInfo;                
+                var methods = type.Methods.Where(m => !m.Name.StartsWith("<")).Concat(type.Accessors);
+                if (!typeViewModel.ShowInternals)
+                {
+                    methods = methods.Where(m => m.IsVisibleOutside());
+                }
+
+                foreach (var method in methods)
                 {
                     var mvm = GetViewModelForMethod(method);
                     if (!graph.ContainsVertex(mvm))
@@ -170,7 +179,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                     }
 
                     var usedMethods = Helper.GetUsedMethods(method.MemberReference)
-                        .Where(m => types.Any(t => t.FullName == m.DeclaringType.FullName) && !m.Name.StartsWith("<"))
+                        .Where(m => typeViewModels.Any(t => t.TypeInfo == m.DeclaringType && (m.IsVisibleOutside() || t.ShowInternals)) && !m.Name.StartsWith("<"))
                         .ToArray();
                     foreach (var usedMethod in usedMethods)
                     {
@@ -179,11 +188,12 @@ namespace AssemblyVisualizer.InteractionBrowser
                         {
                             graph.AddVertex(vm);
                         }
-                        graph.AddEdge(new Controls.Graph.QuickGraph.Edge<MemberViewModel>(mvm, vm));
+                        graph.AddEdge(new Edge<MemberViewModel>(mvm, vm));
                     }                   
 
                     var usedFields = Helper.GetUsedFields(method.MemberReference)
-                        .Where(m => types.Contains(m.DeclaringType) && !m.Name.StartsWith("CS$") && !m.Name.EndsWith("k__BackingField"))
+                        .Where(m => typeViewModels.Any(
+                            tvm => tvm.TypeInfo == m.DeclaringType && (m.IsVisibleOutside() || tvm.ShowInternals)) && !m.Name.StartsWith("CS$") && !m.Name.EndsWith("k__BackingField"))
                         .ToArray();
                     foreach (var usedField in usedFields)
                     {
@@ -192,7 +202,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                         {
                             graph.AddVertex(vm);
                         }
-                        graph.AddEdge(new Controls.Graph.QuickGraph.Edge<MemberViewModel>(mvm, vm));
+                        graph.AddEdge(new Edge<MemberViewModel>(mvm, vm));
                     }
                 }
             }
@@ -282,7 +292,7 @@ namespace AssemblyVisualizer.InteractionBrowser
         private void DrawGraph()
         { 
             var types = _hierarchies
-                .SelectMany(h => h.Where(t => t.IsSelected).Select(t => t.TypeInfo))
+                .SelectMany(h => h.Where(t => t.IsSelected))
                 .Distinct()
                 .ToArray();
             Graph = CreateGraph(types);

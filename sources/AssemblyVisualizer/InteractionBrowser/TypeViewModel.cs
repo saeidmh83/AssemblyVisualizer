@@ -15,6 +15,7 @@ namespace AssemblyVisualizer.InteractionBrowser
     {
         private TypeInfo _typeInfo;
         private bool _isSelected;
+        private bool _showInternals;
 
         public TypeViewModel(TypeInfo typeInfo)
         {
@@ -44,6 +45,19 @@ namespace AssemblyVisualizer.InteractionBrowser
             {
                 _isSelected = value;
                 OnPropertyChanged("IsSelected");
+            }
+        }
+
+        public bool ShowInternals
+        {
+            get
+            {
+                return _showInternals;
+            }
+            set
+            {
+                _showInternals = value;
+                OnPropertyChanged("ShowInternals");
             }
         }
     }

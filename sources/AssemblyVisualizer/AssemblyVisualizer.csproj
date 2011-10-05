@@ -125,6 +125,7 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Extensions.cs" />
     <Compile Include="HAL\Helper.cs" />
     <Compile Include="HAL\ILSpy\BrowseInteractionsAdvContextMenuEntry.cs" />
     <Compile Include="HAL\ILSpy\BrowseInteractionsContextMenuEntry.cs" />

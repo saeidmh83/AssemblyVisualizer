@@ -315,13 +315,36 @@
                                           Margin="6, 0">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <CheckBox IsChecked="{Binding IsSelected}">
-                                            <CheckBox.Content>
-                                                <TextBlock Text="{Binding Name}"
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                            <CheckBox IsChecked="{Binding IsSelected}">
+                                                <CheckBox.Content>
+                                                    <TextBlock Text="{Binding Name}"
                                                            Foreground="Gray"
                                                            FontSize="16"/>
-                                            </CheckBox.Content>
-                                        </CheckBox>
+                                                </CheckBox.Content>
+                                            </CheckBox>
+                                            <CheckBox x:Name="cbxInternals"
+                                                      IsChecked="{Binding ShowInternals}"
+                                                      Grid.Row="1"
+                                                      Margin="10, 5, 0, 5"
+                                                      Visibility="Collapsed">
+                                                <CheckBox.Content>
+                                                    <TextBlock Text="Internals"
+                                                               Foreground="Gray"
+                                                               FontSize="11"/>
+                                                </CheckBox.Content>
+                                            </CheckBox>
+                                                      
+                                        </Grid>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsSelected}" Value="True">
+                                                <Setter TargetName="cbxInternals" Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

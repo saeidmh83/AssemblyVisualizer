@@ -15,7 +15,7 @@ using AssemblyVisualizer.InteractionBrowser;
 
 namespace AssemblyVisualizer.HAL.ILSpy
 {
-    [ExportContextMenuEntry(Header = "Browse Interactions adv.")]
+    [ExportContextMenuEntry(Header = "Interactions (advanced)")]
     sealed class BrowseInteractionsAdvContextMenuEntry : IContextMenuEntry
     {
         public bool IsVisible(SharpTreeNode[] selectedNodes)

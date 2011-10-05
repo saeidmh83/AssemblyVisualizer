@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using AssemblyVisualizer.Model;
 using AssemblyVisualizer.Infrastructure;
+using System.Windows.Media;
 
 namespace AssemblyVisualizer.InteractionBrowser
 {
@@ -60,5 +61,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                 OnPropertyChanged("ShowInternals");
             }
         }
+
+        public Brush Background { get; set; }
     }
 }

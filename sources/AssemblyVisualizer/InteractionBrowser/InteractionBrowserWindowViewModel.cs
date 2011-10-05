@@ -14,6 +14,7 @@ using AssemblyVisualizer.Properties;
 using AssemblyVisualizer.Model;
 using System.Windows.Input;
 using AssemblyVisualizer.Controls.Graph.QuickGraph;
+using System.Windows.Media;
 
 namespace AssemblyVisualizer.InteractionBrowser
 {
@@ -24,12 +25,12 @@ namespace AssemblyVisualizer.InteractionBrowser
         private IEnumerable<TypeInfo> _types;
         private IEnumerable<IEnumerable<TypeViewModel>> _hierarchies;
         private IDictionary<TypeInfo, TypeViewModel> _viewModelCorrespondence = new Dictionary<TypeInfo, TypeViewModel>();
-        private bool _isTypeSelectionVisible;
+        private bool _isTypeSelectionVisible;        
 
         public InteractionBrowserWindowViewModel(IEnumerable<TypeInfo> types, bool drawGraph)
         {
-            _types = types;
-
+            _types = types;     
+            
             ApplySelectionCommand = new DelegateCommand(ApplySelectionCommandHandler);
             ShowSelectionViewCommand = new DelegateCommand(ShowSelectionViewCommandHandler);
             HideSelectionViewCommand = new DelegateCommand(HideSelectionViewCommandHandler);
@@ -224,12 +225,22 @@ namespace AssemblyVisualizer.InteractionBrowser
                 {
                     return _viewModelsDictionary[eventInfo];
                 }
-                var evm = new EventViewModel(eventInfo);
+                var typeViewModel = GetViewModelForType(eventInfo.DeclaringType);
+                var evm = new EventViewModel(eventInfo)
+                {
+                    Background = typeViewModel.Background,
+                    ToolTip = typeViewModel.Name
+                };
                 _viewModelsDictionary.Add(eventInfo, evm);
                 return evm;
             }
 
-            var vm = new FieldViewModel(fieldInfo);
+            var tvm = GetViewModelForType(fieldInfo.DeclaringType);
+            var vm = new FieldViewModel(fieldInfo)
+            {
+                Background = tvm.Background,
+                ToolTip = tvm.Name
+            };
             _viewModelsDictionary.Add(fieldInfo, vm);
             return vm;
         }
@@ -248,7 +259,12 @@ namespace AssemblyVisualizer.InteractionBrowser
                 {
                     return _viewModelsDictionary[propertyInfo];
                 }
-                var pvm = new PropertyViewModel(propertyInfo);
+                var typeViewModel = GetViewModelForType(propertyInfo.DeclaringType);
+                var pvm = new PropertyViewModel(propertyInfo)
+                {
+                    Background = typeViewModel.Background,
+                    ToolTip = typeViewModel.Name
+                };
                 _viewModelsDictionary.Add(propertyInfo, pvm);
                 return pvm;
             }
@@ -259,12 +275,22 @@ namespace AssemblyVisualizer.InteractionBrowser
                 {
                     return _viewModelsDictionary[eventInfo];
                 }
-                var evm = new EventViewModel(eventInfo);
+                var typeViewModel = GetViewModelForType(eventInfo.DeclaringType);
+                var evm = new EventViewModel(eventInfo)
+                {
+                    Background = typeViewModel.Background,
+                    ToolTip = typeViewModel.Name
+                };
                 _viewModelsDictionary.Add(eventInfo, evm);
                 return evm;
             }
             
-            var vm = new MethodViewModel(methodInfo);
+            var tvm = GetViewModelForType(methodInfo.DeclaringType);
+            var vm = new MethodViewModel(methodInfo)
+            {
+                Background = tvm.Background,
+                ToolTip = tvm.Name
+            };
             _viewModelsDictionary.Add(methodInfo, vm);
             return vm;
         }
@@ -295,6 +321,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                 .SelectMany(h => h.Where(t => t.IsSelected))
                 .Distinct()
                 .ToArray();
+            ColorizeTypes(types);
             Graph = CreateGraph(types);
         }
 
@@ -334,5 +361,19 @@ namespace AssemblyVisualizer.InteractionBrowser
             return (method.IsSpecialName
                     && (method.Name.IndexOf("add_") != -1 || method.Name.IndexOf("remove_") != -1));
         }
+
+        private static void ColorizeTypes(IEnumerable<TypeViewModel> types)
+        {
+            int index = 0;
+            foreach (var type in types)
+            {
+                type.Background = BrushProvider.SingleBrushes[index];
+                index++;
+                if (index >= BrushProvider.SingleBrushes.Count)
+                {
+                    index = 0;
+                }
+            }
+        }        
     }
 }

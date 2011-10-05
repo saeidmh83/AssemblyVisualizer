@@ -18,67 +18,74 @@
             </ResourceDictionary.MergedDictionaries>
 
             <BooleanToVisibilityConverter x:Key="BoolVisibilityConverter"/>
-            
+
             <!--Vertex style-->
             <Style TargetType="{x:Type Graph:VertexControl}">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Graph:VertexControl}">
-
                             <ContentPresenter Content="{TemplateBinding Vertex}" >
                                 <ContentPresenter.ContentTemplate>
                                     <DataTemplate>
-                                        <Grid x:Name="grid"
-                                              Margin="0, 2"                                                  
-                                              ToolTip="{Binding ToolTip}"
-                                              Background="Transparent">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition />
-                                            </Grid.ColumnDefinitions>
-                                            <Image Source="{Binding Icon}"
-                                                   Margin="0, 0, 6, 0"                    
-                                                   Stretch="Uniform"
-                                                   Width="16"
-                                                   Height="16"/>
-                                            <TextBlock x:Name="txtMemberName"
-                                                       Text="{Binding Text}"
-                                                       Grid.Column="1" />
-                                            <Border Background="White"
-                                                    Grid.ColumnSpan="2"
-                                                    CornerRadius="8"
-                                                    x:Name="commandsPanel"
-                                                    Visibility="Collapsed"
-                                                    HorizontalAlignment="Right"
-                                                    VerticalAlignment="Center">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Button x:Name="btnSelection"
-                                                            VerticalAlignment="Center"                                                                      
-                                                            Command="{Binding JumpCommand}" 
-                                                            Margin="4, 0"
-                                                            Width="16"
-                                                            Height="16"
-                                                            MinWidth="0"
-                                                            MinHeight="0"
-                                                            Background="{StaticResource RightArrowBlueDrawing}"
-                                                            Style="{StaticResource ImageButtonStyle}"
-                                                            ToolTip="Jump"/>
-                                                </StackPanel>
-                                            </Border>
-                                        </Grid>
+                                        <Border x:Name="brd"
+                                                Background="{Binding Background}"
+                                                CornerRadius="8"
+                                                BorderThickness="1">
+                                            <Grid x:Name="grid"
+                                                  Margin="4, 2"                                                  
+                                                  ToolTip="{Binding ToolTip}"
+                                                  Background="Transparent">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <Image Source="{Binding Icon}"
+                                                       Margin="0, 0, 6, 0"                    
+                                                       Stretch="Uniform"
+                                                       Width="16"
+                                                       Height="16"/>
+                                                <TextBlock x:Name="txtMemberName"
+                                                           Text="{Binding Text}"
+                                                           Grid.Column="1" />
+                                                <Border Background="White"
+                                                        Grid.ColumnSpan="2"
+                                                        CornerRadius="8"
+                                                        x:Name="commandsPanel"
+                                                        Visibility="Collapsed"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Center">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Button x:Name="btnSelection"
+                                                                VerticalAlignment="Center"                                                                      
+                                                                Command="{Binding JumpCommand}" 
+                                                                Margin="4, 0"
+                                                                Width="16"
+                                                                Height="16"
+                                                                MinWidth="0"
+                                                                MinHeight="0"
+                                                                Background="{StaticResource RightArrowBlueDrawing}"
+                                                                Style="{StaticResource ImageButtonStyle}"
+                                                                ToolTip="Jump"/>
+                                                    </StackPanel>
+                                                </Border>
+                                            </Grid>
+                                        </Border>
                                         <DataTemplate.Triggers>
                                             <Trigger SourceName="grid" Property="IsMouseOver" Value="True">
                                                 <Setter TargetName="commandsPanel" Property="Visibility" Value="Visible"/>
                                             </Trigger>
+                                            <DataTrigger Binding="{Binding (Graph:GraphElementBehaviour.IsSemiHighlighted), RelativeSource={RelativeSource AncestorType={x:Type Graph:VertexControl}}}" Value="True">
+                                                <Setter TargetName="brd" Property="Background" Value="White" />
+                                                <Setter TargetName="brd" Property="BorderBrush" Value="Black" />
+                                            </DataTrigger>
                                         </DataTemplate.Triggers>
+
                                     </DataTemplate>
                                 </ContentPresenter.ContentTemplate>
                             </ContentPresenter>
-
-
                         </ControlTemplate>
                     </Setter.Value>
-                </Setter>
+                </Setter>                
             </Style>
 
             <!--Edge style-->
@@ -284,7 +291,7 @@
             </Border.ToolTip>
         </Border>
 
-        <!--Type selector-->        
+        <!--Type selector-->
         <Grid x:Name="gridTypeSelector"
               Visibility="{Binding IsTypeSelectionVisible, Converter={StaticResource BoolVisibilityConverter}}"
               Background="White">
@@ -338,7 +345,7 @@
                                                                FontSize="11"/>
                                                 </CheckBox.Content>
                                             </CheckBox>
-                                                      
+
                                         </Grid>
                                         <DataTemplate.Triggers>
                                             <DataTrigger Binding="{Binding IsSelected}" Value="True">
@@ -352,7 +359,7 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-            
+
             <StackPanel Orientation="Horizontal"
                         Grid.Row="2"
                         HorizontalAlignment="Center"
@@ -367,6 +374,6 @@
 
         </Grid>
 
-        
+
     </Grid>
 </Window>

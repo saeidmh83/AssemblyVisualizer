@@ -112,6 +112,8 @@ namespace AssemblyVisualizer.Common
             }
         }
 
+        public Brush Background { get; set; }
+
         private void JumpCommandHandler()
         {
             Services.JumpTo(MemberReference);

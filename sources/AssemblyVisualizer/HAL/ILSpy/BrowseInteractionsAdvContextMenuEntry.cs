@@ -15,8 +15,8 @@ using AssemblyVisualizer.InteractionBrowser;
 
 namespace AssemblyVisualizer.HAL.ILSpy
 {
-    [ExportContextMenuEntry(Header = "Browse Interactions")]
-    sealed class BrowseInteractionsContextMenuEntry : IContextMenuEntry
+    [ExportContextMenuEntry(Header = "Browse Interactions adv.")]
+    sealed class BrowseInteractionsAdvContextMenuEntry : IContextMenuEntry
     {
         public bool IsVisible(SharpTreeNode[] selectedNodes)
         {
@@ -33,9 +33,9 @@ namespace AssemblyVisualizer.HAL.ILSpy
             var types = selectedNodes
                 .OfType<TypeTreeNode>()
                 .Select(n => HAL.Converter.Type(n.TypeDefinition))
-                .ToArray();            
+                .ToArray();
 
-            var window = new InteractionBrowserWindow(types, true)
+            var window = new InteractionBrowserWindow(types, false)
             {
                 Owner = MainWindow.Instance
             };

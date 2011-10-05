@@ -23,14 +23,14 @@ namespace AssemblyVisualizer.InteractionBrowser
 {   
     partial class InteractionBrowserWindow : Window
     {
-        public InteractionBrowserWindow(IEnumerable<TypeInfo> types)
+        public InteractionBrowserWindow(IEnumerable<TypeInfo> types, bool drawGraph)
         {
             InitializeComponent();
 
             Loaded += new RoutedEventHandler(LoadedHandler);
             Unloaded += new RoutedEventHandler(UnloadedHandler);
 
-            ViewModel = new InteractionBrowserWindowViewModel(types);
+            ViewModel = new InteractionBrowserWindowViewModel(types, drawGraph);
 
             ViewModel.FillGraphRequest += FillGraphRequestHandler;
             ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;    

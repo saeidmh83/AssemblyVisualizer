@@ -126,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HAL\Helper.cs" />
+    <Compile Include="HAL\ILSpy\BrowseInteractionsAdvContextMenuEntry.cs" />
     <Compile Include="HAL\ILSpy\BrowseInteractionsContextMenuEntry.cs" />
     <Compile Include="HAL\ILSpy\ModelHelper.cs" />
     <Compile Include="HAL\Reflector\ModelHelper.cs" />

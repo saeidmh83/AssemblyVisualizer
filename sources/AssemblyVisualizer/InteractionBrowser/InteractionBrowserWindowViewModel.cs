@@ -23,9 +23,9 @@ namespace AssemblyVisualizer.InteractionBrowser
         private IEnumerable<TypeInfo> _types;
         private IEnumerable<IEnumerable<TypeViewModel>> _hierarchies;
         private IDictionary<TypeInfo, TypeViewModel> _viewModelCorrespondence = new Dictionary<TypeInfo, TypeViewModel>();
-        private bool _isTypeSelectionVisible = true;
+        private bool _isTypeSelectionVisible;
 
-        public InteractionBrowserWindowViewModel(IEnumerable<TypeInfo> types)
+        public InteractionBrowserWindowViewModel(IEnumerable<TypeInfo> types, bool drawGraph)
         {
             _types = types;
 
@@ -45,9 +45,30 @@ namespace AssemblyVisualizer.InteractionBrowser
                 .Select(GetHierarchy)
                 .Select(h => h.Select(GetViewModelForType).ToArray())
                 .ToArray();
-            foreach (var hierarchy in _hierarchies)
+
+            if (_hierarchies.Count() > 1)
             {
-                hierarchy.First().IsSelected = true;
+                foreach (var hierarchy in _hierarchies)
+                {
+                    hierarchy.First().IsSelected = true;
+                }
+            }
+            else
+            {
+                var hierarchy = _hierarchies.Single();
+                foreach (var type in hierarchy)
+                {
+                    type.IsSelected = true;
+                }
+            }
+
+            if (drawGraph)
+            {
+                DrawGraph();
+            }
+            else
+            {
+                _isTypeSelectionVisible = true;
             }
         }
 
@@ -255,6 +276,11 @@ namespace AssemblyVisualizer.InteractionBrowser
                 return;
             }
             IsTypeSelectionVisible = false;
+            DrawGraph();
+        }
+
+        private void DrawGraph()
+        { 
             var types = _hierarchies
                 .SelectMany(h => h.Where(t => t.IsSelected).Select(t => t.TypeInfo))
                 .Distinct()

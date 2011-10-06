@@ -127,8 +127,8 @@
   <ItemGroup>
     <Compile Include="Common\Extensions.cs" />
     <Compile Include="HAL\Helper.cs" />
-    <Compile Include="HAL\ILSpy\BrowseInteractionsAdvContextMenuEntry.cs" />
     <Compile Include="HAL\ILSpy\BrowseInteractionsContextMenuEntry.cs" />
+    <Compile Include="HAL\ILSpy\BrowseInteractionsToolbarCommand.cs" />
     <Compile Include="HAL\ILSpy\ModelHelper.cs" />
     <Compile Include="HAL\Reflector\ModelHelper.cs" />
     <Compile Include="InteractionBrowser\MemberGraph.cs" />
@@ -489,7 +489,9 @@
     <Resource Include="Images\ViewCode.png" />
     <Resource Include="Images\VirtualMethod.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\IB.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

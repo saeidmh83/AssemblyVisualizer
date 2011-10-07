@@ -32,9 +32,9 @@ namespace AssemblyVisualizer.Common
         static BrushProvider()
         {
             var brushConverter = new BrushConverter();
-            _brushes.Insert(0, brushConverter.ConvertFromString("#88FFB7A5") as Brush);
-            _brushes.Insert(0, brushConverter.ConvertFromString("#88BFE0FF") as Brush);
-            _brushes.Insert(0, brushConverter.ConvertFromString("#88D2FFB5") as Brush);
+            _brushes.Insert(0, brushConverter.ConvertFromString("#88FFB7A5") as SolidColorBrush);
+            _brushes.Insert(0, brushConverter.ConvertFromString("#88BFE0FF") as SolidColorBrush);
+            _brushes.Insert(0, brushConverter.ConvertFromString("#88D2FFB5") as SolidColorBrush);
         }
 
         private static IList<BrushPair> _brushPairs = new List<BrushPair>
@@ -47,7 +47,7 @@ namespace AssemblyVisualizer.Common
 							new BrushPair("#C18E00", "#88FFEAA8")  // Yellow
 			           	};        
 
-        private static IList<Brush> _brushes = new List<Brush>
+        private static IList<SolidColorBrush> _brushes = new List<SolidColorBrush>
             {   
                 MakeTransparent(Brushes.LightGoldenrodYellow),                
                 MakeTransparent(Brushes.LightPink), 
@@ -61,7 +61,7 @@ namespace AssemblyVisualizer.Common
             };
 
         public static IList<BrushPair> BrushPairs { get { return _brushPairs; } }
-        public static IList<Brush> SingleBrushes { get { return _brushes; } }
+        public static IList<SolidColorBrush> SingleBrushes { get { return _brushes; } }
 
         private static SolidColorBrush MakeTransparent(SolidColorBrush brush)
         {

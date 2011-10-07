@@ -74,10 +74,10 @@
                                             <Trigger SourceName="grid" Property="IsMouseOver" Value="True">
                                                 <Setter TargetName="commandsPanel" Property="Visibility" Value="Visible"/>
                                             </Trigger>
-                                            <DataTrigger Binding="{Binding (Graph:GraphElementBehaviour.IsSemiHighlighted), RelativeSource={RelativeSource AncestorType={x:Type Graph:VertexControl}}}" Value="True">
+                                            <!--<DataTrigger Binding="{Binding (Graph:GraphElementBehaviour.IsSemiHighlighted), RelativeSource={RelativeSource AncestorType={x:Type Graph:VertexControl}}}" Value="True">
                                                 <Setter TargetName="brd" Property="Background" Value="White" />
                                                 <Setter TargetName="brd" Property="BorderBrush" Value="Black" />
-                                            </DataTrigger>
+                                            </DataTrigger>-->
                                         </DataTemplate.Triggers>
 
                                     </DataTemplate>
@@ -209,7 +209,8 @@
         <KeyBinding Key="Escape" Command="{Binding ToggleSelectionViewCommand}"/>
         <KeyBinding Key="Enter" Command="{Binding ApplySelectionCommand}"/>
     </Window.InputBindings>
-    <Grid>
+    <Grid UseLayoutRounding="True"
+          TextOptions.TextFormattingMode="Display">
         <!--Main Content-->
         <ZoomControl:ZoomControl x:Name="zoomControl"
                                  Grid.Row="1"
@@ -289,6 +290,27 @@
                         <Run Text="Apply selection"/>
                 </TextBlock>
             </Border.ToolTip>
+        </Border>
+
+        <!--Displayed types list-->
+        <Border Background="White"
+                CornerRadius="8"
+                Margin="0, 0, 12, 8"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right">
+            <ItemsControl ItemsSource="{Binding DisplayedTypes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"
+                                   ToolTip="{Binding FullName}"
+                                   FontSize="13"
+                                   Margin="3"
+                                   Foreground="{Binding Foreground}"
+                                   FontWeight="DemiBold"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+                          
         </Border>
 
         <!--Type selector-->

@@ -62,6 +62,26 @@ namespace AssemblyVisualizer.InteractionBrowser
             }
         }
 
-        public Brush Background { get; set; }
+        public Brush Foreground
+        {
+            get 
+            {
+                if (Background == null)
+                {
+                    return Brushes.Gray;
+                }
+                var backgroundColor = Background.Color;
+                var multiplier = Math.Min(255.0 / backgroundColor.R, Math.Min(255.0 / backgroundColor.G, 255.0 / backgroundColor.B));
+                var foregroundColor = new Color 
+                { 
+                    A = 255, 
+                    R = (byte)(backgroundColor.R / 3), 
+                    G = (byte)(backgroundColor.G / 3),
+                    B = (byte)(backgroundColor.B / 3)
+                };
+                return new SolidColorBrush(foregroundColor);
+            }
+        }
+        public SolidColorBrush Background { get; set; }
     }
 }

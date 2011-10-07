@@ -122,20 +122,12 @@
     </DataTemplate>
 
     <!--Assembly-->
-    <DataTemplate DataType="{x:Type ViewModels:AssemblyViewModel}">
-        <Grid Margin="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="{Binding Name}"
-                       ToolTip="{Binding FullName}"
-                       FontSize="13"
-                       Foreground="{Binding Foreground}"
-                       FontWeight="DemiBold" />
-        </Grid>        
-    </DataTemplate>
-
-   
-
+    <DataTemplate DataType="{x:Type ViewModels:AssemblyViewModel}">        
+        <TextBlock Text="{Binding Name}"
+                   ToolTip="{Binding FullName}"
+                   FontSize="13"
+                   Margin="3"
+                   Foreground="{Binding Foreground}"
+                   FontWeight="DemiBold" />             
+    </DataTemplate>  
 </ResourceDictionary>

@@ -25,12 +25,12 @@ namespace AssemblyVisualizer.InteractionBrowser
         private IEnumerable<TypeInfo> _types;
         private IEnumerable<IEnumerable<TypeViewModel>> _hierarchies;
         private IDictionary<TypeInfo, TypeViewModel> _viewModelCorrespondence = new Dictionary<TypeInfo, TypeViewModel>();
-        private bool _isTypeSelectionVisible;        
+        private bool _isTypeSelectionVisible;
 
         public InteractionBrowserWindowViewModel(IEnumerable<TypeInfo> types, bool drawGraph)
         {
-            _types = types;     
-            
+            _types = types;
+
             ApplySelectionCommand = new DelegateCommand(ApplySelectionCommandHandler);
             ShowSelectionViewCommand = new DelegateCommand(ShowSelectionViewCommandHandler);
             HideSelectionViewCommand = new DelegateCommand(HideSelectionViewCommandHandler);
@@ -41,7 +41,7 @@ namespace AssemblyVisualizer.InteractionBrowser
 			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
                             new UserCommand(Resources.SelectTypes, ShowSelectionViewCommand)
                             //new UserCommand(Resources.SearchInGraph, ShowSearchCommand),                                                    
-			           	};            
+			           	};
 
             _hierarchies = types
                 .Select(GetHierarchy)
@@ -96,6 +96,17 @@ namespace AssemblyVisualizer.InteractionBrowser
             {
                 _hierarchies = value;
                 OnPropertyChanged("Hierarchies");
+            }
+        }
+
+        public IEnumerable<TypeViewModel> DisplayedTypes
+        {
+            get
+            {
+                return _hierarchies
+                    .SelectMany(h => h.Where(t => t.IsSelected))
+                    .Distinct()
+                    .ToArray();
             }
         }
 
@@ -160,11 +171,11 @@ namespace AssemblyVisualizer.InteractionBrowser
 
         private MemberGraph CreateGraph(IEnumerable<TypeViewModel> typeViewModels)
         {
-            var graph = new MemberGraph(true);            
+            var graph = new MemberGraph(true);
 
             foreach (var typeViewModel in typeViewModels)
             {
-                var type = typeViewModel.TypeInfo;                
+                var type = typeViewModel.TypeInfo;
                 var methods = type.Methods.Where(m => !m.Name.StartsWith("<")).Concat(type.Accessors);
                 if (!typeViewModel.ShowInternals)
                 {
@@ -190,7 +201,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                             graph.AddVertex(vm);
                         }
                         graph.AddEdge(new Edge<MemberViewModel>(mvm, vm));
-                    }                   
+                    }
 
                     var usedFields = Helper.GetUsedFields(method.MemberReference)
                         .Where(m => typeViewModels.Any(
@@ -212,7 +223,7 @@ namespace AssemblyVisualizer.InteractionBrowser
         }
 
         private MemberViewModel GetViewModelForField(FieldInfo fieldInfo)
-        {  
+        {
             if (_viewModelsDictionary.ContainsKey(fieldInfo))
             {
                 return _viewModelsDictionary[fieldInfo];
@@ -284,7 +295,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                 _viewModelsDictionary.Add(eventInfo, evm);
                 return evm;
             }
-            
+
             var tvm = GetViewModelForType(methodInfo.DeclaringType);
             var vm = new MethodViewModel(methodInfo)
             {
@@ -316,13 +327,11 @@ namespace AssemblyVisualizer.InteractionBrowser
         }
 
         private void DrawGraph()
-        { 
-            var types = _hierarchies
-                .SelectMany(h => h.Where(t => t.IsSelected))
-                .Distinct()
-                .ToArray();
+        {
+            var types = DisplayedTypes;
             ColorizeTypes(types);
             Graph = CreateGraph(types);
+            OnPropertyChanged("DisplayedTypes");
         }
 
         private void HideSelectionViewCommandHandler()
@@ -374,6 +383,6 @@ namespace AssemblyVisualizer.InteractionBrowser
                     index = 0;
                 }
             }
-        }        
+        }
     }
 }

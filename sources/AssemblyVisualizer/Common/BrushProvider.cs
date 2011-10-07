@@ -39,12 +39,12 @@ namespace AssemblyVisualizer.Common
 
         private static IList<BrushPair> _brushPairs = new List<BrushPair>
 			           	{
-							new BrushPair("#2D6531", "#D2FFB5"), // Green
-							new BrushPair("#113DC2", "#BFE0FF"), // Blue
-							new BrushPair("#9B2119", "#FFB7A5"), // Red
-							new BrushPair("#746BFF", "#B8B5FF"), // Purple
-							new BrushPair("#AF00A7", "#FFA0F2"), // Violet
-							new BrushPair("#C18E00", "#FFEAA8")  // Yellow
+							new BrushPair("#2D6531", "#88D2FFB5"), // Green
+							new BrushPair("#113DC2", "#88BFE0FF"), // Blue
+							new BrushPair("#9B2119", "#88FFB7A5"), // Red
+							new BrushPair("#746BFF", "#88B8B5FF"), // Purple
+							new BrushPair("#AF00A7", "#88FFA0F2"), // Violet
+							new BrushPair("#C18E00", "#88FFEAA8")  // Yellow
 			           	};        
 
         private static IList<Brush> _brushes = new List<Brush>

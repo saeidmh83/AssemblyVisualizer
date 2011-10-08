@@ -183,7 +183,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
                     return _searchResults;
                 }
 
-				var results = WindowViewModel.Types;
+				var results = WindowViewModel.TypesForSearch;
 
 				if (!string.IsNullOrWhiteSpace(SearchTerm))
 				{
@@ -261,10 +261,15 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 			TriggerSearch();
 		}
 
+        public void NotifyAssemblySelectionChanged()
+        {
+            TriggerSearch();
+        }
+
 		public void FocusSearchField()
 		{
 			OnSearchFocusRequested();
-		}
+		}        
 
 		#endregion
 

@@ -227,7 +227,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
                         var distinctTypeDefinitions = typeDefinitions.Distinct().ToArray();
 
 						var assemblyTypes = distinctTypeDefinitions
-							.Select(t => new TypeViewModel(t, this))
+							.Select(t => new TypeViewModel(t, currentAssembly, this))
 							.ToList();
 						
 						currentAssembly.Types = assemblyTypes;
@@ -239,6 +239,18 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 				return _types;
 			}
 		}
+
+        public IEnumerable<TypeViewModel> TypesForSearch
+        {
+            get
+            { 
+                if (!Assemblies.Any(a => a.IsSelected))
+                {
+                    return Types;
+                }
+                return Types.Where(t => t.AssemblyViewModel.IsSelected);
+            }
+        }
 
 		public Dispatcher Dispatcher
 		{
@@ -364,6 +376,14 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 				OnAssembliesChanged();
 			}
 		}
+
+        public void NotifyAssemblySelectionChanged()
+        {
+            if (_searchScreen != null)
+            {
+                _searchScreen.NotifyAssemblySelectionChanged();
+            }
+        }
 
 		#endregion
 

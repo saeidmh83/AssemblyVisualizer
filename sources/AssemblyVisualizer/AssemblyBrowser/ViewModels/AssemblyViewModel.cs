@@ -22,6 +22,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 		private readonly int _internalTypesCount;
 		private bool _showRemoveCommand = true;
 		private Brush _foreground;
+        private bool _isSelected;
 		
 		public AssemblyViewModel(AssemblyInfo assemblyInfo, 
 								 AssemblyBrowserWindowViewModel windowViewModel)
@@ -52,6 +53,20 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
         public string Version
         {
             get { return _assemblyInfo.Version.ToString(); }
+        }
+
+        public bool IsSelected
+        {
+            get
+            {
+                return _isSelected;
+            }
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged("IsSelected");
+                _windowViewModel.NotifyAssemblySelectionChanged();
+            }
         }
 
 		public Brush Foreground

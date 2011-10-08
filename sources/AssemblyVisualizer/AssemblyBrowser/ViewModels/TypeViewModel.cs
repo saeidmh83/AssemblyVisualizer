@@ -42,11 +42,13 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 		private Brush _background;
 
 		private readonly AssemblyBrowserWindowViewModel _windowViewModel;
+        private readonly AssemblyViewModel _assemblyViewModel;
 
-		public TypeViewModel(TypeInfo typeInfo, AssemblyBrowserWindowViewModel windowViewModel)
+		public TypeViewModel(TypeInfo typeInfo, AssemblyViewModel assemblyViewModel, AssemblyBrowserWindowViewModel windowViewModel)
 		{
 			_typeInfo = typeInfo;
 			_windowViewModel = windowViewModel;
+            _assemblyViewModel = assemblyViewModel;
 
             _name = typeInfo.Name;
             _fullName = typeInfo.FullName;
@@ -125,6 +127,11 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 		{
 			get { return _typeInfo; }
 		}
+
+        public AssemblyViewModel AssemblyViewModel
+        {
+            get { return _assemblyViewModel; }
+        }
 
         public string NameStart { get; set; }
         public string NameMiddle { get; set; }

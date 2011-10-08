@@ -18,6 +18,7 @@ namespace AssemblyVisualizer.InteractionBrowser
         private bool _isSelected;
         private bool _showInternals;
         private InteractionBrowserWindowViewModel _windowViewModel;
+        private SolidColorBrush _background;
 
         public TypeViewModel(TypeInfo typeInfo, InteractionBrowserWindowViewModel windowViewModel)
         {
@@ -86,6 +87,18 @@ namespace AssemblyVisualizer.InteractionBrowser
                 return new SolidColorBrush(foregroundColor);
             }
         }
-        public SolidColorBrush Background { get; set; }        
+        public SolidColorBrush Background 
+        {
+            get
+            {
+                return _background;
+            }
+            set
+            {
+                _background = value;
+                OnPropertyChanged("Background");
+                OnPropertyChanged("Foreground");
+            }
+        }        
     }
 }

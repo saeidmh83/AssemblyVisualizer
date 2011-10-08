@@ -15,7 +15,8 @@ namespace AssemblyVisualizer.Common
 	abstract class MemberViewModel : ViewModelBase
 	{
         private string _toolTip;
-        private MemberInfo _memberInfo;  
+        private MemberInfo _memberInfo;
+        private SolidColorBrush _background;
 
         public MemberViewModel(MemberInfo memberInfo)
         {
@@ -112,7 +113,18 @@ namespace AssemblyVisualizer.Common
             }
         }
 
-        public Brush Background { get; set; }
+        public SolidColorBrush Background 
+        {
+            get
+            {
+                return _background;
+            }
+            set
+            {
+                _background = value;
+                OnPropertyChanged("Background");
+            }
+        }
 
         private void JumpCommandHandler()
         {

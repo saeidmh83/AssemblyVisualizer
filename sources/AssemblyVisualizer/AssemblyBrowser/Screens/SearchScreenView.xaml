@@ -337,7 +337,17 @@
                                         MinHeight="0"
                                         Background="{StaticResource DownArrowDrawing}"
                                         Style="{StaticResource ImageButtonStyle}"                                    
-                                        ToolTip="Browse Ancestry"/>                               
+                                        ToolTip="Browse Ancestry"/>         
+                                <Button VerticalAlignment="Center"                                                                      
+                                        Command="{Binding BrowseInteractionsCommand}" 
+                                        Margin="4, 0"
+                                        Width="32"
+                                        Height="32"
+                                        MinWidth="0"
+                                        MinHeight="0"
+                                        Background="{StaticResource InteractionBrowserIconDrawing}"
+                                        Style="{StaticResource ImageButtonStyle}"                                    
+                                        ToolTip="Browse Interactions"/>         
                                 
                             </StackPanel>                                
                         </Grid>

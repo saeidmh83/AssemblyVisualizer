@@ -81,7 +81,7 @@
                                                         <Storyboard>
                                                             <ColorAnimation Storyboard.TargetName="brdSelectionBrush"
                                                                             Storyboard.TargetProperty="Color"
-                                                                            To="Orange"
+                                                                            To="#88FFA500"
                                                                             Duration="0:0:0.3"/>
                                                         </Storyboard>
                                                     </BeginStoryboard>
@@ -103,7 +103,7 @@
                                                         <Storyboard>
                                                             <ColorAnimation Storyboard.TargetName="brdSearchBrush"
                                                                             Storyboard.TargetProperty="Color"
-                                                                            To="Yellow"
+                                                                            To="#88FFFF00"
                                                                             Duration="0:0:0.3"/>
                                                         </Storyboard>
                                                     </BeginStoryboard>

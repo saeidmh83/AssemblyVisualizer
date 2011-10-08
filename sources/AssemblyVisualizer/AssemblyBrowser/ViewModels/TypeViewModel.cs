@@ -14,6 +14,7 @@ using AssemblyVisualizer.Properties;
 using AssemblyVisualizer.Model;
 using AssemblyVisualizer.HAL;
 using System.Windows;
+using AssemblyVisualizer.InteractionBrowser;
 
 namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 {
@@ -112,6 +113,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 			NavigateToBaseCommand = new DelegateCommand(NavigateToBaseCommandHandler);
 			ShowMembersCommand = new DelegateCommand(ShowMembersCommandHandler);
             BrowseAncestryCommand = new DelegateCommand(BrowseAncestryCommandHandler);
+            BrowseInteractionsCommand = new DelegateCommand(BrowseInteractionsCommandHandler);
 
 			RefreshBackground();
             ResetName();
@@ -122,6 +124,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 		public ICommand NavigateToBaseCommand { get; private set; }
 		public ICommand ShowMembersCommand { get; private set; }
         public ICommand BrowseAncestryCommand { get; private set; }
+        public ICommand BrowseInteractionsCommand { get; private set; }
 
 		public TypeInfo TypeInfo
 		{
@@ -382,13 +385,22 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
         {
             var window = new AncestryBrowserWindow(_typeInfo);
 
-            #if ILSpy
+#if ILSpy
             window.Owner = Services.MainWindow;
-            #endif
+#endif
 
             window.Show();
         }
 
-		
+        private void BrowseInteractionsCommandHandler()
+        {
+            var window = new InteractionBrowserWindow(new[] { TypeInfo }, true);
+
+#if ILSpy
+            window.Owner = Services.MainWindow;
+#endif
+
+            window.Show();
+        }
 	}
 }

@@ -16,7 +16,7 @@ using System.Windows;
 
 namespace AssemblyVisualizer.HAL.ILSpy
 {
-    [ExportToolbarCommand(ToolTip = "Opens Interaction Browser in type selection mode", ToolbarIcon = "Images/IB.png", ToolbarCategory = "AssemblyVisualizer", ToolbarOrder = 1)]
+    [ExportToolbarCommand(ToolTip = "Opens Interaction Browser in type selection mode", ToolbarIcon = "Images/ib2.png", ToolbarCategory = "AssemblyVisualizer", ToolbarOrder = 1)]
     public class BrowseInteractionsToolbarCommand : ICommand
     {
         public bool CanExecute(object parameter)

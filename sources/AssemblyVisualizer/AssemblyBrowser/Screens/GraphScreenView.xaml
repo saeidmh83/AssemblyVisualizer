@@ -25,10 +25,8 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type Graph:VertexControl}">
-
                             <ContentPresenter Content="{TemplateBinding Vertex}" 
-                                      ContentTemplate="{StaticResource TypeDataTemplate}"/>
-
+                                              ContentTemplate="{StaticResource TypeDataTemplate}"/>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

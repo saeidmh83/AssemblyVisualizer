@@ -74,6 +74,17 @@
                                     Style="{StaticResource ImageButtonStyle}"                                    
                                     ToolTip="Browse Ancestry"/>
                             
+                            <Button VerticalAlignment="Center"                                                                      
+                                    Command="{Binding BrowseInteractionsCommand}" 
+                                    Margin="4, 0"
+                                    Width="16"
+                                    Height="16"
+                                    MinWidth="0"
+                                    MinHeight="0"
+                                    Background="{StaticResource InteractionBrowserIconDrawing}"
+                                    Style="{StaticResource ImageButtonStyle}"                                    
+                                    ToolTip="Browse Interactions"/>
+                            
                             <Button Command="{Binding ShowMembersCommand}"                   
                                     Width="16"
                                     Height="16"

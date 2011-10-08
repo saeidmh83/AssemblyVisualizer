@@ -26,6 +26,7 @@ namespace AssemblyVisualizer.InteractionBrowser
         private IEnumerable<IEnumerable<TypeViewModel>> _hierarchies;
         private IDictionary<TypeInfo, TypeViewModel> _viewModelCorrespondence = new Dictionary<TypeInfo, TypeViewModel>();
         private bool _isTypeSelectionVisible;
+        private bool _showUnconnectedVertices;
 
         public InteractionBrowserWindowViewModel(IEnumerable<TypeInfo> types, bool drawGraph)
         {
@@ -136,6 +137,19 @@ namespace AssemblyVisualizer.InteractionBrowser
             }
         }
 
+        public bool ShowUnconnectedVertices
+        {
+            get
+            {
+                return _showUnconnectedVertices;
+            }
+            set
+            {
+                _showUnconnectedVertices = value;
+                OnPropertyChanged("ShowUnconnectedVertices");
+            }
+        }
+
         public string Title
         {
             get
@@ -218,6 +232,11 @@ namespace AssemblyVisualizer.InteractionBrowser
                     }
                 }
             }
+
+            if (!ShowUnconnectedVertices)
+            {
+                graph.RemoveVertexIf(v => graph.Degree(v) == 0);
+            }            
 
             return graph;
         }

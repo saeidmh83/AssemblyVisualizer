@@ -313,7 +313,7 @@ namespace AssemblyVisualizer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select Types.
+        ///   Looks up a localized string similar to Types.
         /// </summary>
         internal static string SelectTypes {
             get {

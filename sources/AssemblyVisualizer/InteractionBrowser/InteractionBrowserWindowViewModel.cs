@@ -124,6 +124,15 @@ namespace AssemblyVisualizer.InteractionBrowser
             }
         }
 
+        public int MembersCount
+        {
+            get
+            {
+                var graph = CreateGraph(DisplayedTypes);
+                return graph.Vertices.Count();
+            }
+        }
+
         public bool IsTypeSelectionVisible
         {
             get
@@ -147,6 +156,7 @@ namespace AssemblyVisualizer.InteractionBrowser
             {
                 _showUnconnectedVertices = value;
                 OnPropertyChanged("ShowUnconnectedVertices");
+                ReportSelectionChanged();
             }
         }
 
@@ -158,13 +168,18 @@ namespace AssemblyVisualizer.InteractionBrowser
             }
         }
 
+        public void ReportSelectionChanged()
+        {
+            OnPropertyChanged("MembersCount");
+        }
+
         private TypeViewModel GetViewModelForType(TypeInfo typeInfo)
         {
             if (_viewModelCorrespondence.ContainsKey(typeInfo))
             {
                 return _viewModelCorrespondence[typeInfo];
             }
-            var viewModel = new TypeViewModel(typeInfo);
+            var viewModel = new TypeViewModel(typeInfo, this);
             _viewModelCorrespondence.Add(typeInfo, viewModel);
             return viewModel;
         }
@@ -243,19 +258,25 @@ namespace AssemblyVisualizer.InteractionBrowser
 
         private MemberViewModel GetViewModelForField(FieldInfo fieldInfo)
         {
+            MemberViewModel vm;
             if (_viewModelsDictionary.ContainsKey(fieldInfo))
             {
-                return _viewModelsDictionary[fieldInfo];
-            }
+                var typeViewModel = GetViewModelForType(fieldInfo.DeclaringType);
+                vm = _viewModelsDictionary[fieldInfo];
+                vm.Background = typeViewModel.Background;
+                return vm;
+            }   
 
             var eventInfo = Helper.GetEventForBackingField(fieldInfo.MemberReference);
             if (eventInfo != null)
             {
+                var typeViewModel = GetViewModelForType(eventInfo.DeclaringType);
                 if (_viewModelsDictionary.ContainsKey(eventInfo))
                 {
-                    return _viewModelsDictionary[eventInfo];
-                }
-                var typeViewModel = GetViewModelForType(eventInfo.DeclaringType);
+                    vm = _viewModelsDictionary[eventInfo];
+                    vm.Background = typeViewModel.Background;
+                    return vm;
+                }                
                 var evm = new EventViewModel(eventInfo)
                 {
                     Background = typeViewModel.Background,
@@ -266,30 +287,37 @@ namespace AssemblyVisualizer.InteractionBrowser
             }
 
             var tvm = GetViewModelForType(fieldInfo.DeclaringType);
-            var vm = new FieldViewModel(fieldInfo)
+            var fvm = new FieldViewModel(fieldInfo)
             {
                 Background = tvm.Background,
                 ToolTip = tvm.Name
             };
-            _viewModelsDictionary.Add(fieldInfo, vm);
-            return vm;
+            _viewModelsDictionary.Add(fieldInfo, fvm);
+            return fvm;
         }
 
         private MemberViewModel GetViewModelForMethod(MethodInfo methodInfo)
         {
+            MemberViewModel vm;
             if (_viewModelsDictionary.ContainsKey(methodInfo))
             {
-                return _viewModelsDictionary[methodInfo];
-            }
+                var typeViewModel = GetViewModelForType(methodInfo.DeclaringType);
+                vm = _viewModelsDictionary[methodInfo];
+                vm.Background = typeViewModel.Background;
+                return vm;
+            }            
 
             if (IsPropertyAccessor(methodInfo))
             {
                 var propertyInfo = Helper.GetAccessorProperty(methodInfo.MemberReference);
+                var typeViewModel = GetViewModelForType(propertyInfo.DeclaringType);
+                
                 if (_viewModelsDictionary.ContainsKey(propertyInfo))
                 {
-                    return _viewModelsDictionary[propertyInfo];
-                }
-                var typeViewModel = GetViewModelForType(propertyInfo.DeclaringType);
+                    vm = _viewModelsDictionary[propertyInfo];
+                    vm.Background = typeViewModel.Background;
+                    return vm;
+                }                
                 var pvm = new PropertyViewModel(propertyInfo)
                 {
                     Background = typeViewModel.Background,
@@ -301,11 +329,13 @@ namespace AssemblyVisualizer.InteractionBrowser
             if (IsEventAccessor(methodInfo))
             {
                 var eventInfo = Helper.GetAccessorEvent(methodInfo.MemberReference);
+                var typeViewModel = GetViewModelForType(eventInfo.DeclaringType);
                 if (_viewModelsDictionary.ContainsKey(eventInfo))
                 {
-                    return _viewModelsDictionary[eventInfo];
-                }
-                var typeViewModel = GetViewModelForType(eventInfo.DeclaringType);
+                    vm = _viewModelsDictionary[eventInfo];
+                    vm.Background = typeViewModel.Background;
+                    return vm;
+                }                
                 var evm = new EventViewModel(eventInfo)
                 {
                     Background = typeViewModel.Background,
@@ -316,14 +346,14 @@ namespace AssemblyVisualizer.InteractionBrowser
             }
 
             var tvm = GetViewModelForType(methodInfo.DeclaringType);
-            var vm = new MethodViewModel(methodInfo)
+            var mvm = new MethodViewModel(methodInfo)
             {
                 Background = tvm.Background,
                 ToolTip = tvm.Name
             };
-            _viewModelsDictionary.Add(methodInfo, vm);
-            return vm;
-        }
+            _viewModelsDictionary.Add(methodInfo, mvm);
+            return mvm;
+        }       
 
         private void OnFillGraphRequest()
         {

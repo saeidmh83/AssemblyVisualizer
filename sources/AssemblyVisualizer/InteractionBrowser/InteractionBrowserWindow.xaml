@@ -385,14 +385,23 @@
             <StackPanel Grid.Row="2" Margin="0, 6"
                         HorizontalAlignment="Center">
                 <CheckBox IsChecked="{Binding ShowUnconnectedVertices}"
-                          Margin="0, 4">
+                          Margin="0, 4"
+                          HorizontalAlignment="Center">
                     <CheckBox.Content>
                         <TextBlock Text="Display unconnected members"
                                    Foreground="Gray"
                                    FontSize="14"/>
                     </CheckBox.Content>
                 </CheckBox>
-                          
+                <TextBlock Foreground="Gray"
+                           FontSize="16"
+                           Margin="0, 4"
+                           HorizontalAlignment="Center">
+                    <TextBlock Text="Members count:" />
+                    <TextBlock Text="{Binding MembersCount}"
+                               FontWeight="Bold"/>
+                </TextBlock>
+                
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         Grid.Row="3"

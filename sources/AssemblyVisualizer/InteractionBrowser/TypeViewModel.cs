@@ -17,10 +17,12 @@ namespace AssemblyVisualizer.InteractionBrowser
         private TypeInfo _typeInfo;
         private bool _isSelected;
         private bool _showInternals;
+        private InteractionBrowserWindowViewModel _windowViewModel;
 
-        public TypeViewModel(TypeInfo typeInfo)
+        public TypeViewModel(TypeInfo typeInfo, InteractionBrowserWindowViewModel windowViewModel)
         {
             _typeInfo = typeInfo;
+            _windowViewModel = windowViewModel;
         }
 
         public string Name 
@@ -46,6 +48,7 @@ namespace AssemblyVisualizer.InteractionBrowser
             {
                 _isSelected = value;
                 OnPropertyChanged("IsSelected");
+                _windowViewModel.ReportSelectionChanged();
             }
         }
 
@@ -59,6 +62,7 @@ namespace AssemblyVisualizer.InteractionBrowser
             {
                 _showInternals = value;
                 OnPropertyChanged("ShowInternals");
+                _windowViewModel.ReportSelectionChanged();
             }
         }
 
@@ -82,6 +86,6 @@ namespace AssemblyVisualizer.InteractionBrowser
                 return new SolidColorBrush(foregroundColor);
             }
         }
-        public SolidColorBrush Background { get; set; }
+        public SolidColorBrush Background { get; set; }        
     }
 }

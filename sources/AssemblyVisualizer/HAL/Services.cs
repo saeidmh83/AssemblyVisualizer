@@ -24,6 +24,18 @@ namespace AssemblyVisualizer.HAL
 {
     class Services
     {
+        public static bool SupportsInteractionBrowser
+        {
+            get
+            { 
+#if ILSpy
+                return true;
+#elif Reflector
+                return false;
+#endif
+            }
+        }
+
         public static void BrowseAssemblies(IEnumerable<AssemblyInfo> assemblies)
         {
             var window = new AssemblyBrowserWindow(assemblies);

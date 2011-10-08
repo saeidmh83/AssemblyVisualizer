@@ -12,6 +12,7 @@ using Reflector.CodeModel;
 using AssemblyVisualizer.AncestryBrowser;
 using AssemblyVisualizer.DependencyBrowser;
 using AssemblyVisualizer.AssemblyBrowser;
+using AssemblyVisualizer.InteractionBrowser;
 
 namespace AssemblyVisualizer.HAL.Reflector
 {
@@ -32,6 +33,7 @@ namespace AssemblyVisualizer.HAL.Reflector
             _commandBarManager.CommandBars["Browser.Assembly"].Items.AddButton("Browse Assembly", BrowseAssemblyHandler);
             _commandBarManager.CommandBars["Browser.Assembly"].Items.AddButton("Browse Dependencies", BrowseDependenciesHandler);
             _commandBarManager.CommandBars["Browser.TypeDeclaration"].Items.AddButton("Browse Ancestry", BrowseAncestryHandler);
+            //_commandBarManager.CommandBars["Browser.TypeDeclaration"].Items.AddButton("Browse Interactions", BrowseInteractionsHandler);
             _commandBarManager.CommandBars["Browser.TypeDeclaration"].Items.AddButton("Visualize Descendants", VisualizeDescendantsHandler);
         }
 
@@ -94,7 +96,16 @@ namespace AssemblyVisualizer.HAL.Reflector
             var window = new DependencyBrowserWindow(new [] { HAL.Converter.Assembly(item) });
             System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(window);
             window.Show();
-        }        
+        }
+
+        private void BrowseInteractionsHandler(object sender, EventArgs e)
+        {
+            var item = _assemblyBrowser.ActiveItem as ITypeDeclaration;
+
+            var window = new InteractionBrowserWindow(new [] { HAL.Converter.Type(item) }, true);
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(window);
+            window.Show();
+        }
 
         public void Unload()
         {

@@ -17,39 +17,40 @@ namespace AssemblyVisualizer.HAL.Reflector
         public EventInfo GetEventForBackingField(object field)
         {
             var fieldDefinition = field as IFieldDeclaration;
-            /*var eventDefinition = fieldDefinition.DeclaringType.Events
-                .FirstOrDefault(e => e.Name == fieldDefinition.Name && e.EventType == fieldDefinition.FieldType);
-            return eventDefinition == null ? null : HAL.Converter.Event(eventDefinition);*/
-            return null;
+            var type = fieldDefinition.DeclaringType as ITypeDeclaration;
+            var eventDefinition = type.Events.OfType<IEventDeclaration>().FirstOrDefault(e => e.Name == fieldDefinition.Name && e.EventType == fieldDefinition.FieldType);
+           
+            return eventDefinition == null ? null : HAL.Converter.Event(eventDefinition);
         }
 
         public PropertyInfo GetAccessorProperty(object method)
         {
-            var methodDefinition = method as IMethodDeclaration;
-            /*var type = methodDefinition.DeclaringType;
-            var prop = type.Properties.Single(p => p.GetMethod == methodDefinition || p.SetMethod == methodDefinition);
-            return HAL.Converter.Property(prop);*/
-            return null;
+            var methodDeclaration = method as IMethodDeclaration;
+            var type = methodDeclaration.DeclaringType as ITypeDeclaration;
+            var property = type.Properties.OfType<IPropertyDeclaration>().Single(p => p.GetMethod == methodDeclaration || p.SetMethod == methodDeclaration);
+            
+            return HAL.Converter.Property(property);            
         }
 
         public EventInfo GetAccessorEvent(object method)
         {
-            var methodDefinition = method as IMethodDeclaration;
-            /*var type = methodDefinition.DeclaringType;
-            var ev = type.Events.Single(p => p.AddMethod == methodDefinition || p.RemoveMethod == methodDefinition);
-            return HAL.Converter.Event(ev);*/
-            return null;
+            var methodDeclaration = method as IMethodDeclaration;
+            var type = methodDeclaration.DeclaringType as ITypeDeclaration;
+            var eventDefinition = type.Events.OfType<IEventDeclaration>().Single(p => p.AddMethod == methodDeclaration || p.RemoveMethod == methodDeclaration);
+
+            return HAL.Converter.Event(eventDefinition);          
         }
 
         public IEnumerable<MethodInfo> GetUsedMethods(object method)
         {
             var analyzedMethod = method as IMethodDeclaration;
-            /*if (!analyzedMethod.HasBody)
+            if (analyzedMethod.Body == null)
             {
                 yield break;
             }
 
-            foreach (Instruction instr in analyzedMethod.Body.Instructions)
+            var instructions = analyzedMethod.Body;
+            /*foreach (Instruction instr in analyzedMethod.Body.Instructions)
             {
                 MethodReference mr = instr.Operand as MethodReference;
                 if (mr != null)
@@ -67,12 +68,13 @@ namespace AssemblyVisualizer.HAL.Reflector
         public IEnumerable<FieldInfo> GetUsedFields(object method)
         {
             var analyzedMethod = method as IMethodDeclaration;
-            /*if (!analyzedMethod.HasBody)
+            if (analyzedMethod.Body == null)
             {
                 yield break;
             }
 
-            foreach (Instruction instr in analyzedMethod.Body.Instructions)
+            var instructions = analyzedMethod.Body;
+            /*foreach (Instruction instr in analyzedMethod.Body.Instructions)
             {
                 FieldReference fr = instr.Operand as FieldReference;
                 if (fr != null)

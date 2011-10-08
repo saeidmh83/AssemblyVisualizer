@@ -7,6 +7,7 @@
              xmlns:CommandsGroup="clr-namespace:AssemblyVisualizer.Common.CommandsGroup" mc:Ignorable="d"
              xmlns:Controls="clr-namespace:AssemblyVisualizer.Controls"
              xmlns:Behaviors="clr-namespace:AssemblyVisualizer.Behaviors"
+             xmlns:HAL="clr-namespace:AssemblyVisualizer.HAL"
              d:DesignHeight="300" d:DesignWidth="300"
              Background="White">
     <UserControl.Resources>
@@ -347,7 +348,8 @@
                                         MinHeight="0"
                                         Background="{StaticResource InteractionBrowserIconDrawing}"
                                         Style="{StaticResource ImageButtonStyle}"                                    
-                                        ToolTip="Browse Interactions"/>         
+                                        ToolTip="Browse Interactions"
+                                        Visibility="{Binding Source={x:Static HAL:Services.SupportsInteractionBrowser}, Converter={StaticResource BooleanToVisibilityConverter}}"/>         
                                 
                             </StackPanel>                                
                         </Grid>

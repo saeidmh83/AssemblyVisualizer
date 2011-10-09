@@ -59,9 +59,11 @@ namespace AssemblyVisualizer.AncestryBrowser
                 .ToArray();
 
             NavigateCommand = new DelegateCommand(NavigateCommandHandler);
+            BrowseInteractionsCommand = new DelegateCommand(BrowseInteractionsCommandHandler);
         }
 
         public ICommand NavigateCommand { get; private set; }
+        public ICommand BrowseInteractionsCommand { get; private set; }
 
         public IEnumerable<MemberViewModel> Members 
         {
@@ -260,6 +262,11 @@ namespace AssemblyVisualizer.AncestryBrowser
         private void NavigateCommandHandler()
         {
             Services.JumpTo(_typeInfo.MemberReference);
+        }
+
+        private void BrowseInteractionsCommandHandler()
+        {
+            Services.BrowseInteractions(new[] { TypeInfo }, true);
         }
 
         private static string GetFullName(string typeNamespace, string typeName)

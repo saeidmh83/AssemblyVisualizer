@@ -23,7 +23,7 @@
             </Style>
 
             <DataTemplate DataType="{x:Type AncestryBrowser:TypeViewModel}">
-                <Grid>                    
+                <Grid>
                     <Border BorderThickness="0, 0, 0, 1"
                             BorderBrush="#888888">
                         <Grid>
@@ -39,19 +39,33 @@
                                                    FontWeight="Bold"                               
                                                    ToolTip="{Binding FullName}"
                                                    Margin="0, 6"/>
-                                        <Button x:Name="btnNavigate"
-                                                Grid.Column="1"
-                                                VerticalAlignment="Center"                                                                      
-                                                Command="{Binding NavigateCommand}" 
-                                                Margin="6, 0"
-                                                Width="24"
-                                                Height="24"
-                                                MinWidth="0"
-                                                MinHeight="0"
-                                                Background="{StaticResource RightArrowBlueDrawing}"
-                                                Style="{StaticResource ImageButtonStyle}"
-                                                ToolTip="Jump"
-                                                Visibility="Collapsed"/>
+                                        <StackPanel x:Name="buttonsPanel"
+                                                    Grid.Column="1"
+                                                    Orientation="Horizontal"
+                                                    Visibility="Collapsed"
+                                                    Margin="12, 0, 0, 4">
+                                            <Button VerticalAlignment="Center"                                                                      
+                                                    Command="{Binding BrowseInteractionsCommand}" 
+                                                    Margin="2, 0"
+                                                    Width="24"
+                                                    Height="24"
+                                                    MinWidth="0"
+                                                    MinHeight="0"
+                                                    Background="{StaticResource InteractionBrowserIconDrawing}"
+                                                    Style="{StaticResource ImageButtonStyle}"                                    
+                                                    ToolTip="Browse Interactions"/>
+                                            <Button x:Name="btnNavigate"                                                    
+                                                    VerticalAlignment="Center"                                                                      
+                                                    Command="{Binding NavigateCommand}" 
+                                                    Margin="2, 0"
+                                                    Width="24"
+                                                    Height="24"
+                                                    MinWidth="0"
+                                                    MinHeight="0"
+                                                    Background="{StaticResource RightArrowBlueDrawing}"
+                                                    Style="{StaticResource ImageButtonStyle}"
+                                                    ToolTip="Jump" />
+                                        </StackPanel>
                                     </Grid>
                                 </Expander.Header>
                                 <ItemsControl ItemsSource="{Binding Members}"
@@ -106,16 +120,16 @@
                         <Setter TargetName="brdConnectionArrow" Property="Visibility" Value="Collapsed"/>
                     </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="btnNavigate" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="buttonsPanel" Property="Visibility" Value="Visible"/>
                     </Trigger>
                 </DataTemplate.Triggers>
             </DataTemplate>
         </ResourceDictionary>
-    </Window.Resources>    
+    </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="Search" Executed="SearchExecuted"/>
     </Window.CommandBindings>
-    
+
     <Grid UseLayoutRounding="True"
           TextOptions.TextFormattingMode="Display">
         <Grid.ColumnDefinitions>

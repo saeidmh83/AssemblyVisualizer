@@ -40,12 +40,14 @@ namespace AssemblyVisualizer.InteractionBrowser
 
         private void LoadedHandler(object sender, RoutedEventArgs e)
         {
-            gridTypeSelector.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);                
+            gridTypeSelector.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);
+            typeList.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);   
         }
 
         private void UnloadedHandler(object sender, RoutedEventArgs e)
         {
             gridTypeSelector.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.None);
+            typeList.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.None);
         }
 
         public InteractionBrowserWindowViewModel ViewModel

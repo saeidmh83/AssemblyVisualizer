@@ -247,6 +247,7 @@
         <KeyBinding Key="T" Modifiers="Control" Command="{Binding ToggleSelectionViewCommand}"/>
         <KeyBinding Key="Escape" Command="{Binding ToggleSelectionViewCommand}"/>
         <KeyBinding Key="Enter" Command="{Binding ApplySelectionCommand}"/>
+        <KeyBinding Key="A" Modifiers="Control" Command="{Binding ToggleTypeListVisibilityCommand}"/>
     </Window.InputBindings>
     <Grid UseLayoutRounding="True"
           TextOptions.TextFormattingMode="Display">
@@ -327,16 +328,22 @@
                         <Run FontWeight="Bold"
                              Text="Enter: "/>
                         <Run Text="Apply selection"/>
+                        <LineBreak/>
+                        <Run FontWeight="Bold"
+                             Text="CTRL + A: "/>
+                        <Run Text="Toggle type list"/>
                 </TextBlock>
             </Border.ToolTip>
         </Border>
 
         <!--Displayed types list-->
-        <Border Background="White"
+        <Border x:Name="typeList"
+                Background="White"
                 CornerRadius="8"
                 Margin="0, 0, 12, 8"
                 VerticalAlignment="Bottom"
-                HorizontalAlignment="Right">
+                HorizontalAlignment="Right"
+                Visibility="{Binding IsTypeListVisible, Converter={StaticResource BoolVisibilityConverter}}">
             <ItemsControl ItemsSource="{Binding DisplayedTypes}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

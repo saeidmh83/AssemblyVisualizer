@@ -27,6 +27,7 @@ namespace AssemblyVisualizer.InteractionBrowser
         private IDictionary<TypeInfo, TypeViewModel> _viewModelCorrespondence = new Dictionary<TypeInfo, TypeViewModel>();
         private bool _isTypeSelectionVisible;
         private bool _showUnconnectedVertices;
+        private bool _isTypeListVisible = true;
 
         public InteractionBrowserWindowViewModel(IEnumerable<TypeInfo> types, bool drawGraph)
         {
@@ -36,6 +37,7 @@ namespace AssemblyVisualizer.InteractionBrowser
             ShowSelectionViewCommand = new DelegateCommand(ShowSelectionViewCommandHandler);
             HideSelectionViewCommand = new DelegateCommand(HideSelectionViewCommandHandler);
             ToggleSelectionViewCommand = new DelegateCommand(ToggleSelectionViewCommandHandler);
+            ToggleTypeListVisibilityCommand = new DelegateCommand(ToggleTypeListVisibilityCommandHandler);
             Commands = new ObservableCollection<UserCommand>
 			           	{
 			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
@@ -51,23 +53,7 @@ namespace AssemblyVisualizer.InteractionBrowser
             foreach (var hierarchy in _hierarchies)
             {
                 hierarchy.AllSelected = true;
-            }
-            /*if (_hierarchies.Count() > 1)
-            {
-                foreach (var hierarchy in _hierarchies)
-                {
-                    hierarchy.First().IsSelected = true;
-                }
-            }
-            else
-            {
-                var hierarchy = _hierarchies.Single();
-                foreach (var type in hierarchy)
-                {
-                    type.IsSelected = true;
-                    type.ShowInternals = true;
-                }
-            }*/
+            }            
 
             if (drawGraph)
             {
@@ -89,6 +75,7 @@ namespace AssemblyVisualizer.InteractionBrowser
         public ICommand ShowSelectionViewCommand { get; private set; }
         public ICommand HideSelectionViewCommand { get; private set; }
         public ICommand ToggleSelectionViewCommand { get; private set; }
+        public ICommand ToggleTypeListVisibilityCommand { get; private set; }
 
         public IEnumerable<HierarchyViewModel> Hierarchies
         {
@@ -124,6 +111,19 @@ namespace AssemblyVisualizer.InteractionBrowser
             {
                 _graph = value;
                 OnPropertyChanged("Graph");
+            }
+        }
+
+        public bool IsTypeListVisible
+        {
+            get
+            {
+                return _isTypeListVisible;
+            }
+            set
+            {
+                _isTypeListVisible = value;
+                OnPropertyChanged("IsTypeListVisible");
             }
         }
 
@@ -399,6 +399,11 @@ namespace AssemblyVisualizer.InteractionBrowser
         private void ToggleSelectionViewCommandHandler()
         {
             IsTypeSelectionVisible = !IsTypeSelectionVisible;
+        }
+
+        private void ToggleTypeListVisibilityCommandHandler()
+        {
+            IsTypeListVisible = !IsTypeListVisible;
         }
 
         private void OnOriginalSizeRequest()

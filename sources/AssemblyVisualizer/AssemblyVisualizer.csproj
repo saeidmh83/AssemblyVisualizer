@@ -131,6 +131,7 @@
     <Compile Include="HAL\ILSpy\BrowseInteractionsToolbarCommand.cs" />
     <Compile Include="HAL\ILSpy\ModelHelper.cs" />
     <Compile Include="HAL\Reflector\ModelHelper.cs" />
+    <Compile Include="InteractionBrowser\HierarchyViewModel.cs" />
     <Compile Include="InteractionBrowser\MemberGraph.cs" />
     <Compile Include="InteractionBrowser\InteractionBrowserWindow.xaml.cs">
       <DependentUpon>InteractionBrowserWindow.xaml</DependentUpon>

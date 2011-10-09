@@ -16,14 +16,16 @@ namespace AssemblyVisualizer.InteractionBrowser
     {
         private TypeInfo _typeInfo;
         private bool _isSelected;
-        private bool _showInternals;
+        private bool _showInternals = true;
         private InteractionBrowserWindowViewModel _windowViewModel;
-        private SolidColorBrush _background;
+        private SolidColorBrush _background;        
 
         public TypeViewModel(TypeInfo typeInfo, InteractionBrowserWindowViewModel windowViewModel)
         {
             _typeInfo = typeInfo;
             _windowViewModel = windowViewModel;
+
+            Hierarchies = new List<HierarchyViewModel>();
         }
 
         public string Name 
@@ -52,9 +54,8 @@ namespace AssemblyVisualizer.InteractionBrowser
             }
             set
             {
-                _isSelected = value;
-                OnPropertyChanged("IsSelected");
-                _windowViewModel.ReportSelectionChanged();
+                DefineIsSelected(value);
+                NotifyHierarchiesSelectionChanged();
             }
         }
 
@@ -71,6 +72,8 @@ namespace AssemblyVisualizer.InteractionBrowser
                 _windowViewModel.ReportSelectionChanged();
             }
         }
+
+        public IList<HierarchyViewModel> Hierarchies { get; private set; }
 
         public Brush Foreground
         {
@@ -92,6 +95,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                 return new SolidColorBrush(foregroundColor);
             }
         }
+
         public SolidColorBrush Background 
         {
             get
@@ -104,6 +108,24 @@ namespace AssemblyVisualizer.InteractionBrowser
                 OnPropertyChanged("Background");
                 OnPropertyChanged("Foreground");
             }
-        }        
+        }
+
+        public void DefineIsSelected(bool isSelected)
+        {
+            _isSelected = isSelected;
+            OnPropertyChanged("IsSelected");
+            _windowViewModel.ReportSelectionChanged();
+        }
+
+        private void NotifyHierarchiesSelectionChanged()
+        {
+            if (Hierarchies.Count > 0)
+            {
+                foreach (var hierarchy in Hierarchies)
+                {
+                    hierarchy.NotifySelectionChanged(); 
+                }
+            }
+        }
     }
 }

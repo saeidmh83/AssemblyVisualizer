@@ -22,25 +22,25 @@ using AssemblyVisualizer.Behaviors;
 namespace AssemblyVisualizer.InteractionBrowser
 {   
     partial class InteractionBrowserWindow : Window
-    {
+    {  
         public InteractionBrowserWindow(IEnumerable<TypeInfo> types, bool drawGraph)
         {
-            InitializeComponent();
-
-            Loaded += new RoutedEventHandler(LoadedHandler);
-            Unloaded += new RoutedEventHandler(UnloadedHandler);
+            InitializeComponent();            
 
             ViewModel = new InteractionBrowserWindowViewModel(types, drawGraph);
-
             ViewModel.FillGraphRequest += FillGraphRequestHandler;
-            ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;    
+
+            ViewModel.OriginalSizeRequest += OriginalSizeRequestHandler;
+
+            Loaded += new RoutedEventHandler(LoadedHandler);
+            Unloaded += new RoutedEventHandler(UnloadedHandler);     
 
             WindowManager.AddInteractionBrowser(this); 
         }
 
         private void LoadedHandler(object sender, RoutedEventArgs e)
         {
-            gridTypeSelector.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);
+            gridTypeSelector.SetValue(VisibilityAnimation.AnimationTypeProperty, VisibilityAnimation.AnimationType.Fade);                
         }
 
         private void UnloadedHandler(object sender, RoutedEventArgs e)

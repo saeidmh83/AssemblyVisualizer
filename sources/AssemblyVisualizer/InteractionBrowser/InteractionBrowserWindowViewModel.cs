@@ -23,7 +23,7 @@ namespace AssemblyVisualizer.InteractionBrowser
         private Dictionary<MemberInfo, MemberViewModel> _viewModelsDictionary = new Dictionary<MemberInfo, MemberViewModel>();
         private MemberGraph _graph;
         private IEnumerable<TypeInfo> _types;
-        private IEnumerable<IEnumerable<TypeViewModel>> _hierarchies;
+        private IEnumerable<HierarchyViewModel> _hierarchies;
         private IDictionary<TypeInfo, TypeViewModel> _viewModelCorrespondence = new Dictionary<TypeInfo, TypeViewModel>();
         private bool _isTypeSelectionVisible;
         private bool _showUnconnectedVertices;
@@ -42,14 +42,17 @@ namespace AssemblyVisualizer.InteractionBrowser
 			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
                             new UserCommand(Resources.SelectTypes, ShowSelectionViewCommand)
                             //new UserCommand(Resources.SearchInGraph, ShowSearchCommand),                                                    
-			           	};
+			           	};            
 
             _hierarchies = types
-                .Select(GetHierarchy)
-                .Select(h => h.Select(GetViewModelForType).ToArray())
+                .Select(GetHierarchy)                
                 .ToArray();
 
-            if (_hierarchies.Count() > 1)
+            foreach (var hierarchy in _hierarchies)
+            {
+                hierarchy.AllSelected = true;
+            }
+            /*if (_hierarchies.Count() > 1)
             {
                 foreach (var hierarchy in _hierarchies)
                 {
@@ -64,7 +67,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                     type.IsSelected = true;
                     type.ShowInternals = true;
                 }
-            }
+            }*/
 
             if (drawGraph)
             {
@@ -87,7 +90,7 @@ namespace AssemblyVisualizer.InteractionBrowser
         public ICommand HideSelectionViewCommand { get; private set; }
         public ICommand ToggleSelectionViewCommand { get; private set; }
 
-        public IEnumerable<IEnumerable<TypeViewModel>> Hierarchies
+        public IEnumerable<HierarchyViewModel> Hierarchies
         {
             get
             {
@@ -105,7 +108,7 @@ namespace AssemblyVisualizer.InteractionBrowser
             get
             {
                 return _hierarchies
-                    .SelectMany(h => h.Where(t => t.IsSelected))
+                    .SelectMany(h => h.Types.Where(t => t.IsSelected))
                     .Distinct()
                     .ToArray();
             }
@@ -184,18 +187,18 @@ namespace AssemblyVisualizer.InteractionBrowser
             return viewModel;
         }
 
-        private List<TypeInfo> GetHierarchy(TypeInfo typeInfo)
+        private HierarchyViewModel GetHierarchy(TypeInfo typeInfo)
         {
-            var hierarchy = new List<TypeInfo>();
+            var hierarchyList = new List<TypeInfo>();
             var currentType = typeInfo;
-            hierarchy.Add(typeInfo);
+            hierarchyList.Add(typeInfo);
             while (currentType.BaseType != null)
             {
                 var t = currentType.BaseType;
-                hierarchy.Add(t);
+                hierarchyList.Add(t);
                 currentType = t;
             }
-            return hierarchy;
+            return new HierarchyViewModel(hierarchyList.Select(GetViewModelForType).ToArray());
         }
 
         private MemberGraph CreateGraph(IEnumerable<TypeViewModel> typeViewModels)

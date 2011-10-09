@@ -57,8 +57,6 @@ namespace AssemblyVisualizer.HAL.Reflector
 
         private void BrowseAssemblyHandler(object sender, EventArgs e)
         {
-            EnsureApplicationAlive();
-
             var item = _assemblyBrowser.ActiveItem as IAssembly;
             var assemblies = new[] { HAL.Converter.Assembly(item) };
             if (WindowManager.AssemblyBrowsers.Count > 0)
@@ -75,8 +73,6 @@ namespace AssemblyVisualizer.HAL.Reflector
 
         private void VisualizeDescendantsHandler(object sender, EventArgs e)
         {
-            EnsureApplicationAlive();
-
             var item = _assemblyBrowser.ActiveItem as ITypeDeclaration;
             var type = HAL.Converter.Type(item);
             var assembly = type.Module.Assembly;
@@ -87,9 +83,7 @@ namespace AssemblyVisualizer.HAL.Reflector
         }
 
         private void BrowseAncestryHandler(object sender, EventArgs e)
-        {
-            EnsureApplicationAlive();
-
+        {            
             var item = _assemblyBrowser.ActiveItem as ITypeDeclaration;
 
             var window = new AncestryBrowserWindow(HAL.Converter.Type(item));
@@ -98,9 +92,7 @@ namespace AssemblyVisualizer.HAL.Reflector
         }
 
         private void BrowseDependenciesHandler(object sender, EventArgs e)
-        {
-            EnsureApplicationAlive();
-
+        {        
             var item = _assemblyBrowser.ActiveItem as IAssembly;
 
             var window = new DependencyBrowserWindow(new [] { HAL.Converter.Assembly(item) });
@@ -109,9 +101,7 @@ namespace AssemblyVisualizer.HAL.Reflector
         }
 
         private void BrowseInteractionsHandler(object sender, EventArgs e)
-        {
-            EnsureApplicationAlive();
-
+        {          
             var item = _assemblyBrowser.ActiveItem as ITypeDeclaration;
 
             var window = new InteractionBrowserWindow(new [] { HAL.Converter.Type(item) }, true);
@@ -122,15 +112,7 @@ namespace AssemblyVisualizer.HAL.Reflector
         public void Unload()
         {
             
-        }
-
-        private static void EnsureApplicationAlive()
-        {            
-            if (Application.Current == null)
-            {                
-                new App { ShutdownMode = ShutdownMode.OnExplicitShutdown };
-            }           
-        }
+        }        
     }
 }
 #endif

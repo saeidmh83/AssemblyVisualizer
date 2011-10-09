@@ -82,7 +82,9 @@
                                                             <ColorAnimation Storyboard.TargetName="brdSelectionBrush"
                                                                             Storyboard.TargetProperty="Color"
                                                                             To="#88FFA500"
-                                                                            Duration="0:0:0.3"/>
+                                                                            Duration="0:0:0.3"
+                                                                            AccelerationRatio="0.2"
+                                                                            DecelerationRatio="0.2"/>
                                                         </Storyboard>
                                                     </BeginStoryboard>
                                                 </DataTrigger.EnterActions>
@@ -92,7 +94,9 @@
                                                             <ColorAnimation Storyboard.TargetName="brdSelectionBrush"
                                                                             Storyboard.TargetProperty="Color"
                                                                             To="Transparent"
-                                                                            Duration="0:0:0.3"/>
+                                                                            Duration="0:0:0.3"
+                                                                            AccelerationRatio="0.2"
+                                                                            DecelerationRatio="0.2"/>
                                                         </Storyboard>
                                                     </BeginStoryboard>
                                                 </DataTrigger.ExitActions>
@@ -104,7 +108,9 @@
                                                             <ColorAnimation Storyboard.TargetName="brdSearchBrush"
                                                                             Storyboard.TargetProperty="Color"
                                                                             To="#88FFFF00"
-                                                                            Duration="0:0:0.3"/>
+                                                                            Duration="0:0:0.3"
+                                                                            AccelerationRatio="0.2"
+                                                                            DecelerationRatio="0.2"/>
                                                         </Storyboard>
                                                     </BeginStoryboard>
                                                 </DataTrigger.EnterActions>
@@ -114,7 +120,9 @@
                                                             <ColorAnimation Storyboard.TargetName="brdSearchBrush"
                                                                             Storyboard.TargetProperty="Color"
                                                                             To="Transparent"
-                                                                            Duration="0:0:0.3"/>
+                                                                            Duration="0:0:0.3"
+                                                                            AccelerationRatio="0.2"
+                                                                            DecelerationRatio="0.2"/>
                                                         </Storyboard>
                                                     </BeginStoryboard>
                                                 </DataTrigger.ExitActions>

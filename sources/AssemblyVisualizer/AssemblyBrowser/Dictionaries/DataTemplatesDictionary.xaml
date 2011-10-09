@@ -115,7 +115,9 @@
                             <ColorAnimation Storyboard.TargetName="brdMarkBrush"
                                                                             Storyboard.TargetProperty="Color"
                                                                             To="#3578FF"
-                                                                            Duration="0:0:0.3"/>
+                                                                            Duration="0:0:0.3"
+                                                                            AccelerationRatio="0.2"
+                                                                            DecelerationRatio="0.2"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </DataTrigger.EnterActions>
@@ -125,7 +127,9 @@
                             <ColorAnimation Storyboard.TargetName="brdMarkBrush"
                                                                             Storyboard.TargetProperty="Color"
                                                                             To="Transparent"
-                                                                            Duration="0:0:0.3"/>
+                                                                            Duration="0:0:0.3"
+                                                                            AccelerationRatio="0.2"
+                                                                            DecelerationRatio="0.2"/>
                         </Storyboard>
                     </BeginStoryboard>
                 </DataTrigger.ExitActions>

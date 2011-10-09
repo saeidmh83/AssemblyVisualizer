@@ -49,19 +49,21 @@ namespace AssemblyVisualizer.HAL.Reflector
                 yield break;
             }
 
-            var instructions = analyzedMethod.Body;
-            /*foreach (Instruction instr in analyzedMethod.Body.Instructions)
+            var body = analyzedMethod.Body as IMethodBody;
+            var instructions = body.Instructions.OfType<IInstruction>();
+            
+            foreach (IInstruction instr in instructions)
             {
-                MethodReference mr = instr.Operand as MethodReference;
+                IMethodReference mr = instr.Value as IMethodReference;
                 if (mr != null)
                 {
-                    MethodDefinition def = mr.Resolve();
+                    IMethodDeclaration def = mr.Resolve();
                     if (def != null)
                     {
                         yield return HAL.Converter.Method(def);
                     }
                 }
-            }*/
+            }
             yield break;
         }
 
@@ -73,19 +75,21 @@ namespace AssemblyVisualizer.HAL.Reflector
                 yield break;
             }
 
-            var instructions = analyzedMethod.Body;
-            /*foreach (Instruction instr in analyzedMethod.Body.Instructions)
+            var body = analyzedMethod.Body as IMethodBody;
+            var instructions = body.Instructions.OfType<IInstruction>();
+
+            foreach (IInstruction instr in instructions)
             {
-                FieldReference fr = instr.Operand as FieldReference;
+                IFieldReference fr = instr.Value as IFieldReference;
                 if (fr != null)
                 {
-                    FieldDefinition def = fr.Resolve();
+                    IFieldDeclaration def = fr.Resolve();
                     if (def != null)
                     {
                         yield return HAL.Converter.Field(def);
                     }
                 }
-            }*/
+            }
             yield break;
         }
 

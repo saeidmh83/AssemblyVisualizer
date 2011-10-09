@@ -383,24 +383,12 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 
         private void BrowseAncestryCommandHandler()
         {
-            var window = new AncestryBrowserWindow(_typeInfo);
-
-#if ILSpy
-            window.Owner = Services.MainWindow;
-#endif
-
-            window.Show();
+            Services.BrowseAncestry(TypeInfo);
         }
 
         private void BrowseInteractionsCommandHandler()
         {
-            var window = new InteractionBrowserWindow(new[] { TypeInfo }, true);
-
-#if ILSpy
-            window.Owner = Services.MainWindow;
-#endif
-
-            window.Show();
+            Services.BrowseInteractions(new[] { TypeInfo }, true);
         }
 	}
 }

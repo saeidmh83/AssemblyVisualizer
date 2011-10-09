@@ -12,6 +12,8 @@ using AssemblyVisualizer.Model;
 #if Reflector
 using AssemblyVisualizer.HAL.Reflector;
 using Reflector.CodeModel;
+using AssemblyVisualizer.InteractionBrowser;
+using AssemblyVisualizer.AncestryBrowser;
 #endif
 
 #if ILSpy
@@ -23,22 +25,32 @@ using System.Windows;
 namespace AssemblyVisualizer.HAL
 {
     class Services
-    {
-        public static bool SupportsInteractionBrowser
-        {
-            get
-            { 
-#if ILSpy
-                return true;
-#elif Reflector
-                return false;
-#endif
-            }
-        }
-
+    { 
         public static void BrowseAssemblies(IEnumerable<AssemblyInfo> assemblies)
         {
             var window = new AssemblyBrowserWindow(assemblies);
+#if ILSpy
+            window.Owner = MainWindow;
+#elif Reflector
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(window);
+#endif
+            window.Show();
+        }
+
+        public static void BrowseInteractions(IEnumerable<TypeInfo> types, bool drawGraph)
+        {
+            var window = new InteractionBrowserWindow(types, drawGraph);
+#if ILSpy
+            window.Owner = MainWindow;
+#elif Reflector
+            System.Windows.Forms.Integration.ElementHost.EnableModelessKeyboardInterop(window);
+#endif
+            window.Show();
+        }
+
+        public static void BrowseAncestry(TypeInfo type)
+        {
+            var window = new AncestryBrowserWindow(type);
 #if ILSpy
             window.Owner = MainWindow;
 #elif Reflector

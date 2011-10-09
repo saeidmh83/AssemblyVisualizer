@@ -33,7 +33,7 @@ namespace AssemblyVisualizer.HAL.Reflector
             _commandBarManager.CommandBars["Browser.Assembly"].Items.AddButton("Browse Assembly", BrowseAssemblyHandler);
             _commandBarManager.CommandBars["Browser.Assembly"].Items.AddButton("Browse Dependencies", BrowseDependenciesHandler);
             _commandBarManager.CommandBars["Browser.TypeDeclaration"].Items.AddButton("Browse Ancestry", BrowseAncestryHandler);
-            //_commandBarManager.CommandBars["Browser.TypeDeclaration"].Items.AddButton("Browse Interactions", BrowseInteractionsHandler);
+            _commandBarManager.CommandBars["Browser.TypeDeclaration"].Items.AddButton("Browse Interactions", BrowseInteractionsHandler);
             _commandBarManager.CommandBars["Browser.TypeDeclaration"].Items.AddButton("Visualize Descendants", VisualizeDescendantsHandler);
         }
 

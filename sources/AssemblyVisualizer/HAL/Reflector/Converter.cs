@@ -460,7 +460,10 @@ namespace AssemblyVisualizer.HAL.Reflector
 
         public FieldInfo Field(object field)
         {
-            return Field(field as IFieldDeclaration);
+            var fieldDeclaration = field as IFieldDeclaration;
+            var typeDeclaration = fieldDeclaration.DeclaringType as ITypeDeclaration;
+            var typeInfo = Type(typeDeclaration);
+            return Field(fieldDeclaration, typeInfo);            
         }
 
         public PropertyInfo Property(object property)
@@ -470,7 +473,7 @@ namespace AssemblyVisualizer.HAL.Reflector
 
         public EventInfo Event(object ev)
         {
-            return Event(ev as EventDeclaration);
+            return Event(ev as IEventDeclaration);
         }
     }
 }

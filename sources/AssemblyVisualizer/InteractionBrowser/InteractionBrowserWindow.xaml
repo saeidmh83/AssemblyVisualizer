@@ -30,7 +30,10 @@
                                         <Border x:Name="brd"
                                                 Background="{Binding Background}"
                                                 CornerRadius="8"
-                                                BorderThickness="1">
+                                                BorderThickness="0">
+                                            <Border.BorderBrush>
+                                                <SolidColorBrush x:Name="brdBrush" Color="Transparent"/>
+                                            </Border.BorderBrush>
                                             <Grid x:Name="grid"
                                                   Margin="4, 2"                                                  
                                                   ToolTip="{Binding ToolTip}"
@@ -74,10 +77,48 @@
                                             <Trigger SourceName="grid" Property="IsMouseOver" Value="True">
                                                 <Setter TargetName="commandsPanel" Property="Visibility" Value="Visible"/>
                                             </Trigger>
-                                            <!--<DataTrigger Binding="{Binding (Graph:GraphElementBehaviour.IsSemiHighlighted), RelativeSource={RelativeSource AncestorType={x:Type Graph:VertexControl}}}" Value="True">
-                                                <Setter TargetName="brd" Property="Background" Value="White" />
-                                                <Setter TargetName="brd" Property="BorderBrush" Value="Black" />
-                                            </DataTrigger>-->
+                                            <DataTrigger Binding="{Binding (Graph:GraphElementBehaviour.IsSemiHighlighted), RelativeSource={RelativeSource AncestorType={x:Type Graph:VertexControl}}}" Value="True">
+                                                <DataTrigger.EnterActions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <ColorAnimation Storyboard.TargetName="brdBrush"
+                                                                            Storyboard.TargetProperty="Color"
+                                                                            To="#FF000000"
+                                                                            BeginTime="0:0:2.0"
+                                                                            Duration="0:0:0.4"
+                                                                            AccelerationRatio="0.2"
+                                                                            DecelerationRatio="0.2" />
+                                                            <ThicknessAnimation Storyboard.TargetName="brd"
+                                                                                Storyboard.TargetProperty="BorderThickness"
+                                                                                To="3, 2"
+                                                                                BeginTime="0:0:2.0"
+                                                                                Duration="0:0:0.4"
+                                                                                AccelerationRatio="0.2"
+                                                                                DecelerationRatio="0.2"/>
+                                                        </Storyboard>                                                       
+                                                    </BeginStoryboard>
+                                                    </DataTrigger.EnterActions>
+                                                    <DataTrigger.ExitActions>
+                                                        <BeginStoryboard>
+                                                            <Storyboard>
+                                                                <ColorAnimation Storyboard.TargetName="brdBrush"
+                                                                                Storyboard.TargetProperty="Color"
+                                                                                To="#FFFFFFFF"                                                                                
+                                                                                Duration="0:0:0.4"
+                                                                                AccelerationRatio="0.2"
+                                                                                DecelerationRatio="0.2" />
+                                                            <ThicknessAnimation Storyboard.TargetName="brd"
+                                                                                Storyboard.TargetProperty="BorderThickness"
+                                                                                To="0"                                                                                
+                                                                                Duration="0:0:0.2"
+                                                                                AccelerationRatio="0.2"
+                                                                                DecelerationRatio="0.2"/>
+                                                        </Storyboard>
+                                                        </BeginStoryboard>
+                                                    </DataTrigger.ExitActions>
+                                                    <!--Setter TargetName="brd" Property="Background" Value="White" />
+                                                <Setter TargetName="brd" Property="BorderBrush" Value="Black" />-->
+                                            </DataTrigger>
                                         </DataTemplate.Triggers>
 
                                     </DataTemplate>
@@ -85,7 +126,7 @@
                             </ContentPresenter>
                         </ControlTemplate>
                     </Setter.Value>
-                </Setter>                
+                </Setter>
             </Style>
 
             <!--Edge style-->
@@ -310,7 +351,7 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-                          
+
         </Border>
 
         <!--Type selector-->
@@ -401,7 +442,7 @@
                     <TextBlock Text="{Binding MembersCount}"
                                FontWeight="Bold"/>
                 </TextBlock>
-                
+
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         Grid.Row="3"

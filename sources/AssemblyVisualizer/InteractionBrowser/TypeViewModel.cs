@@ -31,6 +31,11 @@ namespace AssemblyVisualizer.InteractionBrowser
             get { return _typeInfo.Name; }
         }
 
+        public string FullName
+        {
+            get { return _typeInfo.FullName; }
+        }
+
         public TypeInfo TypeInfo
         {
             get

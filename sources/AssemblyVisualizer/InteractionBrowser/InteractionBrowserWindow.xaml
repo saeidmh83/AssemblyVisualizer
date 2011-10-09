@@ -302,7 +302,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"
-                                   ToolTip="{Binding FullName}"
+                                   ToolTip="{Binding FullName}"                                   
                                    FontSize="13"
                                    Margin="3"
                                    Foreground="{Binding Foreground}"

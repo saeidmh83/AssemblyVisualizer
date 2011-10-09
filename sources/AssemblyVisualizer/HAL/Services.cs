@@ -8,18 +8,18 @@ using System.Linq;
 using System.Text;
 using AssemblyVisualizer.AssemblyBrowser;
 using AssemblyVisualizer.Model;
+using System.Windows;
+using AssemblyVisualizer.InteractionBrowser;
+using AssemblyVisualizer.AncestryBrowser;
 
 #if Reflector
 using AssemblyVisualizer.HAL.Reflector;
 using Reflector.CodeModel;
-using AssemblyVisualizer.InteractionBrowser;
-using AssemblyVisualizer.AncestryBrowser;
 #endif
 
 #if ILSpy
 using ICSharpCode.ILSpy;
 using Mono.Cecil;
-using System.Windows;
 #endif
 
 namespace AssemblyVisualizer.HAL

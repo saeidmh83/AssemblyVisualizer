@@ -344,7 +344,8 @@
                 VerticalAlignment="Bottom"
                 HorizontalAlignment="Right"
                 Visibility="{Binding IsTypeListVisible, Converter={StaticResource BoolVisibilityConverter}}">
-            <ItemsControl ItemsSource="{Binding DisplayedTypes}">
+            <ItemsControl ItemsSource="{Binding DisplayedTypes}"
+                          MouseDoubleClick="TypeListMouseDoubleClick">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Name}"

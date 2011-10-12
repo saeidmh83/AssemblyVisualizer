@@ -116,5 +116,10 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 				handler();
 			}
 		}
+
+        private void AssemblyListMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ViewModel.IsAssemblyListVisible = false;
+        }
 	}
 }

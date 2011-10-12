@@ -78,6 +78,11 @@ namespace AssemblyVisualizer.InteractionBrowser
         {
             var animation = new DoubleAnimation(1, TimeSpan.FromSeconds(0.5));
             zoomControl.BeginAnimation(ZoomControl.ZoomProperty, animation);
+        }
+
+        private void TypeListMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ViewModel.IsTypeListVisible = false;
         }  
     }
 }

@@ -273,7 +273,8 @@
                 CornerRadius="8"
                 Margin="0, 0, 12, 8"
                 Visibility="{Binding IsAssemblyListVisible, Converter={StaticResource boolVisibilityConverter}}">
-            <ItemsControl ItemsSource="{Binding Assemblies}"/>
+            <ItemsControl ItemsSource="{Binding Assemblies}"
+                          MouseDoubleClick="AssemblyListMouseDoubleClick"/>
         </Border>        
         
         <StackPanel VerticalAlignment="Bottom"

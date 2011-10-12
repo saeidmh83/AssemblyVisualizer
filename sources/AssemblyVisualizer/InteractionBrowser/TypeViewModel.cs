@@ -87,9 +87,9 @@ namespace AssemblyVisualizer.InteractionBrowser
                 var foregroundColor = new Color 
                 { 
                     A = 255, 
-                    R = (byte)(backgroundColor.R / 2), 
-                    G = (byte)(backgroundColor.G / 2),
-                    B = (byte)(backgroundColor.B / 2)
+                    R = (byte)(backgroundColor.R / 2.5), 
+                    G = (byte)(backgroundColor.G / 2.5),
+                    B = (byte)(backgroundColor.B / 2.5)
                 };
                 return new SolidColorBrush(foregroundColor);
             }

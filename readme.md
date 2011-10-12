@@ -27,7 +27,7 @@ Usage: 'Browse Ancestry' context menu item for types.
 
 ### Interaction browser
 
-Type member interactions visualizer.
+Type member interactions visualizer.    
 Usage: 'Browse Interactions' context menu item for types.
 
 ### Dependency browser

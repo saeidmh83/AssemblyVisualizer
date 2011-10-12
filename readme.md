@@ -25,6 +25,11 @@ Usage: 'Browse Assembly' context menu item for assemblies,
 Type hierarchy visualizer from selected type to the inheritance root.    
 Usage: 'Browse Ancestry' context menu item for types.
 
+### Interaction browser
+
+Type member interactions visualizer.
+Usage: 'Browse Interactions' context menu item for types.
+
 ### Dependency browser
 
 Assembly references visualizer.    

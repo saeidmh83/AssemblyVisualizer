@@ -572,7 +572,11 @@ namespace AssemblyVisualizer.Controls.ZoomControl
                 }
                 return;
             }
-            var animation = new DoubleAnimation(toValue, duration);
+            var animation = new DoubleAnimation(toValue, duration)
+                                {
+                                    AccelerationRatio = 0.2,
+                                    DecelerationRatio = 0.2
+                                };
             if (dp == ZoomProperty)
             {
                 _zoomAnimCount++;

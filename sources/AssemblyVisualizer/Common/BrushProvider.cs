@@ -28,7 +28,6 @@ namespace AssemblyVisualizer.Common
             public Brush Background { get; private set; }
         }
 
-
         static BrushProvider()
         {
             var brushConverter = new BrushConverter();

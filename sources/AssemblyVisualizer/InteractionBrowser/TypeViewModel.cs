@@ -84,13 +84,12 @@ namespace AssemblyVisualizer.InteractionBrowser
                     return Brushes.Gray;
                 }
                 var backgroundColor = Background.Color;
-                var multiplier = Math.Min(255.0 / backgroundColor.R, Math.Min(255.0 / backgroundColor.G, 255.0 / backgroundColor.B));
                 var foregroundColor = new Color 
                 { 
                     A = 255, 
-                    R = (byte)(backgroundColor.R / 3), 
-                    G = (byte)(backgroundColor.G / 3),
-                    B = (byte)(backgroundColor.B / 3)
+                    R = (byte)(backgroundColor.R / 2), 
+                    G = (byte)(backgroundColor.G / 2),
+                    B = (byte)(backgroundColor.B / 2)
                 };
                 return new SolidColorBrush(foregroundColor);
             }

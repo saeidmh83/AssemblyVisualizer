@@ -267,6 +267,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                 var typeViewModel = GetViewModelForType(fieldInfo.DeclaringType);
                 vm = _viewModelsDictionary[fieldInfo];
                 vm.Background = typeViewModel.Background;
+                vm.Foreground = typeViewModel.Foreground;
                 return vm;
             }   
 
@@ -278,11 +279,13 @@ namespace AssemblyVisualizer.InteractionBrowser
                 {
                     vm = _viewModelsDictionary[eventInfo];
                     vm.Background = typeViewModel.Background;
+                    vm.Foreground = typeViewModel.Foreground;
                     return vm;
                 }                
                 var evm = new EventViewModel(eventInfo)
                 {
                     Background = typeViewModel.Background,
+                    Foreground = typeViewModel.Foreground,
                     ToolTip = typeViewModel.Name
                 };
                 _viewModelsDictionary.Add(eventInfo, evm);
@@ -293,6 +296,7 @@ namespace AssemblyVisualizer.InteractionBrowser
             var fvm = new FieldViewModel(fieldInfo)
             {
                 Background = tvm.Background,
+                Foreground = tvm.Foreground,
                 ToolTip = tvm.Name
             };
             _viewModelsDictionary.Add(fieldInfo, fvm);
@@ -307,6 +311,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                 var typeViewModel = GetViewModelForType(methodInfo.DeclaringType);
                 vm = _viewModelsDictionary[methodInfo];
                 vm.Background = typeViewModel.Background;
+                vm.Foreground = typeViewModel.Foreground;
                 return vm;
             }            
 
@@ -319,11 +324,13 @@ namespace AssemblyVisualizer.InteractionBrowser
                 {
                     vm = _viewModelsDictionary[propertyInfo];
                     vm.Background = typeViewModel.Background;
+                    vm.Foreground = typeViewModel.Foreground;
                     return vm;
                 }                
                 var pvm = new PropertyViewModel(propertyInfo)
                 {
                     Background = typeViewModel.Background,
+                    Foreground = typeViewModel.Foreground,
                     ToolTip = typeViewModel.Name
                 };
                 _viewModelsDictionary.Add(propertyInfo, pvm);
@@ -337,11 +344,13 @@ namespace AssemblyVisualizer.InteractionBrowser
                 {
                     vm = _viewModelsDictionary[eventInfo];
                     vm.Background = typeViewModel.Background;
+                    vm.Foreground = typeViewModel.Foreground;
                     return vm;
                 }                
                 var evm = new EventViewModel(eventInfo)
                 {
                     Background = typeViewModel.Background,
+                    Foreground = typeViewModel.Foreground,
                     ToolTip = typeViewModel.Name
                 };
                 _viewModelsDictionary.Add(eventInfo, evm);
@@ -352,6 +361,7 @@ namespace AssemblyVisualizer.InteractionBrowser
             var mvm = new MethodViewModel(methodInfo)
             {
                 Background = tvm.Background,
+                Foreground = tvm.Foreground,
                 ToolTip = tvm.Name
             };
             _viewModelsDictionary.Add(methodInfo, mvm);

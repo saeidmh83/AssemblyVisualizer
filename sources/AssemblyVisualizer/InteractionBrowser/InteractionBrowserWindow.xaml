@@ -29,11 +29,9 @@
                                     <DataTemplate>
                                         <Border x:Name="brd"
                                                 Background="{Binding Background}"
+                                                BorderBrush="{Binding Foreground}"
                                                 CornerRadius="8"
-                                                BorderThickness="0">
-                                            <Border.BorderBrush>
-                                                <SolidColorBrush x:Name="brdBrush" Color="Transparent"/>
-                                            </Border.BorderBrush>
+                                                BorderThickness="1">                                            
                                             <Grid x:Name="grid"
                                                   Margin="4, 2"                                                  
                                                   ToolTip="{Binding ToolTip}"
@@ -76,49 +74,8 @@
                                         <DataTemplate.Triggers>
                                             <Trigger SourceName="grid" Property="IsMouseOver" Value="True">
                                                 <Setter TargetName="commandsPanel" Property="Visibility" Value="Visible"/>
-                                            </Trigger>
-                                            <DataTrigger Binding="{Binding (Graph:GraphElementBehaviour.IsSemiHighlighted), RelativeSource={RelativeSource AncestorType={x:Type Graph:VertexControl}}}" Value="True">
-                                                <DataTrigger.EnterActions>
-                                                    <BeginStoryboard>
-                                                        <Storyboard>
-                                                            <ColorAnimation Storyboard.TargetName="brdBrush"
-                                                                            Storyboard.TargetProperty="Color"
-                                                                            To="Black"
-                                                                            BeginTime="0:0:1.5"
-                                                                            Duration="0:0:0.4"
-                                                                            AccelerationRatio="0.2"
-                                                                            DecelerationRatio="0.2"/>
-                                                            <ThicknessAnimation Storyboard.TargetName="brd"
-                                                                                Storyboard.TargetProperty="BorderThickness"
-                                                                                To="3, 2"
-                                                                                BeginTime="0:0:1.5"
-                                                                                Duration="0:0:0.4"
-                                                                                AccelerationRatio="0.2"
-                                                                                DecelerationRatio="0.2"/>
-                                                        </Storyboard>                                                       
-                                                    </BeginStoryboard>
-                                                    </DataTrigger.EnterActions>
-                                                    <DataTrigger.ExitActions>
-                                                        <BeginStoryboard>
-                                                            <Storyboard>
-                                                                <ColorAnimation Storyboard.TargetName="brdBrush"
-                                                                                Storyboard.TargetProperty="Color"
-                                                                                To="Transparent" 
-                                                                                Duration="0:0:0.2"
-                                                                                AccelerationRatio="0.2"
-                                                                                DecelerationRatio="0.2"/>
-                                                                <ThicknessAnimation Storyboard.TargetName="brd"
-                                                                                    Storyboard.TargetProperty="BorderThickness"
-                                                                                    To="0"
-                                                                                    Duration="0:0:0.2"
-                                                                                    AccelerationRatio="0.2"
-                                                                                    DecelerationRatio="0.2"/>
-                                                        </Storyboard>
-                                                        </BeginStoryboard>
-                                                    </DataTrigger.ExitActions>                                                    
-                                            </DataTrigger>
+                                            </Trigger>                                            
                                         </DataTemplate.Triggers>
-
                                     </DataTemplate>
                                 </ContentPresenter.ContentTemplate>
                             </ContentPresenter>

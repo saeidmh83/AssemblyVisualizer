@@ -18,7 +18,8 @@ namespace AssemblyVisualizer.InteractionBrowser
         private bool _isSelected;
         private bool _showInternals = true;
         private InteractionBrowserWindowViewModel _windowViewModel;
-        private SolidColorBrush _background;        
+        private SolidColorBrush _background;
+        private SolidColorBrush _foreground = Brushes.Gray;
 
         public TypeViewModel(TypeInfo typeInfo, InteractionBrowserWindowViewModel windowViewModel)
         {
@@ -75,23 +76,16 @@ namespace AssemblyVisualizer.InteractionBrowser
 
         public IList<HierarchyViewModel> Hierarchies { get; private set; }
 
-        public Brush Foreground
+        public SolidColorBrush Foreground
         {
             get 
             {
-                if (Background == null)
-                {
-                    return Brushes.Gray;
-                }
-                var backgroundColor = Background.Color;
-                var foregroundColor = new Color 
-                { 
-                    A = 255, 
-                    R = (byte)(backgroundColor.R / 2.5), 
-                    G = (byte)(backgroundColor.G / 2.5),
-                    B = (byte)(backgroundColor.B / 2.5)
-                };
-                return new SolidColorBrush(foregroundColor);
+                return _foreground;
+            }
+            set
+            {
+                _foreground = value;
+                OnPropertyChanged("Foreground");
             }
         }
 
@@ -105,7 +99,7 @@ namespace AssemblyVisualizer.InteractionBrowser
             {
                 _background = value;
                 OnPropertyChanged("Background");
-                OnPropertyChanged("Foreground");
+                Foreground = GetForeground(value);
             }
         }
 
@@ -125,6 +119,23 @@ namespace AssemblyVisualizer.InteractionBrowser
                     hierarchy.NotifySelectionChanged(); 
                 }
             }
+        }
+
+        private static SolidColorBrush GetForeground(SolidColorBrush background)
+        {
+            if (background == null)
+            {
+                return Brushes.Gray;
+            }
+            var backgroundColor = background.Color;
+            var foregroundColor = new Color
+            {
+                A = 255,
+                R = (byte)(backgroundColor.R / 2.5),
+                G = (byte)(backgroundColor.G / 2.5),
+                B = (byte)(backgroundColor.B / 2.5)
+            };
+            return new SolidColorBrush(foregroundColor);
         }
     }
 }

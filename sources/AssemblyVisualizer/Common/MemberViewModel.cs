@@ -17,6 +17,7 @@ namespace AssemblyVisualizer.Common
         private string _toolTip;
         private MemberInfo _memberInfo;
         private SolidColorBrush _background;
+        private SolidColorBrush _foreground;
 
         public MemberViewModel(MemberInfo memberInfo)
         {
@@ -126,6 +127,18 @@ namespace AssemblyVisualizer.Common
             }
         }
 
+        public SolidColorBrush Foreground
+        {
+            get
+            {
+                return _foreground;
+            }
+            set
+            {
+                _foreground = value;
+                OnPropertyChanged("Foreground");
+            }
+        }
         private void JumpCommandHandler()
         {
             Services.JumpTo(MemberReference);

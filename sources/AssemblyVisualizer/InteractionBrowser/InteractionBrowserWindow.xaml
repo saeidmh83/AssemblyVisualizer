@@ -73,7 +73,10 @@
                                         <DataTemplate.Triggers>
                                             <Trigger SourceName="grid" Property="IsMouseOver" Value="True">
                                                 <Setter TargetName="commandsPanel" Property="Visibility" Value="Visible"/>
-                                            </Trigger>                                            
+                                            </Trigger>
+                                            <DataTrigger Binding="{Binding IsVisibleOutsideFamily}" Value="True">
+                                                <Setter TargetName="txtMemberName" Property="FontWeight" Value="Bold"/>
+                                            </DataTrigger>
                                         </DataTemplate.Triggers>
                                     </DataTemplate>
                                 </ContentPresenter.ContentTemplate>

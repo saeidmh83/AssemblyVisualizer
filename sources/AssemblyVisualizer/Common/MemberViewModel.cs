@@ -72,7 +72,15 @@ namespace AssemblyVisualizer.Common
         public object MemberReference
         {
             get { return _memberInfo.MemberReference; }
-        } 
+        }
+
+        public bool IsVisibleOutsideFamily
+        {
+            get
+            {
+                return _memberInfo.IsPublic || _memberInfo.IsInternal || _memberInfo.IsProtectedOrInternal;
+            }
+        }
 
         public bool IsPublic
         {

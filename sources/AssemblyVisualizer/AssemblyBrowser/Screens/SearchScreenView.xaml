@@ -99,7 +99,17 @@
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                     <Setter TargetName="brd" Property="BorderBrush" Value="Green"/>
-                                    <Setter TargetName="brd" Property="Background" Value="#88D6FFC9"/>
+                                    <Setter TargetName="brd" Property="TextElement.Foreground" Value="Green"/>
+                                    <!--<Setter TargetName="brd" Property="BorderBrush" Value="#AABBAA"/>
+                                    <Setter TargetName="brd" Property="Background">
+                                        <Setter.Value>
+                                            <RadialGradientBrush Center="0.8,0.2" RadiusX="0.8" RadiusY="0.8" GradientOrigin="0.8,0.2">
+                                                <GradientStop Color="#DDFFDD" Offset="0.3"/>
+                                                <GradientStop Color="#CCEECC" Offset="0.9"/>
+                                                <GradientStop Color="#BBDDBB" Offset="1"/>
+                                            </RadialGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>-->
                                 </DataTrigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

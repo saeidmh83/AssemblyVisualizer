@@ -9,3 +9,4 @@ build/reflector
 _ReSharper*/
 *.ReSharper
 *.patch
+*.jtconfig

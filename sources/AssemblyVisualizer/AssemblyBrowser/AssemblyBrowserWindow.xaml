@@ -54,13 +54,10 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button Style="{StaticResource ImageButtonStyle}"
-                    Width="42"
-                    Height="42"
-                    Background="{StaticResource LeftArrowDrawing}"
+            <Button Width="42"
+                    Height="42"                    
                     Margin="0, 0, 8, 0"
-                    Command="{Binding NavigateBackCommand}"
-                    IsEnabled="{Binding CanNavigateBack}">
+                    Command="{Binding NavigateBackCommand}">
                 <Button.ToolTip>
                     <TextBlock>
                         <TextBlock Text="{Binding NavigateBackHint}"/>
@@ -69,16 +66,24 @@
                                    FontWeight="Bold"/>
                     </TextBlock>
                 </Button.ToolTip>
+                <Button.Style>
+                    <Style BasedOn="{StaticResource ImageButtonStyle}"
+                           TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource LeftArrowDrawing}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CanNavigateBack}" Value="False">
+                                <Setter Property="Background" Value="{StaticResource LeftGrayArrowDrawing}"/>
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
             </Button>                                
             
-            <Button Style="{StaticResource ImageButtonStyle}"
-                    Width="42"
+            <Button Width="42"
                     Height="42"
-                    Grid.Column="1"
-                    Background="{StaticResource RightArrowDrawing}"
-                    Command="{Binding NavigateForwardCommand}"
-                    IsEnabled="{Binding CanNavigateForward}"
-                    >
+                    Grid.Column="1"                    
+                    Command="{Binding NavigateForwardCommand}">
                 <Button.ToolTip>
                     <TextBlock>
                         <TextBlock Text="{Binding NavigateForwardHint}"/>
@@ -87,6 +92,18 @@
                                    FontWeight="Bold"/>
                     </TextBlock>
                 </Button.ToolTip>
+                <Button.Style>
+                    <Style BasedOn="{StaticResource ImageButtonStyle}"
+                           TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource RightArrowDrawing}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CanNavigateForward}" Value="False">
+                                <Setter Property="Background" Value="{StaticResource RightGrayArrowDrawing}"/>
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
             </Button>
         </Grid>
     </Grid>

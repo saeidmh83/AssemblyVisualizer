@@ -28,6 +28,8 @@ namespace AssemblyVisualizer.InteractionBrowser
         private bool _isTypeSelectionVisible;
         private bool _showUnconnectedVertices;
         private bool _isTypeListVisible = true;
+        private bool _isSearchVisible;
+        private string _searchTerm;
 
         public InteractionBrowserWindowViewModel(IEnumerable<TypeInfo> types, bool drawGraph)
         {
@@ -38,12 +40,14 @@ namespace AssemblyVisualizer.InteractionBrowser
             HideSelectionViewCommand = new DelegateCommand(HideSelectionViewCommandHandler);
             ToggleSelectionViewCommand = new DelegateCommand(ToggleSelectionViewCommandHandler);
             ToggleTypeListVisibilityCommand = new DelegateCommand(ToggleTypeListVisibilityCommandHandler);
+            ShowSearchCommand = new DelegateCommand(ShowSearchCommandHandler);
+            HideSearchCommand = new DelegateCommand(HideSearchCommandHandler);
             Commands = new ObservableCollection<UserCommand>
 			           	{
 			           		new UserCommand(Resources.FillGraph, OnFillGraphRequest),
 			           		new UserCommand(Resources.OriginalSize, OnOriginalSizeRequest),	
-                            new UserCommand(Resources.SelectTypes, ShowSelectionViewCommand)
-                            //new UserCommand(Resources.SearchInGraph, ShowSearchCommand),                                                    
+                            new UserCommand(Resources.SelectTypes, ShowSelectionViewCommand),
+                            new UserCommand(Resources.SearchInGraph, ShowSearchCommand),                                                    
 			           	};            
 
             _hierarchies = types
@@ -67,7 +71,7 @@ namespace AssemblyVisualizer.InteractionBrowser
 
         public event Action FillGraphRequest;
         public event Action OriginalSizeRequest;
-        //public event Action FocusSearchRequest;
+        public event Action FocusSearchRequest;
 
         public IEnumerable<UserCommand> Commands { get; private set; }
 
@@ -76,6 +80,8 @@ namespace AssemblyVisualizer.InteractionBrowser
         public ICommand HideSelectionViewCommand { get; private set; }
         public ICommand ToggleSelectionViewCommand { get; private set; }
         public ICommand ToggleTypeListVisibilityCommand { get; private set; }
+        public ICommand ShowSearchCommand { get; private set; }
+        public ICommand HideSearchCommand { get; private set; }
 
         public IEnumerable<HierarchyViewModel> Hierarchies
         {
@@ -99,7 +105,7 @@ namespace AssemblyVisualizer.InteractionBrowser
                     .Distinct()
                     .ToArray();
             }
-        }
+        }        
 
         public MemberGraph Graph
         {
@@ -111,6 +117,33 @@ namespace AssemblyVisualizer.InteractionBrowser
             {
                 _graph = value;
                 OnPropertyChanged("Graph");
+            }
+        }
+
+        public string SearchTerm
+        {
+            get
+            {
+                return _searchTerm;
+            }
+            set
+            {
+                _searchTerm = value;
+                OnPropertyChanged("SearchTerm");
+                PerformSearch();
+            }
+        }
+
+        public bool IsSearchVisible
+        {
+            get
+            {
+                return _isSearchVisible;
+            }
+            set
+            {
+                _isSearchVisible = value;
+                OnPropertyChanged("IsSearchVisible");
             }
         }
 
@@ -175,6 +208,29 @@ namespace AssemblyVisualizer.InteractionBrowser
         {
             OnPropertyChanged("MembersCount");
         }
+
+        private void PerformSearch()
+        {
+            if (string.IsNullOrEmpty(SearchTerm) || string.IsNullOrEmpty(SearchTerm.Trim()))
+            {
+                ClearSearch();
+                return;
+            }
+
+            foreach (var vm in _viewModelsDictionary.Values)
+            {
+                vm.IsMarked = vm.MemberInfo.Name
+                    .IndexOf(SearchTerm, StringComparison.InvariantCultureIgnoreCase) >= 0;
+            }
+        }
+
+        private void ClearSearch()
+		{
+			foreach (var vm in _viewModelsDictionary.Values)
+			{
+				vm.IsMarked = false;
+			}
+		}
 
         private TypeViewModel GetViewModelForType(TypeInfo typeInfo)
         {
@@ -366,17 +422,7 @@ namespace AssemblyVisualizer.InteractionBrowser
             };
             _viewModelsDictionary.Add(methodInfo, mvm);
             return mvm;
-        }       
-
-        private void OnFillGraphRequest()
-        {
-            var handler = FillGraphRequest;
-
-            if (handler != null)
-            {
-                handler();
-            }
-        }
+        }  
 
         private void ApplySelectionCommandHandler()
         {
@@ -416,9 +462,41 @@ namespace AssemblyVisualizer.InteractionBrowser
             IsTypeListVisible = !IsTypeListVisible;
         }
 
+        private void HideSearchCommandHandler()
+        {
+            IsSearchVisible = false;
+            SearchTerm = string.Empty;
+        }
+
+        private void ShowSearchCommandHandler()
+        {
+            IsSearchVisible = true;
+            OnFocusSearchRequest();
+        }    
+
         private void OnOriginalSizeRequest()
         {
             var handler = OriginalSizeRequest;
+
+            if (handler != null)
+            {
+                handler();
+            }
+        }
+
+        private void OnFillGraphRequest()
+        {
+            var handler = FillGraphRequest;
+
+            if (handler != null)
+            {
+                handler();
+            }
+        }
+
+        private void OnFocusSearchRequest()
+        {
+            var handler = FocusSearchRequest;
 
             if (handler != null)
             {

@@ -25,7 +25,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
 		private string _searchTerm;
 		private IEnumerable<TypeViewModel> _types;
 		private readonly UserCommand _toggleColorizeUserCommand;
-        private bool _isSearhVisible;
+        private bool _isSearchVisible;
         private bool _isAssemblyListVisible = true;
 
 		public GraphScreen(AssemblyBrowserWindowViewModel windowViewModel) : base(windowViewModel)
@@ -70,11 +70,11 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
         {
             get
             {
-                return _isSearhVisible;
+                return _isSearchVisible;
             }
             set
             {
-                _isSearhVisible = value;
+                _isSearchVisible = value;
                 OnPropertyChanged("IsSearchVisible");
             }
         }

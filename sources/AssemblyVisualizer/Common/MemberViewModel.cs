@@ -18,6 +18,7 @@ namespace AssemblyVisualizer.Common
         private MemberInfo _memberInfo;
         private SolidColorBrush _background;
         private SolidColorBrush _foreground;
+        private bool _isMarked;
 
         public MemberViewModel(MemberInfo memberInfo)
         {
@@ -26,7 +27,18 @@ namespace AssemblyVisualizer.Common
             JumpCommand = new DelegateCommand(JumpCommandHandler);
         }
 
-        public bool IsMarked { get; set; }        
+        public bool IsMarked 
+        {
+            get
+            {
+                return _isMarked;
+            }
+            set
+            {
+                _isMarked = value;
+                OnPropertyChanged("IsMarked");
+            }
+        }        
         public ICommand JumpCommand { get; private set; }
 
         public virtual string ToolTip

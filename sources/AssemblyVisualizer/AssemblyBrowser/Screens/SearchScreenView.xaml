@@ -99,17 +99,7 @@
                                 </DataTrigger>
                                 <DataTrigger Binding="{Binding IsSelected}" Value="True">
                                     <Setter TargetName="brd" Property="BorderBrush" Value="Green"/>
-                                    <Setter TargetName="brd" Property="TextElement.Foreground" Value="Green"/>
-                                    <!--<Setter TargetName="brd" Property="BorderBrush" Value="#AABBAA"/>
-                                    <Setter TargetName="brd" Property="Background">
-                                        <Setter.Value>
-                                            <RadialGradientBrush Center="0.8,0.2" RadiusX="0.8" RadiusY="0.8" GradientOrigin="0.8,0.2">
-                                                <GradientStop Color="#DDFFDD" Offset="0.3"/>
-                                                <GradientStop Color="#CCEECC" Offset="0.9"/>
-                                                <GradientStop Color="#BBDDBB" Offset="1"/>
-                                            </RadialGradientBrush>
-                                        </Setter.Value>
-                                    </Setter>-->
+                                    <Setter TargetName="brd" Property="TextElement.Foreground" Value="Green"/>                                   
                                 </DataTrigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -180,7 +170,7 @@
 
         <!--Search filters-->
         <StackPanel Grid.Row="1"
-                    Margin="20, 0, 4, 0">
+                    Margin="24, 0, 4, 0">
             <ItemsControl ItemsSource="{Binding SearchControlGroups}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

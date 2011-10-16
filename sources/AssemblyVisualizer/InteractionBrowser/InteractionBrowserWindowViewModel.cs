@@ -263,8 +263,14 @@ namespace AssemblyVisualizer.InteractionBrowser
 
         private void HideWpfInternals(HierarchyViewModel hierarchy)
         {
+            var firstType = hierarchy.Types.First();
+
             foreach (var type in hierarchy.Types)
             {
+                if (type == firstType)
+                {
+                    continue;
+                }
                 if (IsWpfInternalType(type))
                 {
                     type.IsSelected = false;

@@ -137,7 +137,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
 
-        <Grid Margin="20, 10, 10, 10">
+        <Grid Margin="24, 10, 10, 10">
             <Grid.Resources>
                 <Style TargetType="{x:Type CheckBox}">
                     <Setter Property="FontSize" Value="12"/>

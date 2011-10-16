@@ -10,6 +10,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="..\ControlStylesDictionary.xaml"/>
+                <ResourceDictionary Source="..\ImagesDictionary.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -28,23 +29,51 @@
                       Grid.Row="1">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <TextBlock Margin="0, 1"
-                                   x:Name="txtCommand">
-                            <Hyperlink Style="{StaticResource HyperlinkStyle}"
-                                       Command="{Binding Command}">
-                                <TextBlock Text="{Binding Text}"/>
-                            </Hyperlink>
-                        </TextBlock>
-                        <TextBlock Margin="0, 1"
-                                   x:Name="txtCommandName"
-                                   Text="{Binding Text}"
-                                   Visibility="Collapsed"/>
+                    <Grid>                        
+                        <Border Width="16"
+                                Height="16"
+                                Background="{StaticResource CherryDrawing}"
+                                x:Name="brdIndicator"
+                                Opacity="0"
+                                Margin="-18, 0, 0, 0"
+                                HorizontalAlignment="Left"/>
+                        <Button Style="{StaticResource LooklessButtonStyle}"
+                                x:Name="btnCommand"
+                                Command="{Binding Command}"
+                                Background="Transparent"
+                                HorizontalAlignment="Left"
+                                Cursor="Hand"
+                                Grid.Column="1">                        
+                            <TextBlock Margin="0, 1"
+                                       Text="{Binding Text}"/> 
+                        </Button>                        
                     </Grid>
                     <DataTemplate.Triggers>
                         <DataTrigger Binding="{Binding IsCurrent}" Value="True">
-                            <Setter TargetName="txtCommand" Property="Visibility" Value="Collapsed"/>
-                            <Setter TargetName="txtCommandName" Property="Visibility" Value="Visible"/>
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="brdIndicator" 
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         AccelerationRatio="0.2"
+                                                         DecelerationRatio="0.2"
+                                                         Duration="0:0:0.3"
+                                                         To="1"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetName="brdIndicator" 
+                                                         Storyboard.TargetProperty="Opacity"
+                                                         AccelerationRatio="0.2"
+                                                         DecelerationRatio="0.2"
+                                                         Duration="0:0:0.3"
+                                                         To="0"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
                         </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>

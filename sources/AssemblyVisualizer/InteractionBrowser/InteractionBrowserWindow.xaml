@@ -232,7 +232,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-
         </Border>
 
         <!--Search-->
@@ -336,6 +335,16 @@
             </ScrollViewer>
             <StackPanel Grid.Row="2" Margin="0, 6"
                         HorizontalAlignment="Center">
+                <CheckBox IsChecked="{Binding ShowStaticConstructors}"
+                          Margin="0, 4"
+                          HorizontalAlignment="Center"
+                          Visibility="{Binding ContainsWpfInternals, Converter={StaticResource BoolVisibilityConverter}}">
+                    <CheckBox.Content>
+                        <TextBlock Text="Display static constructors"
+                                   Foreground="Gray"
+                                   FontSize="14"/>
+                    </CheckBox.Content>
+                </CheckBox>
                 <CheckBox IsChecked="{Binding ShowUnconnectedVertices}"
                           Margin="0, 4"
                           HorizontalAlignment="Center">
@@ -366,9 +375,6 @@
                         Command="{Binding HideSelectionViewCommand}"
                         Margin="4"/>
             </StackPanel>
-
         </Grid>
-
-
     </Grid>
 </Window>

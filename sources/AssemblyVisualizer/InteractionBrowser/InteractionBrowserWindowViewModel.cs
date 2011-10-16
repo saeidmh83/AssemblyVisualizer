@@ -20,6 +20,9 @@ namespace AssemblyVisualizer.InteractionBrowser
 {
     class InteractionBrowserWindowViewModel : ViewModelBase
     {
+        private static readonly string[] WpfInternalTypes = new[] { "DependencyObject", "Visual", "UIElement", "FrameworkElement" };
+        private static readonly string[] WpfAssemblies = new[] { "WindowsBase", "PresentationFramework", "PresentationCore" };
+
         private Dictionary<MemberInfo, MemberViewModel> _viewModelsDictionary = new Dictionary<MemberInfo, MemberViewModel>();
         private MemberGraph _graph;
         private IEnumerable<TypeInfo> _types;
@@ -27,6 +30,7 @@ namespace AssemblyVisualizer.InteractionBrowser
         private IDictionary<TypeInfo, TypeViewModel> _viewModelCorrespondence = new Dictionary<TypeInfo, TypeViewModel>();
         private bool _isTypeSelectionVisible;
         private bool _showUnconnectedVertices;
+        private bool _showStaticConstructors;
         private bool _isTypeListVisible = true;
         private bool _isSearchVisible;
         private string _searchTerm;
@@ -57,7 +61,10 @@ namespace AssemblyVisualizer.InteractionBrowser
             foreach (var hierarchy in _hierarchies)
             {
                 hierarchy.AllSelected = true;
-            }            
+                HideWpfInternals(hierarchy);
+            }
+
+            _showStaticConstructors = !ContainsWpfInternals;
 
             if (drawGraph)
             {
@@ -117,6 +124,28 @@ namespace AssemblyVisualizer.InteractionBrowser
             {
                 _graph = value;
                 OnPropertyChanged("Graph");
+            }
+        }
+
+        public bool ContainsWpfInternals
+        {
+            get
+            {
+                return _hierarchies.Any(h => h.Types.Any(IsWpfInternalType));
+            }
+        }
+
+        public bool ShowStaticConstructors
+        {
+            get
+            {
+                return _showStaticConstructors;            
+            }
+            set
+            {
+                _showStaticConstructors = value;
+                OnPropertyChanged("ShowStaticConstructors");
+                ReportSelectionChanged();
             }
         }
 
@@ -232,6 +261,22 @@ namespace AssemblyVisualizer.InteractionBrowser
 			}
 		}
 
+        private void HideWpfInternals(HierarchyViewModel hierarchy)
+        {
+            foreach (var type in hierarchy.Types)
+            {
+                if (IsWpfInternalType(type))
+                {
+                    type.IsSelected = false;
+                }
+            }
+        }
+
+        private bool IsWpfInternalType(TypeViewModel type)
+        {
+            return WpfInternalTypes.Contains(type.Name) && WpfAssemblies.Contains(type.TypeInfo.Module.Assembly.Name);
+        }
+
         private TypeViewModel GetViewModelForType(TypeInfo typeInfo)
         {
             if (_viewModelCorrespondence.ContainsKey(typeInfo))
@@ -259,16 +304,21 @@ namespace AssemblyVisualizer.InteractionBrowser
 
         private MemberGraph CreateGraph(IEnumerable<TypeViewModel> typeViewModels)
         {
-            var graph = new MemberGraph(true);
+            var graph = new MemberGraph(true);            
 
             foreach (var typeViewModel in typeViewModels)
-            {
-                var type = typeViewModel.TypeInfo;
+            {    
+                var type = typeViewModel.TypeInfo;                
                 var methods = type.Methods.Where(m => !m.Name.StartsWith("<")).Concat(type.Accessors);
                 if (!typeViewModel.ShowInternals)
                 {
                     methods = methods.Where(m => m.IsVisibleOutside());
                 }
+
+                if (!ShowStaticConstructors)
+                {
+                    methods = methods.Where(m => m.Name != ".cctor");
+                }                
 
                 foreach (var method in methods)
                 {

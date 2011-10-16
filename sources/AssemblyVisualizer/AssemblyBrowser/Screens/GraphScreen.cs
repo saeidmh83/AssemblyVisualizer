@@ -229,6 +229,14 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
                     AdjustExpansion(typeViewModel);
                 }
             }
+            else
+            {
+                typeViewModel.IsExpanded = true;
+                if (typeViewModel.DescendantsCount <= 100)
+                {
+                    ExpandAll(typeViewModel);
+                }
+            }
             var flattenedHierarchy = typeViewModel.FlattenedHierarchy;
             graph.AddVertexRange(flattenedHierarchy);
             foreach (var viewModel in flattenedHierarchy)

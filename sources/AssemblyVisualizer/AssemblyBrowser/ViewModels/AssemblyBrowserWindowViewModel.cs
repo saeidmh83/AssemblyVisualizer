@@ -308,12 +308,14 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 				}
 				else
 				{
+                    bool adjustExpansion = false;
 					if (graphScreen == null)
 					{
+                        adjustExpansion = true;
 						graphScreen = new GraphScreen(this);
 						Screen = graphScreen;
 					}
-					graphScreen.Show(value.Type);
+					graphScreen.Show(value.Type, adjustExpansion);
 				}
 			}
 		}

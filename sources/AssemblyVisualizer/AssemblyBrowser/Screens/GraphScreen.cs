@@ -177,11 +177,11 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
             OnShowDetailsRequest();
         }
 
-        public void Show(TypeViewModel type)
+        public void Show(TypeViewModel type, bool adjustExpansion)
         {
             _types = null;
             Type = type;
-            Graph = CreateGraph(type);
+            Graph = CreateGraph(type, adjustExpansion);
             OnGraphChanged();
         }
 
@@ -217,13 +217,17 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
             }
         }
 
-        private static TypeGraph CreateGraph(TypeViewModel typeViewModel)
+        private static TypeGraph CreateGraph(TypeViewModel typeViewModel, bool adjustExpansion)
         {
             var graph = new TypeGraph(true);
-            ExpandAll(typeViewModel);
-            if (typeViewModel.DescendantsCount > 100)
+
+            if (adjustExpansion)
             {
-                AdjustExpansion(typeViewModel);
+                ExpandAll(typeViewModel);
+                if (typeViewModel.DescendantsCount > 100)
+                {
+                    AdjustExpansion(typeViewModel);
+                }
             }
             var flattenedHierarchy = typeViewModel.FlattenedHierarchy;
             graph.AddVertexRange(flattenedHierarchy);
@@ -254,11 +258,8 @@ namespace AssemblyVisualizer.AssemblyBrowser.Screens
                 if (type.DirectDescendantsCount > 3)
                 {
                     type.IsExpanded = false;
-                }
-                else
-                {
-                    AdjustExpansion(type);
-                }
+                }                
+                AdjustExpansion(type);                
             }
         }        
 

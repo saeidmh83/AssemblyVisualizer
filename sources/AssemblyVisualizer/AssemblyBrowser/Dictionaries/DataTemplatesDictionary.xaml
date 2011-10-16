@@ -96,7 +96,7 @@
                                     Height="16"
                                     MinWidth="0"
                                     MinHeight="0"
-                                    Background="{StaticResource ExpandDrawing}"
+                                    Background="{StaticResource GreenSunDrawing}"
                                     Style="{StaticResource ImageButtonStyle}"  
                                     Visibility="{Binding CanExpand, Converter={StaticResource BooleanToVisibilityConverter}}"
                                     ToolTip="Expand"/>

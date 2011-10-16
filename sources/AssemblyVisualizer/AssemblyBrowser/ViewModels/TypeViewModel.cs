@@ -29,11 +29,12 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 
 		private int _descendantsCount;
 		private int _directDescendantsCount;
-		private readonly int _membersCount;
+		private readonly int _membersCount;        
 		
 		private bool _showMembers;
 		private bool _isCurrent;
 		private bool _isMarked;
+        private bool _isExpanded = true;        
 		private readonly bool _isBaseTypeAvailable = true;
 		private readonly string _name;
 		private readonly string _fullName;
@@ -114,6 +115,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 			ShowMembersCommand = new DelegateCommand(ShowMembersCommandHandler);
             BrowseAncestryCommand = new DelegateCommand(BrowseAncestryCommandHandler);
             BrowseInteractionsCommand = new DelegateCommand(BrowseInteractionsCommandHandler);
+            ExpandCommand = new DelegateCommand(ExpandCommandHandler);
 
 			RefreshBackground();
             ResetName();
@@ -125,6 +127,7 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 		public ICommand ShowMembersCommand { get; private set; }
         public ICommand BrowseAncestryCommand { get; private set; }
         public ICommand BrowseInteractionsCommand { get; private set; }
+        public ICommand ExpandCommand { get; private set; }
 
 		public TypeInfo TypeInfo
 		{
@@ -166,6 +169,28 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
             }
         }
 
+        public bool IsExpanded
+        {
+            get
+            {
+                return _isExpanded;
+            }
+            set
+            {
+                _isExpanded = value;
+                OnPropertyChanged("IsExpanded");
+                OnPropertyChanged("CanExpand");
+            }
+        }
+
+        public bool CanExpand
+        {
+            get
+            {
+                return !IsExpanded;
+            }
+        }
+
         public bool IsNameMiddleEmpty { get { return string.IsNullOrWhiteSpace(NameMiddle); } }
 
 		public IEnumerable<TypeViewModel> FlattenedHierarchy
@@ -173,10 +198,13 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
 			get 
 			{ 
 				var list = new List<TypeViewModel> {this};
-				foreach (var typeViewModel in DerivedTypes)
-				{
-					list.AddRange(typeViewModel.FlattenedHierarchy);
-				}
+                if (IsExpanded)
+                {
+                    foreach (var typeViewModel in DerivedTypes)
+                    {
+                        list.AddRange(typeViewModel.FlattenedHierarchy);
+                    }
+                }
 				return list;
 			}
 		}
@@ -389,6 +417,12 @@ namespace AssemblyVisualizer.AssemblyBrowser.ViewModels
         private void BrowseInteractionsCommandHandler()
         {
             Services.BrowseInteractions(new[] { TypeInfo }, true);
+        }
+
+        private void ExpandCommandHandler()
+        {
+            var screen = _windowViewModel.Screen as GraphScreen;
+            screen.Expand(this);
         }
 	}
 }

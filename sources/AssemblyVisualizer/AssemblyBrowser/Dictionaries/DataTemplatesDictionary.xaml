@@ -26,10 +26,13 @@
                     Style="{StaticResource BorderStyle}"                            
                     Background="{Binding Background}">
                 <Grid>
-
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition />
+                    </Grid.RowDefinitions>
                     <TextBlock Text="{Binding Name}"
                                ToolTip="{Binding ExtendedInfo}"
-                               Margin="8, 5, 8, 3"
+                               Margin="8, 5, 8, 2"
                                FontWeight="Bold"
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
@@ -85,7 +88,19 @@
                                     Background="{StaticResource InteractionBrowserIconDrawing}"
                                     Style="{StaticResource ImageButtonStyle}"                                    
                                     ToolTip="Browse Interactions"/>
-                            
+
+                            <Button VerticalAlignment="Center"                                                                      
+                                    Command="{Binding ExpandCommand}" 
+                                    Margin="4, 0"
+                                    Width="16"
+                                    Height="16"
+                                    MinWidth="0"
+                                    MinHeight="0"
+                                    Background="{StaticResource ExpandDrawing}"
+                                    Style="{StaticResource ImageButtonStyle}"  
+                                    Visibility="{Binding CanExpand, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    ToolTip="Expand"/>
+
                             <Button Command="{Binding ShowMembersCommand}"                   
                                     Width="16"
                                     Height="16"
@@ -96,6 +111,17 @@
                                     Visibility="{Binding CanShowMembers, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                         </StackPanel>
                     </Border>
+                    
+                    <Grid x:Name="grdExpand"
+                          Grid.Row="1"
+                          Visibility="Collapsed"
+                          HorizontalAlignment="Center">
+                        <TextBlock Margin="8, 0, 8, 5">
+                            <TextBlock Text="{Binding DescendantsCount}"
+                                       FontWeight="Bold"/>
+                            <Run Text="more types"/>
+                        </TextBlock>
+                    </Grid>
                 </Grid>               
             </Border>
             <Border Style="{StaticResource BorderStyle}">
@@ -104,7 +130,10 @@
                 </Border.Effect>
             </Border>
         </Grid>
-        <DataTemplate.Triggers>            
+        <DataTemplate.Triggers>    
+            <DataTrigger Binding="{Binding IsExpanded}" Value="False">
+                <Setter TargetName="grdExpand" Property="Visibility" Value="Visible"/>
+            </DataTrigger>
             <Trigger SourceName="brdMain" Property="IsMouseOver" Value="True">
                 <Setter TargetName="pnlButtons" Property="Visibility" Value="Visible"/>                
             </Trigger>            
